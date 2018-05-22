@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blueocean.azbrain.dao.AnswerCommentMapper">
+  <resultMap id="comment" type="com.blueocean.azbrain.model.AnswerComment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="answer_id" jdbcType="INTEGER" property="answerId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="like_num" jdbcType="INTEGER" property="likeNum" />
+    <result column="create_id" jdbcType="INTEGER" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="reply_comment_id" jdbcType="INTEGER" property="replyCommentId" />
+    <result column="reply_user_id" jdbcType="INTEGER" property="replyUserId" />
+    <result column="status" jdbcType="CHAR" property="status" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, question_id, answer_id, content, like_num, create_id, create_time, reply_comment_id, 
+    reply_user_id, status
+  </sql>
+
+  <select id="get" parameterType="java.lang.Integer" resultMap="comment">
+    select 
+    <include refid="Base_Column_List" />
+    from azbrain_answer_comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="getAnswerComments" parameterType="java.lang.Integer" resultMap="comment">
+    select
+    <include refid="Base_Column_List" />
+    from
+      azbrain_answer_comment
+    where
+      answer_id = #{answerId,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="com.blueocean.azbrain.model.AnswerComment" useGeneratedKeys="true" keyProperty="id">
+    insert into azbrain_answer_comment (
+      id,
+      question_id,
+      answer_id,
+      content,
+      like_num,
+      create_id,
+      create_time,
+      reply_comment_id,
+      reply_user_id,
+      status)
+    values (
+      #{id,jdbcType=INTEGER},
+      #{questionId,jdbcType=INTEGER},
+      #{answerId,jdbcType=INTEGER},
+      #{content,jdbcType=VARCHAR},
+      #{likeNum,jdbcType=INTEGER},
+      #{createId,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{replyCommentId,jdbcType=INTEGER},
+      #{replyUserId,jdbcType=INTEGER},
+      #{status,jdbcType=CHAR})
+  </insert>
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blueocean.azbrain.dao.QuestionMapper">
+  <resultMap id="question" type="com.blueocean.azbrain.model.Question">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="follower_num" jdbcType="INTEGER" property="followerNum" />
+    <result column="answer_num" jdbcType="INTEGER" property="answerNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, title, content, icon, follower_num, answer_num, create_time, create_by, create_name, status
+  </sql>
+
+  <select id="get" parameterType="java.lang.Integer" resultMap="question">
+    select 
+    <include refid="Base_Column_List" />
+    from azbrain_question
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="com.blueocean.azbrain.model.Question" useGeneratedKeys="true" keyProperty="id">
+    insert into azbrain_question (
+      id,
+      title,
+      content,
+      icon,
+      follower_num,
+      answer_num,
+      create_time,
+      create_by,
+      create_name,
+      status
+      )
+    values (
+      #{id,jdbcType=INTEGER},
+      #{title,jdbcType=VARCHAR},
+      #{content,jdbcType=VARCHAR},
+      #{icon,jdbcType=VARCHAR},
+      #{followerNum,jdbcType=INTEGER},
+      #{answerNum,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{createBy,jdbcType=INTEGER},
+      #{createName,jdbcType=VARCHAR},
+      #{status,jdbcType=CHAR}
+      )
+  </insert>
+
+  <select id="getUserFollowQuestions" resultMap="question">
+    SELECT
+      q.*
+    FROM
+      azbrain_user_follow_question fq
+    INNER JOIN
+      azbrain_question q
+    ON
+      fq.question_id = q.id
+    WHERE
+      user_id = #{userId, jdbcType=INTEGER}
+  </select>
+
+  <select id="getUserRecommendQuestions" resultMap="question">
+    SELECT
+      q.*
+    FROM
+      azbrain_user_recommend_question rq
+    INNER JOIN
+      azbrain_question q
+    ON
+      rq.question_id = q.id
+  </select>
+
+  <select id="search" parameterType="java.lang.String" resultMap="question">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+      azbrain_question
+    WHERE
+      MATCH(title) AGAINST(#{key,jdbcType=VARCHAR})
+  </select>
+
+  <update id="incrementFollower">
+    UPDATE azbrain_question
+    SET
+      follower_num = follower_num + 1
+    WHERE
+      id = #{questionId, jdbcType=INTEGER}
+  </update>
+
+  <update id="decrementFollower">
+    UPDATE azbrain_question
+    SET
+      follower_num = follower_num - 1
+    WHERE
+      id = #{questionId, jdbcType=INTEGER}
+  </update>
+</mapper>

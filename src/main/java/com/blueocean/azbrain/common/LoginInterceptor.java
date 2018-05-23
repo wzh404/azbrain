@@ -20,6 +20,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        if (request.getRequestURI().equalsIgnoreCase("/index.html")){
+            return true;
+        }
+
         String accessToken = request.getHeader("access_token");
         if (accessToken == null){
             logger.info("access token is null");

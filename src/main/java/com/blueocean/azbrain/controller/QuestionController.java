@@ -9,6 +9,7 @@ import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public class QuestionController {
      * @return
      */
     @RequestMapping(value="/user/question/followers", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject listUserFollowQuestion(@RequestParam("page") Integer page){
-        Integer userId = 1;
+    public ResultObject listUserFollowQuestion(HttpServletRequest request, @RequestParam("page") Integer page){
+        int userId = (int)request.getAttribute("userId");
         Page<Question> r = questionService.getUserFollowQuestions(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(r.getResult());
     }
@@ -48,8 +49,8 @@ public class QuestionController {
      * @return
      */
     @RequestMapping(value="/question/detail", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject answers(@RequestParam("question_id") Integer questionId){
-        int userId = 1;
+    public ResultObject answers(HttpServletRequest request, @RequestParam("question_id") Integer questionId){
+        int userId = (int)request.getAttribute("userId");
         Question q = questionService.get(questionId);
         Map map = new HashMap<String, Object>();
         map.put("follow_flag", questionService.isFollowed(userId, questionId));

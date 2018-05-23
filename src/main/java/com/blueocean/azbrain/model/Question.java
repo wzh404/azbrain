@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -17,7 +18,9 @@ public class Question{
     private Integer followerNum;
     @JsonProperty("answer_num")
     private Integer answerNum;
+
     @JsonProperty("create_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date createTime;
     @JsonProperty("create_by")
     private Integer createBy;

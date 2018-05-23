@@ -1,12 +1,13 @@
 package com.blueocean.azbrain.controller;
 
+import com.blueocean.azbrain.common.SessionObject;
 import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.common.ResultCode;
-import com.blueocean.azbrain.common.UserStatus;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.CryptoUtil;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.service.UserService;
+import com.blueocean.azbrain.util.TokenUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.google.common.cache.Cache;
@@ -16,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
 
 /**
  * Created by @author wangzunhui on 2018/3/12.
@@ -48,11 +49,15 @@ public class UserController {
         if (savedMobile == null || !savedMobile.equalsIgnoreCase(mobile)){
             return ResultObject.fail(ResultCode.USER_LOGIN_FAILED);
         }
-        String wxid = "---";
+        String wxid = "";
         User user = new User(mobile, wxid, AZBrainConstants.DEFAULT_COMPANY_ID);
 
         int rows = userService.insert(user, inviteCode);
-        return rows == 1 ? ResultObject.ok() : ResultObject.fail(ResultCode.USER_ADD_FAILED);
+        if (rows == 1){
+            return ResultObject.ok();
+        }
+
+        return ResultObject.fail(ResultCode.USER_ADD_FAILED);
     }
 
     /**
@@ -64,7 +69,8 @@ public class UserController {
      */
     @RequestMapping(value="/login", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject login(@RequestParam("mobile") String mobile,
-                              @RequestParam("sms_code") String smscode){
+            @RequestParam("sms_code") String smscode){
+
         String code = smsCache.getIfPresent(mobile);
         if (code == null || !code.equalsIgnoreCase(smscode)){
             return ResultObject.fail(ResultCode.USER_LOGIN_FAILED);
@@ -106,7 +112,8 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/sms", method= {RequestMethod.GET})
-    public ResultObject sendSms(@RequestParam("mobile") String mobile){
+    public ResultObject sendSms(
+            @RequestParam("mobile") String mobile){
         String code = new Integer(randomCode()).toString();
         logger.info("code is {}", code);
         smsCache.put(mobile, code);
@@ -127,8 +134,10 @@ public class UserController {
     }
 
     @RequestMapping(value="/follow-question", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject follow(@RequestParam("question_id") Integer questionId){
-        Integer userId = 1;
+    public ResultObject follow(
+            HttpServletRequest request,
+            @RequestParam("question_id") Integer questionId){
+        int userId = (int)request.getAttribute("userId");
         int ret = userService.follow(userId, questionId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_QUESTION_FOLLOWED);
@@ -138,8 +147,9 @@ public class UserController {
     }
 
     @RequestMapping(value="/unfollow-question", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject unfollow(@RequestParam("question_id") Integer questionId){
-        Integer userId = 1;
+    public ResultObject unfollow(HttpServletRequest request,
+            @RequestParam("question_id") Integer questionId){
+        int userId = (int)request.getAttribute("userId");
         int ret = userService.unfollow(userId, questionId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_QUESTION_FOLLOWED);
@@ -149,8 +159,9 @@ public class UserController {
     }
 
     @RequestMapping(value="/like-answer", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject like(@RequestParam("answer_id") Integer answerId){
-        Integer userId = 1;
+    public ResultObject like(HttpServletRequest request,
+            @RequestParam("answer_id") Integer answerId){
+        int userId = (int)request.getAttribute("userId");
         int ret = userService.like(userId, answerId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_ANSWER_LIKED);
@@ -160,8 +171,9 @@ public class UserController {
     }
 
     @RequestMapping(value="/unlike-answer", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject unlike(@RequestParam("answer_id") Integer answerId){
-        Integer userId = 1;
+    public ResultObject unlike(HttpServletRequest request,
+            @RequestParam("answer_id") Integer answerId){
+        int userId = (int)request.getAttribute("userId");
         int ret = userService.unlike(userId, answerId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_ANSWER_LIKED);
@@ -171,7 +183,13 @@ public class UserController {
     }
 
     @RequestMapping(value="/apply/access-token", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject accessToken(){
-        return ResultObject.ok("access_token", "5821b41db32bfc5be6ce81382a84ee916d76eb6b28b02f8528d21b0a7c0d2b17");
+    public ResultObject accessToken(@RequestParam("code") String code){
+        User user = userService.getUserByName(code);
+        if (user == null){
+            return ResultObject.fail(ResultCode.USER_ACCESS_TOKEN);
+        }
+        SessionObject sessionObject = new SessionObject(user.getId(), code);
+        String token = TokenUtil.createJwtToken(sessionObject.toJson()).get();
+        return ResultObject.ok("access_token", token);
     }
 }

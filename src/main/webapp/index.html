@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+<a href="#" onclick="javascript:a()">hello nuctech!</a> ||
+<a href="#" onclick="javascript:b('/user/sms', sms)">SMS!</a>||
+<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=3', {})">question-answers!</a>
+<a href="#" onclick="javascript:b('/search/answer?key=为什么&page=1', {})">search-answers!</a>
+
+
+</br>
+<span id="msg_id" >----</span>
+
+<script type="text/javascript">
+    var access_token = "";
+    var sms = {
+                "mobile": "13911709225"
+            };
+
+    function a() {
+        $.ajax({
+            type : "GET",
+            url : "/user/apply/access-token",
+            data : {
+                "code": "13911709225"
+            },
+            success : function(result) {
+                access_token = result.result.access_token;
+                alert(access_token);
+            }
+        });
+
+    }
+
+    function b(url, data) {
+        $.ajax({
+            type : "GET",
+            url : url,
+            headers: {
+                "access_token": access_token
+            },
+            data : data,
+            success : function(result) {
+                $('#msg_id').html(result.flag);
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

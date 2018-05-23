@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ public class Answer {
     private Integer commentNum;
 
     @JsonProperty("create_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date createTime;
 
     @JsonProperty("create_by")

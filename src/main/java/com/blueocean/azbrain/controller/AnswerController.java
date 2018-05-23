@@ -11,6 +11,7 @@ import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,8 +32,8 @@ public class AnswerController {
      * @return
      */
     @RequestMapping(value="/answer/detail", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject detail(@RequestParam("answer_id") Integer answerId){
-        int userId = 1;
+    public ResultObject detail(HttpServletRequest request, @RequestParam("answer_id") Integer answerId){
+        int userId = (int)request.getAttribute("userId");
         Map map = new HashMap<String, Object>();
         Answer answer = answerService.get(answerId);
         if (answer == null){
@@ -60,8 +61,9 @@ public class AnswerController {
      * @return
      */
     @RequestMapping(value="/answer/comments", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject comments(@RequestParam("answer_id") Integer answerId,
-                                 @RequestParam("page") Integer page){
+    public ResultObject comments(
+            @RequestParam("answer_id") Integer answerId,
+            @RequestParam("page") Integer page){
         Page<AnswerComment> pageAnswerComment = answerService.getAnswerComments(page, AZBrainConstants.PAGE_SIZE, answerId);
         return ResultObject.ok("comments", pageAnswerComment.getResult());
     }

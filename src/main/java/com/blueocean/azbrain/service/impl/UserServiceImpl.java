@@ -129,12 +129,12 @@ public class UserServiceImpl implements UserService{
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public int unlike(int userId, int likeAnswerId) {
-        UserLikeAnswer ula = userLikeAnswerMapper.get(likeAnswerId);
+    public int unlike(int userId, int answerId) {
+        UserLikeAnswer ula = userLikeAnswerMapper.getUserLikeAnswer(userId, answerId);
         if (ula == null){
             return -1;
         }
-        userLikeAnswerMapper.delete(likeAnswerId);
+        userLikeAnswerMapper.delete(ula.getId());
         answerMapper.decrementLiker(ula.getAnswerId());
 
         return 0;

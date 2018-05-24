@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(allowCredentials="true")
 public class AnswerController {
     @Autowired
     private AnswerService answerService;

@@ -7,14 +7,30 @@
     <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
-<a href="#" onclick="javascript:a()">hello nuctech!</a> ||
-<a href="#" onclick="javascript:b('/user/sms', sms)">SMS!</a>||
-<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=3', {})">question-answers!</a>
-<a href="#" onclick="javascript:b('/search/answer?key=为什么&page=1', {})">search-answers!</a>
+<a href="#" onclick="javascript:a()">access_token!</a> |
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/search/answer?key=为什么&page=1', {})">搜索回答!</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/search/question?key=医药代表&page=1', {})">搜索问题!</a>|
+<br/>
 
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/user/question/followers?page=1', {})">我的关注问题</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/user/question/recommends?page=1', {})">推荐问题</a>|
+<br/>
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/question/detail?question_id=1', {})">问题详情</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/question/answers?question_id=1&page=1', {})">下拉刷新回答!</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/answer/detail?answer_id=1', {})">回答详情</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/answer/comments?answer_id=1&page=1', {})">下拉刷新回答评论</a>|
 
+<br/>
+
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/user/follow-question?question_id=1', {})">关注问题</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/user/unfollow-question?question_id=1', {})">取消关注</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/user/like-answer?answer_id=1', {})">点赞回答</a>|
+<a href="#" onclick="javascript:b('http://119.254.84.20:8889/user/unlike-answer?answer_id=1', {})">取消点赞</a>|
+</br></br></br>
+【</br>
+<span id="msg_id" >off</span>
 </br>
-<span id="msg_id" >----</span>
+】
 
 <script type="text/javascript">
     var access_token = "";
@@ -25,13 +41,13 @@
     function a() {
         $.ajax({
             type : "GET",
-            url : "/user/apply/access-token",
+            url : "http://119.254.84.20:8889/user/apply/access-token",
             data : {
                 "code": "13911709225"
             },
             success : function(result) {
                 access_token = result.result.access_token;
-                alert(access_token);
+                $('#msg_id').html('on');
             }
         });
 
@@ -46,7 +62,7 @@
             },
             data : data,
             success : function(result) {
-                $('#msg_id').html(result.flag);
+                $('#msg_id').html(JSON.stringify(result));
             }
         });
 

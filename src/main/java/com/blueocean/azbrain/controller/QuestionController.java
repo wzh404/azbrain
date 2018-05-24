@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(allowCredentials="true")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -66,6 +65,7 @@ public class QuestionController {
      * @param questionId
      * @return
      */
+    //@CrossOrigin(allowCredentials="true", origins="http://10.13.202.49:8889")
     @RequestMapping(value="/question/answers", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject answers(@RequestParam("question_id") Integer questionId,
                                 @RequestParam("page") Integer page){

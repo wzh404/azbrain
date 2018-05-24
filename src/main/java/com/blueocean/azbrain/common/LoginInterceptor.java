@@ -16,6 +16,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("---{}", request.getRequestURI());
 
+        if (request.getMethod().equalsIgnoreCase("OPTIONS")){
+            return true;
+        }
+
         if (request.getRequestURI().equalsIgnoreCase("/user/apply/access-token")){
             return true;
         }
@@ -47,6 +51,5 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
     }
 }

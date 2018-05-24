@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(allowCredentials="true")
 public class SearchController {
     private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 

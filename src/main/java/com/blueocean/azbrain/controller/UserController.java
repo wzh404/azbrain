@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(allowCredentials="true")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 

@@ -32,6 +32,7 @@
 </br>
 】
 
+<a href="#" onclick="javascript:c()">新增问题</a>
 <script type="text/javascript">
     var access_token = "";
     var sms = {
@@ -45,6 +46,8 @@
             data : {
                 "code": "13911709225"
             },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
             success : function(result) {
                 access_token = result.result.access_token;
                 $('#msg_id').html('on');
@@ -61,6 +64,29 @@
                 "access_token": access_token
             },
             data : data,
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+
+    }
+
+
+    function c() {
+        $.ajax({
+            type : "POST",
+            url : "/manager/question/add",
+            data : JSON.stringify({
+                "title":"TITLE TEST",
+                "content":"www",
+                "create_id" : 0,
+                "answers":[{
+                    "content":"CONTENT---1",
+                    "create_id" : 0,
+                }]
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
             success : function(result) {
                 $('#msg_id').html(JSON.stringify(result));
             }

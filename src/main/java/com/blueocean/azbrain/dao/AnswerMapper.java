@@ -34,4 +34,9 @@ public interface AnswerMapper {
      * @return
      */
     Page<Answer> search(@Param("key")String key);
+
+    /**
+     * 修改回答状态
+     */
+    int changeStatus(@Param("answerId")Integer id);
 }

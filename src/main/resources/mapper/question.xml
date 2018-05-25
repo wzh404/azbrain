@@ -100,4 +100,31 @@
     WHERE
       id = #{questionId, jdbcType=INTEGER}
   </update>
+
+  <!-- Manager -->
+  <select id="searchByCondition" parameterType="java.util.HashMap" resultMap="question">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+      azbrain_question
+    WHERE
+      status = '00'
+    <if test="title != null">
+      AND title LIKE CONCAT('%',#{title},'%')
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ AND create_time >= #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND create_time <= #{endTime} ]]>
+    </if>
+  </select>
+
+  <update id="changeStatus">
+    UPDATE azbrain_question
+    SET
+      status = #{status, jdbcType=VARCHAR}
+    WHERE
+      id = #{questionId, jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.pagehelper.Page;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -28,6 +29,15 @@ public class ResultObject {
         Map<String, Object> map = new HashMap();
         map.put(key, val);
         return new ResultObject(true, ResultCode.OK.getCode(), null, map);
+    }
+
+    public static HashMap<String, Object> pageMap(Page page){
+        HashMap<String, Object> pageMap = new HashMap<>();
+        pageMap.put("total", page.getTotal());
+        pageMap.put("pages", page.getPages());
+        pageMap.put("pageNum", page.getPageNum());
+
+        return pageMap;
     }
 
     public static ResultObject ok(){

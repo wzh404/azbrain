@@ -14,17 +14,24 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("---{}", request.getRequestURI());
-
+        logger.info("----------{}", request.getRequestURI());
         if (request.getMethod().equalsIgnoreCase("OPTIONS")){
             return true;
         }
 
-        if (request.getRequestURI().equalsIgnoreCase("/user/apply/access-token")){
+        if (request.getRequestURI().equalsIgnoreCase("/index.html")){
             return true;
         }
 
-        if (request.getRequestURI().equalsIgnoreCase("/index.html")){
+        if (request.getRequestURI().startsWith("/error")){
+            return true;
+        }
+
+        if (request.getRequestURI().startsWith("/manager")){
+            return true;
+        }
+
+        if (request.getRequestURI().equalsIgnoreCase("/user/apply/access-token")){
             return true;
         }
 

@@ -5,6 +5,9 @@ import com.blueocean.azbrain.model.Question;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
+import java.util.List;
+
 public interface QuestionService {
     /**
      * 用户关注的问题
@@ -58,4 +61,37 @@ public interface QuestionService {
      * @return
      */
     boolean isFollowed(int userId, int questionId);
+
+    /**
+     * 按条件查询问题
+     *
+     * @param map
+     * @return
+     */
+    Page<Question> searchByCondition(int page, int pageSize, HashMap<String, Object> map);
+
+    /**
+     * 新增问题
+     *
+     * @param question
+     * @return
+     */
+    int insert(Question question);
+
+    /**
+     * 新增问题及其回答
+     *
+     * @param question
+     * @param answers
+     * @return
+     */
+    int insert(Question question, List<Answer> answers);
+
+    /**
+     * 关闭问题
+     *
+     * @param questionId
+     * @return
+     */
+    int close(int questionId);
 }

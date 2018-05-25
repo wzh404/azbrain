@@ -118,19 +118,6 @@ public class UserController {
         return ResultObject.ok("code",code);
     }
 
-    /**
-     * find user by page.
-     *
-     * @return
-     */
-    @RequestMapping(value="/users", method= {RequestMethod.GET})
-    public ResultObject list(){
-        Page<User> users = userService.findByPage(1, 3);
-        logger.info("pages is {}", users.getTotal());
-        PageInfo<User> pageInfo = new PageInfo<>(users);
-        return ResultObject.ok(pageInfo);
-    }
-
     @RequestMapping(value="/follow-question", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject follow(
             HttpServletRequest request,

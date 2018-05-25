@@ -43,4 +43,9 @@ public class AnswerServiceImpl implements AnswerService {
     public boolean isLiked(int userId, int answerId) {
         return userLikeAnswerMapper.getUserLikeAnswer(userId, answerId) == null ? false : true;
     }
+
+    @Override
+    public int insert(Answer answer) {
+        return answerMapper.insert(answer);
+    }
 }

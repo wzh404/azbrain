@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.service.impl;
 
+import com.blueocean.azbrain.common.QuestionStatus;
 import com.blueocean.azbrain.dao.AnswerMapper;
 import com.blueocean.azbrain.dao.QuestionMapper;
 import com.blueocean.azbrain.dao.UserFollowQuestionMapper;
@@ -11,6 +12,11 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
@@ -56,5 +62,31 @@ public class QuestionServiceImpl implements QuestionService{
     public boolean isFollowed(int userId, int questionId) {
         UserFollowQuestion ufq = userFollowQuestionMapper.getUserFollowQuestion(userId, questionId);
         return ufq == null ? false : true;
+    }
+
+    @Override
+    public Page<Question> searchByCondition(int page, int pageSize, HashMap<String, Object> map) {
+        PageHelper.startPage(page, pageSize);
+        return questionMapper.searchByCondition(map);
+    }
+
+    @Override
+    public int insert(Question question) {
+        return questionMapper.insert(question);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int insert(Question question, List<Answer> answers) {
+        int ret = questionMapper.insert(question);
+        for (Answer answer: answers){
+            answerMapper.insert(answer);
+        }
+        return ret;
+    }
+
+    @Override
+    public int close(int questionId) {
+        return questionMapper.changeStatus(questionId, QuestionStatus.CLOSED.getCode());
     }
 }

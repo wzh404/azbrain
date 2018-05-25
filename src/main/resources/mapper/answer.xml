@@ -81,4 +81,11 @@
       id = #{answerId, jdbcType=INTEGER}
   </update>
 
+  <update id="changeStatus">
+    UPDATE azbrain_answer
+    SET
+      status = #{status, jdbcType=VARCHAR}
+    WHERE
+      id = #{answerId, jdbcType=INTEGER}
+  </update>
 </mapper>

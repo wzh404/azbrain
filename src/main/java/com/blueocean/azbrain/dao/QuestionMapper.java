@@ -5,6 +5,8 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
+
 @Mapper
 public interface QuestionMapper {
     /**
@@ -57,4 +59,20 @@ public interface QuestionMapper {
      * @return
      */
     Page<Question> search(@Param("key")String key);
+
+    /**
+     * 按条件查询问题
+     *
+     * @param map
+     * @return
+     */
+    Page<Question> searchByCondition(HashMap<String, Object> map);
+
+    /**
+     * 修改回答状态
+     *
+     * @param id
+     * @return
+     */
+    int changeStatus(@Param("questionId")Integer id, @Param("status")String status);
 }

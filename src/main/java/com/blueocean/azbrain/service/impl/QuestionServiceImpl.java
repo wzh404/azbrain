@@ -1,6 +1,6 @@
 package com.blueocean.azbrain.service.impl;
 
-import com.blueocean.azbrain.common.QuestionStatus;
+import com.blueocean.azbrain.common.status.QuestionStatus;
 import com.blueocean.azbrain.dao.AnswerMapper;
 import com.blueocean.azbrain.dao.QuestionMapper;
 import com.blueocean.azbrain.dao.UserFollowQuestionMapper;

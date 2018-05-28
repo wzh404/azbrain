@@ -1,6 +1,6 @@
 package com.blueocean.azbrain.vo;
 
-import com.blueocean.azbrain.common.QuestionStatus;
+import com.blueocean.azbrain.common.status.QuestionStatus;
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.Question;
 import com.fasterxml.jackson.annotation.JsonInclude;

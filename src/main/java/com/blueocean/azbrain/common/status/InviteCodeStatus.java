@@ -1,4 +1,4 @@
-package com.blueocean.azbrain.common;
+package com.blueocean.azbrain.common.status;
 
 import java.util.Arrays;
 

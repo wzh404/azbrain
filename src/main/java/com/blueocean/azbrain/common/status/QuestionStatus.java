@@ -1,14 +1,14 @@
-package com.blueocean.azbrain.common;
+package com.blueocean.azbrain.common.status;
 
 import java.util.Arrays;
 
 /**
  * Created by @author wangzunhui on 2018/3/15.
  */
-public enum UserStatus {
+public enum QuestionStatus {
     EMPTY(""),
-    NORMAL("00"),
     CLOSED("09"),
+    NORMAL("00"),
     DELETED("99");
 
     private String code;
@@ -17,14 +17,14 @@ public enum UserStatus {
         return code;
     }
 
-    UserStatus(String code){
+    QuestionStatus(String code){
         this.code = code;
     }
 
-    public static UserStatus get(String code){
-        return Arrays.stream(UserStatus.values())
+    public static QuestionStatus get(String code){
+        return Arrays.stream(QuestionStatus.values())
                 .filter(u -> u.code.equalsIgnoreCase(code))
                 .findFirst()
-                .orElse(UserStatus.EMPTY);
+                .orElse(QuestionStatus.EMPTY);
     }
 }

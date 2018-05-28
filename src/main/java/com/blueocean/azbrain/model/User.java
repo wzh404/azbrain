@@ -1,6 +1,6 @@
 package com.blueocean.azbrain.model;
 
-import com.blueocean.azbrain.common.UserStatus;
+import com.blueocean.azbrain.common.status.UserStatus;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

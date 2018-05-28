@@ -3,7 +3,7 @@ package com.blueocean.azbrain.controller;
 import com.blueocean.azbrain.common.ManagerSessionObject;
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
-import com.blueocean.azbrain.common.UserStatus;
+import com.blueocean.azbrain.common.status.UserStatus;
 import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;

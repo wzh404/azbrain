@@ -1,6 +1,6 @@
 package com.blueocean.azbrain.model;
 
-import com.blueocean.azbrain.common.InviteCodeStatus;
+import com.blueocean.azbrain.common.status.InviteCodeStatus;
 import lombok.Data;
 
 import java.util.Calendar;

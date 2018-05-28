@@ -28,41 +28,20 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-/*
-        if (request.getRequestURI().startsWith("/static")){
-            return true;
-        }
 
-        if (request.getRequestURI().startsWith("/error")){
-            return true;
-        }
-
-        if (request.getRequestURI().equalsIgnoreCase("/user/apply/access-token")){
-            return true;
-        }
-*/
         if (request.getRequestURI().startsWith("/manager")){
             return managerHandle(request);
         } else {
             return userHandle(request);
         }
-/*
-        String accessToken = request.getHeader("access_token");
-        if (accessToken == null){
-            logger.info("access token is null");
-            return false;
-        }
-
-        int userId = TokenUtil.getUserId(accessToken);
-        if (userId <= 0){
-            logger.info("auserId is null");
-            return false;
-        }
-
-        request.setAttribute("userId", userId);
-        return true;*/
     }
 
+    /**
+     * 微信客户端session处理
+     *
+     * @param request
+     * @return
+     */
     private boolean userHandle(HttpServletRequest request){
         String accessToken = request.getHeader("access_token");
         if (accessToken == null){
@@ -80,6 +59,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * PC运营端session处理
+     *
+     * @param request
+     * @return
+     */
     private boolean managerHandle(HttpServletRequest request){
         return true;
     }

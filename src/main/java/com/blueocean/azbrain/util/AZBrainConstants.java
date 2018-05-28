@@ -7,4 +7,6 @@ public class AZBrainConstants {
     public final static String DEFAULT_USER_PHOTO = EMPTY_STRING;
     public final static int DEFAULT_COMPANY_ID = 1;
     public final static String DEFAULT_KEY = "blueocean-health.com@20180523";
+    public final static String SESSION_USER_ID = "session.user.id";
+    public final static String SESSION_USER_NAME = "session.user.name";
 }

@@ -7,8 +7,8 @@ import java.util.Arrays;
  */
 public enum UserStatus {
     EMPTY(""),
-    INIT("00"),
-    NORMAL("01"),
+    NORMAL("00"),
+    CLOSED("09"),
     DELETED("99");
 
     private String code;

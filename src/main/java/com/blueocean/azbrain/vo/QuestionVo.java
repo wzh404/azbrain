@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +16,7 @@ import java.util.List;
 public class QuestionVo {
     private String title;
     private String content;
-    @JsonProperty("create_id")
-    private int createId;
+    private String icon;
     List<AnswerVo> answers;
 
     @Data
@@ -29,9 +29,9 @@ public class QuestionVo {
             Answer answer = new Answer();
             answer.setCommentNum(0);
             answer.setLikeNum(0);
-            answer.setLikeNum(0);
-            answer.setCreateBy(createId);
-            answer.setContent(content);
+            answer.setViewNum(0);
+            answer.setCreateBy(this.createId);
+            answer.setContent(this.content);
             answer.setCreateTime(new Date());
             answer.setStatus(QuestionStatus.NORMAL.getCode());
 
@@ -41,15 +41,23 @@ public class QuestionVo {
 
     public Question asQuestion(){
        Question question = new Question();
-       question.setContent(content);
-       question.setCreateBy(createId);
-       question.setTitle(title);
+       question.setContent(this.content);
+       question.setTitle(this.title);
        question.setCreateTime(new Date());
-       question.setAnswerNum(answers.size());
+       question.setAnswerNum(this.answers.size());
        question.setFollowerNum(0);
-       question.setIcon("");
+       question.setIcon(this.icon);
        question.setStatus(QuestionStatus.NORMAL.getCode());
 
        return question;
+    }
+
+    public List<Answer> asAnswers(){
+        List<Answer> answers = new ArrayList<>();
+        for (AnswerVo v : this.answers){
+            answers.add(v.asAnswer());
+        }
+
+        return answers;
     }
 }

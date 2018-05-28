@@ -5,6 +5,8 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
+
 /**
  * Created by wangzunhui on 2018/3/13.
  */
@@ -52,9 +54,18 @@ public interface UserMapper {
     int changeLoginPwd(@Param("id")int id, @Param("password")String password);
 
     /**
+     * 修改用户状态
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    int changeStatus(@Param("id")int id, @Param("status")String status);
+
+    /**
      * paging query user.
      *
      * @return
      */
-    Page<User> findByPage();
+    Page<User> findByPage(HashMap<String, Object> conditionMap);
 }

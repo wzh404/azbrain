@@ -4,6 +4,8 @@ import com.blueocean.azbrain.model.User;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
+
 /**
  * Created by wangzunhui on 2018/3/13.
  */
@@ -47,7 +49,7 @@ public interface UserService {
      * @param pageSize
      * @return
      */
-    Page<User> findByPage(int page, int pageSize);
+    Page<User> findByPage(int page, int pageSize, HashMap<String, Object> conditionMap);
 
     /**
      * 关注问题
@@ -84,4 +86,13 @@ public interface UserService {
      * @return
      */
     int unlike(int userId, int likeAnswerId);
+
+    /**
+     * 修改用户状态
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    int changeStatus(int id, String status);
 }

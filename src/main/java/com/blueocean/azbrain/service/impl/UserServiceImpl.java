@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by @author wangzunhui on 2018/3/13.
@@ -67,9 +68,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Page<User> findByPage(int page, int pageSize) {
+    public Page<User> findByPage(int page, int pageSize, HashMap<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
-        return userMapper.findByPage();
+        return userMapper.findByPage(conditionMap);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService{
         ufq.setQuestionId(questionId);
         ufq.setFollowTime(new Date());
 
-        // uid和quesiton_id设置为唯一索引
+        // uid & quesiton_id设置为唯一索引
         userFollowQuestionMapper.insert(ufq);
         questionMapper.incrementFollower(questionId);
 
@@ -138,5 +139,10 @@ public class UserServiceImpl implements UserService{
         answerMapper.decrementLiker(ula.getAnswerId());
 
         return 0;
+    }
+
+    @Override
+    public int changeStatus(int id, String status) {
+        return userMapper.changeStatus(id, status);
     }
 }

@@ -107,4 +107,21 @@ public class CryptoUtil {
 
         return hasher.hash().toString();
     }
+
+    /**
+     * hash256
+     *
+     * @param args string list
+     * @return hash value
+     */
+    public static String sha1(String... args){
+        Hasher hasher = Hashing.sha1().newHasher();
+        for (String arg : args){
+            if (!StringUtils.isEmpty(arg)){
+                hasher.putString(arg, Charset.forName("utf-8"));
+            }
+        }
+
+        return hasher.hash().toString();
+    }
 }

@@ -30,7 +30,6 @@ public class SearchController {
 
     @RequestMapping(value="/search/question", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject question(@RequestParam("key")String key, @RequestParam("page") Integer page){
-
         Page<Question> pageQuestion = questionService.search(page, AZBrainConstants.PAGE_SIZE, key);
 
         return ResultObject.ok("question", pageQuestion.getResult());
@@ -38,8 +37,6 @@ public class SearchController {
 
     @RequestMapping(value="/search/answer", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject answer(@RequestParam("key")String key, @RequestParam("page") Integer page){
-
-
         Page<Answer> pageAnswer = answerService.search(page, AZBrainConstants.PAGE_SIZE, key);
         return ResultObject.ok("answer", pageAnswer.getResult());
     }

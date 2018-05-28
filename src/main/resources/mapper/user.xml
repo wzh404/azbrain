@@ -69,6 +69,17 @@
 
     <select id="findByPage" resultMap="user">
         SELECT * FROM azbrain_user
+        WHERE
+            status = '00'
+        <if test="name != null">
+            AND name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[ AND create_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[ AND create_time <= #{endTime} ]]>
+        </if>
     </select>
 
     <select id="getUserByName" resultMap="user" parameterType="java.lang.String">
@@ -83,6 +94,14 @@
         SET del_flag = 'T'
         WHERE
             id = #{id}
+    </update>
+
+    <update id="changeStatus" >
+        UPDATE azbrain_user
+        SET
+            status = #{status,jdbcType=VARCHAR}
+        WHERE
+            id = #{id,jdbcType=INTEGER}
     </update>
 
     <!-- change user password -->

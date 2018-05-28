@@ -2,6 +2,7 @@ package com.blueocean.azbrain.model;
 
 import com.blueocean.azbrain.common.UserStatus;
 import com.blueocean.azbrain.util.AZBrainConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ public class User extends Creator {
     private String name;
     private String loginName;
     private String wxid;
+    @JsonIgnore
     private String password;
     private Integer companyId;
     private String jobNumber;
@@ -54,7 +56,11 @@ public class User extends Creator {
         return this.status() == UserStatus.NORMAL;
     }
 
+    public boolean closed(){
+        return this.status() == UserStatus.CLOSED;
+    }
+
     public boolean deleted(){
-        return "T".equalsIgnoreCase(this.getDeleteFlag());
+        return this.status() == UserStatus.DELETED;
     }
 }

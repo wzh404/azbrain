@@ -80,6 +80,7 @@ public class QuestionServiceImpl implements QuestionService{
     public int insert(Question question, List<Answer> answers) {
         int ret = questionMapper.insert(question);
         for (Answer answer: answers){
+            answer.setQuestionId(question.getId());
             answerMapper.insert(answer);
         }
         return ret;

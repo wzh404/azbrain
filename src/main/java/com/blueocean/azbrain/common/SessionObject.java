@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.io.IOException;
 
+/**
+ * C端token存储对象
+ */
 @Data
 public class SessionObject {
     private Integer userId;

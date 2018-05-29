@@ -3,6 +3,7 @@ package com.blueocean.azbrain.model;
 import com.blueocean.azbrain.common.status.UserStatus;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  * Created by @author wangzunhui on 2018/3/13.
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User extends Creator {
     private Integer id;
     private String name;

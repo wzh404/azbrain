@@ -48,13 +48,18 @@ public class QuestionController {
      * @return
      */
     @RequestMapping(value="/question/detail", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject answers(HttpServletRequest request, @RequestParam("question_id") Integer questionId){
+    public ResultObject answers(HttpServletRequest request,
+                                @RequestParam("question_id") Integer questionId,
+                                @RequestParam(value = "order_by", required = false) String orderBy){
         int userId = (int)request.getAttribute("userId");
         Question q = questionService.get(questionId);
         Map map = new HashMap<String, Object>();
         map.put("follow_flag", questionService.isFollowed(userId, questionId));
         map.put("question", q);
-        Page<Answer> pageAnswer = questionService.getQuestionAnswers(1, AZBrainConstants.PAGE_SIZE, questionId);
+        if (orderBy == null){
+            orderBy = "like";
+        }
+        Page<Answer> pageAnswer = questionService.getQuestionAnswers(1, AZBrainConstants.PAGE_SIZE, questionId, orderBy);
         map.put("answers", pageAnswer.getResult());
         return ResultObject.ok(map);
     }
@@ -67,8 +72,12 @@ public class QuestionController {
      */
     @RequestMapping(value="/question/answers", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject answers(@RequestParam("question_id") Integer questionId,
+                                @RequestParam(value = "order_by", required = false) String orderBy,
                                 @RequestParam("page") Integer page){
-        Page<Answer> pageAnswer = questionService.getQuestionAnswers(page, AZBrainConstants.PAGE_SIZE, questionId);
+        if (orderBy == null){
+            orderBy = "like";
+        }
+        Page<Answer> pageAnswer = questionService.getQuestionAnswers(page, AZBrainConstants.PAGE_SIZE, questionId, orderBy);
         return ResultObject.ok("answers", pageAnswer.getResult());
     }
 }

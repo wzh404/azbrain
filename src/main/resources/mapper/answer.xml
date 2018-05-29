@@ -24,13 +24,22 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="listByQuestionId" parameterType="java.lang.Integer" resultMap="answer">
+  <!--查询问题的回答类别，根据点赞数或时间排序 -->
+  <select id="listByQuestionId" resultMap="answer">
     select
     <include refid="Base_Column_List" />
     from azbrain_answer
-      where question_id = #{questionId,jdbcType=INTEGER}
+    where
+      question_id = #{questionId,jdbcType=INTEGER}
+    <if test="orderBy == 'like'">
+      ORDER BY like_num DESC
+    </if>
+    <if test="orderBy == 'time'">
+      ORDER BY create_time DESC
+    </if>
   </select>
 
+  <!--回答搜索 -->
   <select id="search" parameterType="java.lang.String" resultMap="answer">
     SELECT
     <include refid="Base_Column_List" />
@@ -40,6 +49,7 @@
       MATCH(content) AGAINST(#{key,jdbcType=VARCHAR})
   </select>
 
+  <!--回答问题 -->
   <insert id="insert" parameterType="com.blueocean.azbrain.model.Answer" useGeneratedKeys="true" keyProperty="id">
     insert into azbrain_answer (
       id,
@@ -67,12 +77,16 @@
     )
   </insert>
 
+  <!--增加回答点赞数 -->
   <update id="incrementLiker">
-    UPDATE azbrain_answer SET like_num = like_num + 1
+    UPDATE azbrain_answer
+    SET
+      like_num = like_num + 1
     WHERE
       id = #{answerId, jdbcType=INTEGER}
   </update>
 
+  <!--减少回答点赞数 -->
   <update id="decrementLiker">
     UPDATE azbrain_answer
     SET
@@ -81,6 +95,7 @@
       id = #{answerId, jdbcType=INTEGER}
   </update>
 
+  <!--改变回答状态 -->
   <update id="changeStatus">
     UPDATE azbrain_answer
     SET

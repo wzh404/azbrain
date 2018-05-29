@@ -109,8 +109,8 @@
         UPDATE
             azbrain_user
         SET
-          password = #{password}
+            password = #{password}
         WHERE
-          id = #{id}
+            id = #{id}
     </update>
 </mapper>

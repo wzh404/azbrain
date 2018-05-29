@@ -4,9 +4,11 @@ import com.blueocean.azbrain.common.status.QuestionStatus;
 import com.blueocean.azbrain.dao.AnswerMapper;
 import com.blueocean.azbrain.dao.QuestionMapper;
 import com.blueocean.azbrain.dao.UserFollowQuestionMapper;
+import com.blueocean.azbrain.dao.UserRecommendQuestionMapper;
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.Question;
 import com.blueocean.azbrain.model.UserFollowQuestion;
+import com.blueocean.azbrain.model.UserRecommendQuestion;
 import com.blueocean.azbrain.service.QuestionService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,6 +31,9 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Autowired
     private UserFollowQuestionMapper userFollowQuestionMapper;
+
+    @Autowired
+    private UserRecommendQuestionMapper userRecommendQuestionMapper;
 
     @Override
     public Page<Question> getUserFollowQuestions(int page, int pageSize, Integer userId) {
@@ -47,9 +53,9 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Page<Answer> getQuestionAnswers(int page, int pageSize, int questionId) {
+    public Page<Answer> getQuestionAnswers(int page, int pageSize, int questionId, String orderBy) {
         PageHelper.startPage(page, pageSize);
-        return answerMapper.listByQuestionId(questionId);
+        return answerMapper.listByQuestionId(questionId, orderBy);
     }
 
     @Override
@@ -89,5 +95,24 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public int close(int questionId) {
         return questionMapper.changeStatus(questionId, QuestionStatus.CLOSED.getCode());
+    }
+
+    @Override
+    public int recommend(int questionId) {
+        UserRecommendQuestion recommendQuestion = new UserRecommendQuestion();
+        recommendQuestion.setQuestionId(questionId);
+        recommendQuestion.setUserId(0);
+        recommendQuestion.setCreateTime(new Date());
+        return userRecommendQuestionMapper.insert(recommendQuestion);
+    }
+
+    @Override
+    public int unrecommend(int questionId) {
+        return userRecommendQuestionMapper.delete(questionId);
+    }
+
+    @Override
+    public boolean isRecommended(int questionId) {
+        return userRecommendQuestionMapper.get(questionId) == null ? false : true;
     }
 }

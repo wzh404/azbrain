@@ -27,4 +27,6 @@ public class Question{
     private String status;
     @JsonProperty("create_name")
     private String createName;
+
+    private Integer recommend;
 }

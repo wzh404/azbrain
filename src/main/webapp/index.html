@@ -25,8 +25,8 @@
 <a href="#" onclick="javascript:b('/user/question/followers?page=1', {})">我的关注问题</a>|
 <a href="#" onclick="javascript:b('/user/question/recommends?page=1', {})">推荐问题</a>|
 <br/>
-<a href="#" onclick="javascript:b('/question/detail?question_id=1', {})">问题详情</a>|
-<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1', {})">下拉刷新回答!</a>|
+<a href="#" onclick="javascript:b('/question/detail?question_id=1&order_by=time', {})">问题详情</a>|
+<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=time', {})">下拉刷新回答!</a>|
 <a href="#" onclick="javascript:b('/answer/detail?answer_id=1', {})">回答详情</a>|
 <a href="#" onclick="javascript:b('/answer/comments?answer_id=1&page=1', {})">下拉刷新回答评论</a>|
 
@@ -46,6 +46,8 @@
 <a href="#" onclick="javascript:c()">新增问题</a> |
 <a href="#" onclick="javascript:b('/manager/question/detail?question_id=1', {})">查看问题</a> |
 <a href="#" onclick="javascript:b('/manager/question/close?question_id=1', {})">关闭问题</a> |
+<a href="#" onclick="javascript:b('/manager/question/recommend?question_id=2', {})">推荐问题</a> |
+<a href="#" onclick="javascript:b('/manager/question/unrecommend?question_id=2', {})">取消推荐</a> |
 <a href="#" onclick="javascript:b('/manager/question/search?title=医药代表&start_time=2018-01-01&end_time=2018-06-01&page=1', {})">问题管理</a> |
 <a href="#" onclick="javascript:b('/manager/user/search?name=adm&start_time=2018-01-01&end_time=2018-06-01&page=1', {})">用户管理</a> |
 <a href="#" onclick="javascript:b('/manager/user/close?user_id=1', {})">停止用户</a> |
@@ -55,8 +57,8 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    //var g_uri = "http://119.254.84.20:8889";
-    var g_uri = "http://10.13.202.49:8889";
+    var g_uri = "http://119.254.84.20:8889";
+    //var g_uri = "http://10.13.202.49:8889";
 
     function a() {
         $.ajax({

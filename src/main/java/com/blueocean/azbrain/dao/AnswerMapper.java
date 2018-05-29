@@ -11,7 +11,13 @@ public interface AnswerMapper {
 
     Answer get(@Param("id")Integer id);
 
-    Page<Answer> listByQuestionId(@Param("questionId")Integer questionId);
+    /**
+     * 根据问题ID列表回答
+     *
+     * @param questionId
+     * @return
+     */
+    Page<Answer> listByQuestionId(@Param("questionId")Integer questionId, @Param("orderBy")String orderBy);
 
     /**
      * 点赞人数加一

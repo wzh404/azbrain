@@ -12,17 +12,20 @@
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="status" jdbcType="CHAR" property="status" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="recommend" jdbcType="INTEGER" property="recommend" />
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, title, content, icon, follower_num, answer_num, create_time, create_by, create_name, status
+    id, title, content, icon, follower_num, answer_num, create_time, create_by, create_name, status,recommend
   </sql>
 
   <select id="get" parameterType="java.lang.Integer" resultMap="question">
     select 
     <include refid="Base_Column_List" />
-    from azbrain_question
-    where id = #{id,jdbcType=INTEGER}
+    from
+        azbrain_question
+    where
+        id = #{id,jdbcType=INTEGER}
   </select>
 
   <insert id="insert" parameterType="com.blueocean.azbrain.model.Question" useGeneratedKeys="true" keyProperty="id">
@@ -36,7 +39,8 @@
       create_time,
       create_by,
       create_name,
-      status
+      status,
+      recommend
       )
     values (
       #{id,jdbcType=INTEGER},
@@ -48,7 +52,8 @@
       #{createTime,jdbcType=TIMESTAMP},
       #{createBy,jdbcType=INTEGER},
       #{createName,jdbcType=VARCHAR},
-      #{status,jdbcType=CHAR}
+      #{status,jdbcType=CHAR},
+      #{recommend,jdbcType=INTEGER}
       )
   </insert>
 

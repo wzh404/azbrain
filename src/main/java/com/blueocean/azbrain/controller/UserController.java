@@ -118,6 +118,13 @@ public class UserController {
         return ResultObject.ok("code",code);
     }
 
+    /**
+     * 关注问题
+     *
+     * @param request
+     * @param questionId
+     * @return
+     */
     @RequestMapping(value="/follow-question", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject follow(
             HttpServletRequest request,
@@ -131,6 +138,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 取消关注
+     *
+     * @param request
+     * @param questionId
+     * @return
+     */
     @RequestMapping(value="/unfollow-question", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject unfollow(HttpServletRequest request,
             @RequestParam("question_id") Integer questionId){
@@ -143,6 +157,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 点赞回答
+     *
+     * @param request
+     * @param answerId
+     * @return
+     */
     @RequestMapping(value="/like-answer", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject like(HttpServletRequest request,
             @RequestParam("answer_id") Integer answerId){
@@ -155,6 +176,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 取消点赞
+     *
+     * @param request
+     * @param answerId
+     * @return
+     */
     @RequestMapping(value="/unlike-answer", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject unlike(HttpServletRequest request,
             @RequestParam("answer_id") Integer answerId){
@@ -167,6 +195,12 @@ public class UserController {
         }
     }
 
+    /**
+     * 获取access_token.
+     *
+     * @param code
+     * @return
+     */
     @RequestMapping(value="/apply/access-token", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject accessToken(@RequestParam("code") String code){
         User user = userService.getUserByName(code);

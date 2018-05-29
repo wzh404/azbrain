@@ -48,6 +48,7 @@ public class QuestionVo {
        question.setFollowerNum(0);
        question.setIcon(this.icon);
        question.setStatus(QuestionStatus.NORMAL.getCode());
+       question.setRecommend(0);
 
        return question;
     }

@@ -1,18 +1,21 @@
 package com.blueocean.azbrain.dao;
 
-import com.blueocean.azbrain.model.UserInviteCode;
 import com.blueocean.azbrain.model.UserRecommendQuestion;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
-
 @Mapper
 public interface UserRecommendQuestionMapper {
-    int delete(@Param("id") Integer id);
+    /**
+     * 取消推荐
+     *
+     * @param questionId
+     * @return
+     */
+    int delete(@Param("questionId") Integer questionId);
 
     /**
-     * 生成邀请码
+     * 推荐问题
      *
      * @param record
      * @return
@@ -20,26 +23,10 @@ public interface UserRecommendQuestionMapper {
     int insert(UserRecommendQuestion record);
 
     /**
-     * 领取邀请码
+     * 获取推荐问题
      *
-     * @param userId
-     * @param createTime
-     *
+     * @param questionId
      * @return
      */
-    int complete(@Param("inviteCode")String inviteCode, @Param("userId")Integer userId, @Param("createTime")Date createTime);
-
-    /**
-     *
-     * @param inviteCode
-     * @return
-     */
-    UserInviteCode getByInviteCode(@Param("inviteCode") String inviteCode);
-
-    /**
-     *
-     * @param id
-     * @return
-     */
-    UserInviteCode get(@Param("id") Integer id);
+    UserRecommendQuestion get(@Param("questionId")Integer questionId);
 }

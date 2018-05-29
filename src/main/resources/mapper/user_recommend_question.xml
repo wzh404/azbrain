@@ -11,18 +11,20 @@
   <sql id="Base_Column_List">
     id, user_id, question_id, create_time
   </sql>
+
   <select id="get" parameterType="java.lang.Integer" resultMap="UserRecommendQuestion">
     select
     <include refid="Base_Column_List" />
     from
-      azbrain_user_follow_question
+      azbrain_user_recommend_question
     where
-      id = #{id, jdbcType=INTEGER}
+      question_id = #{questionId, jdbcType=INTEGER}
   </select>
 
   <delete id="delete" parameterType="java.lang.Integer">
-    delete from azbrain_user_follow_question
-    where id = #{id, jdbcType=INTEGER}
+    delete from azbrain_user_recommend_question
+    where
+      question_id = #{questionId, jdbcType=INTEGER}
   </delete>
 
   <insert id="insert" parameterType="com.blueocean.azbrain.model.UserRecommendQuestion" useGeneratedKeys="true" keyProperty="id">

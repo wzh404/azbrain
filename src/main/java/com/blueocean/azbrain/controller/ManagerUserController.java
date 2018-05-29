@@ -109,6 +109,7 @@ public class ManagerUserController {
             logger.warn("user {} not exist", userId);
             return ResultObject.fail(ResultCode.USER_NOT_EXIST);
         }
+
         if (!user.normal()){
             return ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);
         }
@@ -129,6 +130,7 @@ public class ManagerUserController {
             logger.warn("user {} not exist", userId);
             return ResultObject.fail(ResultCode.USER_NOT_EXIST);
         }
+
         if (!user.closed()){
             return ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);
         }

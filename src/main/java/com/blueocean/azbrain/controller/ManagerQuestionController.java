@@ -5,6 +5,7 @@ import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.Question;
+import com.blueocean.azbrain.model.UserRecommendQuestion;
 import com.blueocean.azbrain.service.AnswerService;
 import com.blueocean.azbrain.service.QuestionService;
 import com.blueocean.azbrain.util.AZBrainConstants;
@@ -79,7 +80,7 @@ public class ManagerQuestionController {
     public ResultObject detail(@RequestParam("question_id") Integer questionId){
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("question", questionService.get(questionId));
-        Page<Answer> pageAnswer = questionService.getQuestionAnswers(1, AZBrainConstants.MANAGER_PAGE_SIZE, questionId);
+        Page<Answer> pageAnswer = questionService.getQuestionAnswers(1, AZBrainConstants.MANAGER_PAGE_SIZE, questionId, "time");
         resultMap.put("answers", pageAnswer.getResult());
         resultMap.put("page", ResultObject.pageMap(pageAnswer));
 
@@ -151,6 +152,44 @@ public class ManagerQuestionController {
         } catch (Exception e) {
             logger.error("file", e);
             return ResultObject.fail(ResultCode.MANAGE_UPLOAD_FILE_FAILED);
+        }
+    }
+
+    /**
+     * 推荐问题
+     *
+     * @param questionId
+     * @return
+     */
+    @RequestMapping(value="/recommend", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject recommend(@RequestParam("question_id") Integer questionId){
+        if (questionService.isRecommended(questionId)){
+            return ResultObject.fail(ResultCode.MANAGE_QUESTION_RECOMMENDED);
+        }
+
+        if (questionService.recommend(questionId) > 0){
+            return ResultObject.ok();
+        } else {
+            return ResultObject.fail(ResultCode.MANAGE_RECOMMEND_FAILED);
+        }
+    }
+
+    /**
+     * 取消推荐
+     *
+     * @param questionId
+     * @return
+     */
+    @RequestMapping(value="/unrecommend", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject unrecommend(@RequestParam("question_id") Integer questionId){
+        if (!questionService.isRecommended(questionId)){
+            return ResultObject.fail(ResultCode.MANAGE_QUESTION_UNRECOMMENDED);
+        }
+
+        if (questionService.unrecommend(questionId) > 0){
+            return ResultObject.ok();
+        } else {
+            return ResultObject.fail(ResultCode.MANAGE_RECOMMEND_FAILED);
         }
     }
 }

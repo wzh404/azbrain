@@ -2,6 +2,7 @@ package com.blueocean.azbrain.service;
 
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.Question;
+import com.blueocean.azbrain.model.UserRecommendQuestion;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,7 +43,7 @@ public interface QuestionService {
      * @param questionId
      * @return
      */
-    Page<Answer> getQuestionAnswers(int page, int pageSize, int questionId);
+    Page<Answer> getQuestionAnswers(int page, int pageSize, int questionId, String orderBy);
 
     /**
      *
@@ -94,4 +95,28 @@ public interface QuestionService {
      * @return
      */
     int close(int questionId);
+
+    /**
+     * 推荐问题
+     *
+     * @param questionId
+     * @return
+     */
+    int recommend(int questionId);
+
+    /**
+     * 取消推荐
+     *
+     * @param questionId
+     * @return
+     */
+    int unrecommend(int questionId);
+
+    /**
+     * 问题是否被推荐
+     *
+     * @param questionId
+     * @return
+     */
+    boolean isRecommended(int questionId);
 }

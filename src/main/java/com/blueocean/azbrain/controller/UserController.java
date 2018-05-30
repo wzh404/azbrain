@@ -47,8 +47,10 @@ public class UserController {
         if (savedMobile == null || !savedMobile.equalsIgnoreCase(mobile)){
             return ResultObject.fail(ResultCode.USER_LOGIN_FAILED);
         }
-        String wxid = "";
-        User user = new User(mobile, wxid, AZBrainConstants.DEFAULT_COMPANY_ID);
+        String kcode = "";
+        String bu = "";
+        String pinyin="";
+        User user = new User(mobile, kcode, AZBrainConstants.DEFAULT_COMPANY_ID, pinyin, bu);
 
         int rows = userService.insert(user, inviteCode);
         if (rows == 1){

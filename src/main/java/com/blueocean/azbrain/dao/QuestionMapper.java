@@ -75,4 +75,13 @@ public interface QuestionMapper {
      * @return
      */
     int changeStatus(@Param("questionId")Integer id, @Param("status")String status);
+
+    /**
+     * 改变问题推荐状态
+     *
+     * @param questionId
+     * @param recommend
+     * @return
+     */
+    int changeRecommendStatus(@Param("questionId")Integer questionId, @Param("recommend")Integer recommend);
 }

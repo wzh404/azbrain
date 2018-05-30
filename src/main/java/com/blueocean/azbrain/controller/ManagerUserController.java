@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/manager/user")
@@ -48,6 +49,17 @@ public class ManagerUserController {
         resultMap.put("page", ResultObject.pageMap(users));
 
         return ResultObject.ok(resultMap);
+    }
+
+    /**
+     * 全部用户列表
+     *
+     * @return
+     */
+    @RequestMapping(value="/list", method= {RequestMethod.GET})
+    public ResultObject list(){
+        List<User> users = userService.list();
+        return ResultObject.ok("users", users);
     }
 
     /**

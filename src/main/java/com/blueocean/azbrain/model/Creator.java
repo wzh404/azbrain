@@ -15,6 +15,5 @@ public class Creator {
     protected Integer createBy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     protected Date createTime;
-    protected String deleteFlag;
     protected String remarks;
 }

@@ -17,9 +17,10 @@
 
         <result column="create_by" jdbcType="INTEGER" property="createBy" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="delete_flag" jdbcType="CHAR" property="deleteFlag" />
+        <result column="business_unit" jdbcType="VARCHAR" property="businessUnit" />
         <result column="remarks" jdbcType="VARCHAR" property="remarks" />
         <result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
+        <result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
     </resultMap>
 
     <insert id="insert" parameterType="com.blueocean.azbrain.model.User" useGeneratedKeys="true" keyProperty="id">
@@ -38,8 +39,9 @@
             status,
             create_by,
             create_time,
-            delete_flag,
+            business_unit,
             invite_code,
+            pinyin,
             remarks)
         values (
             #{id,jdbcType=INTEGER},
@@ -56,8 +58,9 @@
             #{status,jdbcType=CHAR},
             #{createBy,jdbcType=INTEGER},
             #{createTime,jdbcType=TIMESTAMP},
-            #{deleteFlag,jdbcType=CHAR},
-            #{inviteCode,jdbcType=VARCHAR}
+            #{businessUnit,jdbcType=VARCHAR},
+            #{inviteCode,jdbcType=VARCHAR},
+            #{pinyin,jdbcType=VARCHAR},
             #{remarks,jdbcType=VARCHAR})
     </insert>
 
@@ -70,7 +73,7 @@
     <select id="findByPage" resultMap="user">
         SELECT * FROM azbrain_user
         WHERE
-            status = '00'
+            status != '09'
         <if test="name != null">
             AND name LIKE CONCAT('%',#{name},'%')
         </if>
@@ -80,6 +83,14 @@
         <if test="endTime != null">
             <![CDATA[ AND create_time <= #{endTime} ]]>
         </if>
+    </select>
+
+    <select id="list" resultMap="user">
+        SELECT *
+        FROM
+            azbrain_user
+        WHERE
+            status = '00'
     </select>
 
     <select id="getUserByName" resultMap="user" parameterType="java.lang.String">

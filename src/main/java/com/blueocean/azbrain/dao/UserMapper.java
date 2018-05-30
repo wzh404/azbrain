@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by wangzunhui on 2018/3/13.
@@ -68,4 +69,10 @@ public interface UserMapper {
      * @return
      */
     Page<User> findByPage(HashMap<String, Object> conditionMap);
+
+    /**
+     * 列表全部用户
+     * @return
+     */
+    List<User> list();
 }

@@ -98,7 +98,9 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public int recommend(int questionId) {
+        questionMapper.changeRecommendStatus(questionId, 1);
         UserRecommendQuestion recommendQuestion = new UserRecommendQuestion();
         recommendQuestion.setQuestionId(questionId);
         recommendQuestion.setUserId(0);
@@ -107,7 +109,9 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public int unrecommend(int questionId) {
+        questionMapper.changeRecommendStatus(questionId, 0);
         return userRecommendQuestionMapper.delete(questionId);
     }
 

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by @author wangzunhui on 2018/3/13.
@@ -144,5 +145,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public int changeStatus(int id, String status) {
         return userMapper.changeStatus(id, status);
+    }
+
+    @Override
+    public List<User> list(){
+        return userMapper.list();
     }
 }

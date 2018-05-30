@@ -28,17 +28,19 @@ public class User extends Creator {
     private String mobile;
     private String status;
     private String inviteCode;
+    protected String businessUnit;
+    protected String pinyin;
 
     public User(){
     }
 
-    public User(String mobile, String wxid, int companyId){
+    public User(String mobile, String kcode, int companyId, String pinyin, String businessUnit){
         this.name = mobile;
         this.wxid = wxid;
         this.companyId = companyId;
-        this.loginName = mobile;
+        this.loginName = kcode;
         this.password = "";
-        this.jobNumber = "";
+        this.jobNumber = kcode;
         this.userType = "";
         this.photo = AZBrainConstants.DEFAULT_USER_PHOTO;
         this.email = "";
@@ -46,7 +48,8 @@ public class User extends Creator {
         this.status = UserStatus.NORMAL.getCode();
         this.createBy = 0;
         this.createTime = new Date();
-        this.deleteFlag = "F";
+        this.businessUnit = businessUnit;
+        this.pinyin = pinyin;
         this.remarks = "";
     }
 

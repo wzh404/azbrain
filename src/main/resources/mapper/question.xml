@@ -132,4 +132,12 @@
     WHERE
       id = #{questionId, jdbcType=INTEGER}
   </update>
+
+  <update id="changeRecommendStatus">
+    UPDATE azbrain_question
+    SET
+      recommend = #{recommend, jdbcType=INTEGER}
+    WHERE
+      id = #{questionId, jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -52,7 +52,6 @@
   <!--回答问题 -->
   <insert id="insert" parameterType="com.blueocean.azbrain.model.Answer" useGeneratedKeys="true" keyProperty="id">
     insert into azbrain_answer (
-      id,
       question_id,
       content,
       like_num,
@@ -64,7 +63,6 @@
       status
       )
     values (
-      #{id,jdbcType=INTEGER},
       #{questionId,jdbcType=INTEGER},
       #{content,jdbcType=VARCHAR},
       #{likeNum,jdbcType=INTEGER},
@@ -100,6 +98,14 @@
     UPDATE azbrain_answer
     SET
       status = #{status, jdbcType=VARCHAR}
+    WHERE
+      id = #{answerId, jdbcType=INTEGER}
+  </update>
+
+  <update id="update">
+    UPDATE azbrain_answer
+    SET
+      content = #{content, jdbcType=VARCHAR}
     WHERE
       id = #{answerId, jdbcType=INTEGER}
   </update>

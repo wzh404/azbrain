@@ -119,4 +119,23 @@ public interface QuestionService {
      * @return
      */
     boolean isRecommended(int questionId);
+
+    /**
+     * 修改问题标题及内容
+     *
+     * @param questionId
+     * @param title
+     * @param content
+     * @return
+     */
+    int update(Integer questionId, String title, String content);
+
+    /**
+     * 修改问题标题及内容,问题回答内容
+     *
+     * @param question
+     * @param answers
+     * @return
+     */
+    int update(Question question, List<Answer> answers);
 }

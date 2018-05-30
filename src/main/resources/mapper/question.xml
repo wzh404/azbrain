@@ -30,7 +30,6 @@
 
   <insert id="insert" parameterType="com.blueocean.azbrain.model.Question" useGeneratedKeys="true" keyProperty="id">
     insert into azbrain_question (
-      id,
       title,
       content,
       icon,
@@ -43,7 +42,6 @@
       recommend
       )
     values (
-      #{id,jdbcType=INTEGER},
       #{title,jdbcType=VARCHAR},
       #{content,jdbcType=VARCHAR},
       #{icon,jdbcType=VARCHAR},
@@ -137,6 +135,15 @@
     UPDATE azbrain_question
     SET
       recommend = #{recommend, jdbcType=INTEGER}
+    WHERE
+      id = #{questionId, jdbcType=INTEGER}
+  </update>
+
+  <update id="update">
+    UPDATE azbrain_question
+    SET
+      title = #{title, jdbcType=VARCHAR},
+      content = #{content, jdbcType=VARCHAR}
     WHERE
       id = #{questionId, jdbcType=INTEGER}
   </update>

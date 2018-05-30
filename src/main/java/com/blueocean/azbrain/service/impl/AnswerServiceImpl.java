@@ -48,4 +48,9 @@ public class AnswerServiceImpl implements AnswerService {
     public int insert(Answer answer) {
         return answerMapper.insert(answer);
     }
+
+    @Override
+    public int update(Integer answerId, String content) {
+        return answerMapper.update(answerId, content);
+    }
 }

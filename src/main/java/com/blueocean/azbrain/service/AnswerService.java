@@ -3,6 +3,7 @@ package com.blueocean.azbrain.service;
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.AnswerComment;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
 
 public interface AnswerService {
@@ -50,4 +51,13 @@ public interface AnswerService {
      * @return
      */
     int insert(Answer answer);
+
+    /**
+     * 修改回答内容
+     *
+     * @param answerId
+     * @param content
+     * @return
+     */
+    int update(Integer answerId, String content);
 }

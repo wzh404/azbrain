@@ -192,4 +192,10 @@ public class ManagerQuestionController {
             return ResultObject.fail(ResultCode.MANAGE_RECOMMEND_FAILED);
         }
     }
+
+    @RequestMapping(value="/update", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject add(@RequestBody QuestionVo questionVo){
+        questionService.update(questionVo.asQuestion(), questionVo.asAnswers());
+        return ResultObject.ok();
+    }
 }

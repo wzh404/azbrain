@@ -119,4 +119,20 @@ public class QuestionServiceImpl implements QuestionService{
     public boolean isRecommended(int questionId) {
         return userRecommendQuestionMapper.get(questionId) == null ? false : true;
     }
+
+    @Override
+    public int update(Integer questionId, String title, String content) {
+        return questionMapper.update(questionId, title, content);
+    }
+
+    @Override
+    public int update(Question question, List<Answer> answers) {
+        int ret = questionMapper.update(question.getId(), question.getTitle(), question.getContent());
+        if (ret <= 0) return -1;
+
+        for (Answer answer: answers){
+            answerMapper.update(answer.getId(), answer.getContent());
+        }
+        return ret;
+    }
 }

@@ -109,7 +109,7 @@ public class CryptoUtil {
     }
 
     /**
-     * hash256
+     * sha1
      *
      * @param args string list
      * @return hash value

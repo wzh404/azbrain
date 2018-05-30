@@ -84,4 +84,14 @@ public interface QuestionMapper {
      * @return
      */
     int changeRecommendStatus(@Param("questionId")Integer questionId, @Param("recommend")Integer recommend);
+
+    /**
+     * 修改问题标题及内容
+     *
+     * @param questionId
+     * @param title
+     * @param content
+     * @return
+     */
+    int update(@Param("questionId")Integer questionId, @Param("title")String title, @Param("content")String content);
 }

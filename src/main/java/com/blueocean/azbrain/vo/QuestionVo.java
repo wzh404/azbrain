@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class QuestionVo {
+    private Integer id;
     private String title;
     private String content;
     private String icon;
@@ -21,12 +22,14 @@ public class QuestionVo {
 
     @Data
     public static class AnswerVo {
+        private Integer id;
         private String content;
         @JsonProperty("create_id")
         private int createId;
 
         public Answer asAnswer(){
             Answer answer = new Answer();
+            answer.setId(id);
             answer.setCommentNum(0);
             answer.setLikeNum(0);
             answer.setViewNum(0);
@@ -41,6 +44,7 @@ public class QuestionVo {
 
     public Question asQuestion(){
        Question question = new Question();
+       question.setId(id);
        question.setContent(this.content);
        question.setTitle(this.title);
        question.setCreateTime(new Date());

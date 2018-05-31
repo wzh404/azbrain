@@ -40,7 +40,7 @@ public class User extends Creator {
         this.loginName = kcode;
         this.password = "";
         this.jobNumber = kcode;
-        this.userType = "";
+        this.userType = "00";
         this.photo = AZBrainConstants.DEFAULT_USER_PHOTO;
         this.email = "";
         this.mobile = "";

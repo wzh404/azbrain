@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
@@ -171,8 +172,12 @@ public class ManagerUserController {
      * @return
      */
     @RequestMapping(value="/new", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject newUser(@Valid @RequestBody UserVo userVo) {
+    public ResultObject newUser(HttpServletRequest request, @Valid @RequestBody UserVo userVo) {
+        HttpSession session = request.getSession();
+        ManagerSessionObject mso = ManagerSessionObject.fromSession(session);
         User user = userVo.asUser();
+        user.setCreateBy(mso.getId());
+
         int rows = userService.insert(user);
         return rows > 0 ? ResultObject.ok() : ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);
     }

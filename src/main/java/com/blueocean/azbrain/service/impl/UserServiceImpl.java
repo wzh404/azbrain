@@ -42,15 +42,8 @@ public class UserServiceImpl implements UserService{
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public int insert(User user, String inviteCode) {
-        UserInviteCode userInviteCode = inviteCodeMapper.getByInviteCode(inviteCode);
-        if (userInviteCode == null || !userInviteCode.isValid()){
-            return 0;
-        }
-
-        user.setInviteCode(inviteCode);
-        userMapper.insert(user);
-        return inviteCodeMapper.receive(user.getId(), inviteCode, new Date());
+    public int insert(User user) {
+        return userMapper.insert(user);
     }
 
     @Override

@@ -1,14 +1,8 @@
 package com.blueocean.azbrain.service.impl;
 
 import com.blueocean.azbrain.common.status.QuestionStatus;
-import com.blueocean.azbrain.dao.AnswerMapper;
-import com.blueocean.azbrain.dao.QuestionMapper;
-import com.blueocean.azbrain.dao.UserFollowQuestionMapper;
-import com.blueocean.azbrain.dao.UserRecommendQuestionMapper;
-import com.blueocean.azbrain.model.Answer;
-import com.blueocean.azbrain.model.Question;
-import com.blueocean.azbrain.model.UserFollowQuestion;
-import com.blueocean.azbrain.model.UserRecommendQuestion;
+import com.blueocean.azbrain.dao.*;
+import com.blueocean.azbrain.model.*;
 import com.blueocean.azbrain.service.QuestionService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -17,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +24,9 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Autowired
     private AnswerMapper answerMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private UserFollowQuestionMapper userFollowQuestionMapper;
@@ -82,14 +81,19 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public int insert(Question question, List<Answer> answers) {
-        int ret = questionMapper.insert(question);
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor=SQLException.class)
+    public int insert(Question question, List<Answer> answers) throws SQLException {
+        questionMapper.insert(question);
         for (Answer answer: answers){
+            User user = userMapper.get(answer.getCreateBy());
+            if (user == null){
+                throw new SQLException("user is not exist");
+            }
+            answer.setCreateName(user.getName());
             answer.setQuestionId(question.getId());
             answerMapper.insert(answer);
         }
-        return ret;
+        return 1;
     }
 
     @Override
@@ -121,18 +125,17 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public int update(Integer questionId, String title, String content) {
-        return questionMapper.update(questionId, title, content);
+    public int update(Integer questionId, String title, String content, String icon) {
+        return questionMapper.update(questionId, title, content, icon);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public int update(Question question, List<Answer> answers) {
-        int ret = questionMapper.update(question.getId(), question.getTitle(), question.getContent());
-        if (ret <= 0) return -1;
-
+        questionMapper.update(question.getId(), question.getTitle(), question.getContent(), question.getIcon());
         for (Answer answer: answers){
             answerMapper.update(answer.getId(), answer.getContent());
         }
-        return ret;
+        return 1;
     }
 }

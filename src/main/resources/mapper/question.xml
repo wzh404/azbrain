@@ -85,7 +85,8 @@
     FROM
       azbrain_question
     WHERE
-      MATCH(title) AGAINST(#{key,jdbcType=VARCHAR})
+      <!-- MATCH(title) AGAINST(#{key,jdbcType=VARCHAR}) -->
+      title LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
   </select>
 
   <update id="incrementFollower">
@@ -143,6 +144,7 @@
     UPDATE azbrain_question
     SET
       title = #{title, jdbcType=VARCHAR},
+      icon = #{icon, jdbcType=VARCHAR},
       content = #{content, jdbcType=VARCHAR}
     WHERE
       id = #{questionId, jdbcType=INTEGER}

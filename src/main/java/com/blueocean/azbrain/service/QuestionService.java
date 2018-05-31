@@ -6,6 +6,7 @@ import com.blueocean.azbrain.model.UserRecommendQuestion;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,7 +87,7 @@ public interface QuestionService {
      * @param answers
      * @return
      */
-    int insert(Question question, List<Answer> answers);
+    int insert(Question question, List<Answer> answers) throws SQLException;
 
     /**
      * 关闭问题
@@ -128,7 +129,7 @@ public interface QuestionService {
      * @param content
      * @return
      */
-    int update(Integer questionId, String title, String content);
+    int update(Integer questionId, String title, String content, String icon);
 
     /**
      * 修改问题标题及内容,问题回答内容

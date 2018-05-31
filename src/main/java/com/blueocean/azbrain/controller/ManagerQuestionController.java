@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -40,7 +41,7 @@ public class ManagerQuestionController {
     @Value("${spring.resources.static-locations}")
     private String resourceLocation;
 
-    @Value("${question_icon_url}")
+    @Value("${azbrain.question.icon.url}")
     private String questionIconUrl;
 
     /**
@@ -107,7 +108,7 @@ public class ManagerQuestionController {
      */
     @RequestMapping(value="/add", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject add(HttpServletRequest request,
-                            @RequestBody QuestionVo questionVo){
+                            @RequestBody QuestionVo questionVo) throws SQLException {
         logger.info("{}, {}", questionVo.getTitle(), questionVo.getIcon());
         Question question = questionVo.asQuestion();
 
@@ -193,8 +194,14 @@ public class ManagerQuestionController {
         }
     }
 
-    @RequestMapping(value="/update", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject add(@RequestBody QuestionVo questionVo){
+    /**
+     * 问题编辑
+     *
+     * @param questionVo
+     * @return
+     */
+    @RequestMapping(value="/edit", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject edit(@RequestBody QuestionVo questionVo)  {
         questionService.update(questionVo.asQuestion(), questionVo.asAnswers());
         return ResultObject.ok();
     }

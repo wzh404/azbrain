@@ -93,5 +93,5 @@ public interface QuestionMapper {
      * @param content
      * @return
      */
-    int update(@Param("questionId")Integer questionId, @Param("title")String title, @Param("content")String content);
+    int update(@Param("questionId")Integer questionId, @Param("title")String title, @Param("content")String content, @Param("icon")String icon);
 }

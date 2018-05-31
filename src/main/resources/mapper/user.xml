@@ -73,7 +73,7 @@
     <select id="findByPage" resultMap="user">
         SELECT * FROM azbrain_user
         WHERE
-            status != '09'
+            status != '99'
         <if test="name != null">
             AND name LIKE CONCAT('%',#{name},'%')
         </if>
@@ -98,14 +98,6 @@
         WHERE
           login_name = #{name}
     </select>
-
-    <!-- set user del_flag to true -->
-    <update id="delete">
-        UPDATE azbrain_user
-        SET del_flag = 'T'
-        WHERE
-            id = #{id}
-    </update>
 
     <update id="changeStatus" >
         UPDATE azbrain_user

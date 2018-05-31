@@ -34,17 +34,17 @@ public class User extends Creator {
     public User(){
     }
 
-    public User(String mobile, String kcode, int companyId, String pinyin, String businessUnit){
-        this.name = mobile;
-        this.wxid = wxid;
-        this.companyId = companyId;
+    public User(String name, String kcode, String pinyin, String businessUnit){
+        this.name = name;
+        this.wxid = "";
+        this.companyId = AZBrainConstants.DEFAULT_COMPANY_ID;
         this.loginName = kcode;
         this.password = "";
         this.jobNumber = kcode;
         this.userType = "";
         this.photo = AZBrainConstants.DEFAULT_USER_PHOTO;
         this.email = "";
-        this.mobile = mobile;
+        this.mobile = "";
         this.status = UserStatus.NORMAL.getCode();
         this.createBy = 0;
         this.createTime = new Date();

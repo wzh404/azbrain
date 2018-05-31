@@ -50,9 +50,9 @@ public class UserController {
         String kcode = "";
         String bu = "";
         String pinyin="";
-        User user = new User(mobile, kcode, AZBrainConstants.DEFAULT_COMPANY_ID, pinyin, bu);
+        User user = new User(mobile, kcode, pinyin, bu);
 
-        int rows = userService.insert(user, inviteCode);
+        int rows = userService.insert(user);
         if (rows == 1){
             return ResultObject.ok();
         }

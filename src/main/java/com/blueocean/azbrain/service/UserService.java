@@ -17,7 +17,7 @@ public interface UserService {
      * @param user
      * @return 1 success, other failed.
      */
-    public int insert(User user, String inviteCode);
+    public int insert(User user);
 
     /**
      * set user del_flag to 'T'

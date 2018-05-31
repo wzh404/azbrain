@@ -45,12 +45,15 @@
 <br/>
 <a href="#" onclick="javascript:login('/manager/user/login', {'name':'admin', 'pwd':'admin'})">登录</a> |
 <a href="#" onclick="javascript:c()">新增问题</a> |
-<a href="#" onclick="javascript:b('/manager/question/detail?question_id=1', {})">查看问题</a> |
+<a href="#" onclick="javascript:d()">编辑问题</a> |
+<a href="#" onclick="javascript:user()">新增用户</a> |
+<a href="#" onclick="javascript:b('/manager/question/detail?question_id=26', {})">查看问题</a> |
 <a href="#" onclick="javascript:b('/manager/question/close?question_id=1', {})">关闭问题</a> |
 <a href="#" onclick="javascript:b('/manager/question/recommend?question_id=7', {})">推荐问题</a> |
 <a href="#" onclick="javascript:b('/manager/question/unrecommend?question_id=7', {})">取消推荐</a> |
 <a href="#" onclick="javascript:b('/manager/question/search?title=医药代表&start_time=2018-01-01&end_time=2018-06-01&page=1', {})">问题管理</a> |
 <a href="#" onclick="javascript:b('/manager/user/search?name=adm&start_time=2018-01-01&end_time=2018-06-01&page=1', {})">用户管理</a> |
+<a href="#" onclick="javascript:b('/manager/user/search?page=1', {})">用户管理2</a> |
 <a href="#" onclick="javascript:b('/manager/user/close?user_id=1', {})">停止用户</a> |
 <a href="#" onclick="javascript:b('/manager/user/active?user_id=1', {})">激活用户</a> |
 <a href="#" onclick="javascript:b('/manager/user/delete?user_id=1', {})">删除用户</a> |
@@ -103,8 +106,49 @@
                 "icon":icon,
                 "answers":[{
                     "content":"CONTENT---1",
-                    "create_id" : 0,
+                    "create_id" : 5,
                 }]
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function d() {
+        $.ajax({
+            type : "POST",
+            url : g_uri + "/manager/question/edit",
+            data : JSON.stringify({
+                "id":26,
+                "title":"TITLE TEST EDIT",
+                "content":"www EDIT",
+                "icon":icon,
+                "answers":[{
+                    "id":26,
+                    "content":"CONTENT---1 EDIT-0",
+                    "create_id" : 7,
+                }]
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function user() {
+        $.ajax({
+            type : "POST",
+            url : g_uri + "/manager/user/new",
+            data : JSON.stringify({
+                "kcode":"127456",
+                "name":"www",
+                "pinyin":"pinyin",
+                "bu":"bubu"
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

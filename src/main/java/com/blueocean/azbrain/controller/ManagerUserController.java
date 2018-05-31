@@ -9,6 +9,7 @@ import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.CryptoUtil;
 import com.blueocean.azbrain.vo.LoginVo;
+import com.blueocean.azbrain.vo.UserVo;
 import com.github.pagehelper.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,6 +124,7 @@ public class ManagerUserController {
         }
 
         if (!user.normal()){
+            logger.warn("user status is {}", user.getStatus());
             return ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);
         }
         int ret = userService.changeStatus(userId, UserStatus.CLOSED.getCode());
@@ -160,5 +162,18 @@ public class ManagerUserController {
     public ResultObject delete(@RequestParam("user_id") Integer userId){
         int ret = userService.changeStatus(userId, UserStatus.DELETED.getCode());
         return ret > 0 ? ResultObject.ok() : ResultObject.fail(ResultCode.USER_CHANGE_STATUS_FAILED);
+    }
+
+    /**
+     * 添加新用户
+     *
+     * @param userVo
+     * @return
+     */
+    @RequestMapping(value="/new", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject newUser(@Valid @RequestBody UserVo userVo) {
+        User user = userVo.asUser();
+        int rows = userService.insert(user);
+        return rows > 0 ? ResultObject.ok() : ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);
     }
 }

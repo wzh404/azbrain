@@ -21,7 +21,8 @@
     select 
     <include refid="Base_Column_List" />
     from azbrain_answer
-    where id = #{id,jdbcType=INTEGER}
+    where
+      id = #{id,jdbcType=INTEGER}
   </select>
 
   <!--查询问题的回答类别，根据点赞数或时间排序 -->
@@ -46,7 +47,8 @@
     FROM
       azbrain_answer
     WHERE
-      MATCH(content) AGAINST(#{key,jdbcType=VARCHAR})
+      <!-- MATCH(content) AGAINST(#{key,jdbcType=VARCHAR}) -->
+      content LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
   </select>
 
   <!--回答问题 -->

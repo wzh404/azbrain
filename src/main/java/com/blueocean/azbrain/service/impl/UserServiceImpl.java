@@ -3,7 +3,6 @@ package com.blueocean.azbrain.service.impl;
 import com.blueocean.azbrain.dao.*;
 import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.model.UserFollowQuestion;
-import com.blueocean.azbrain.model.UserInviteCode;
 import com.blueocean.azbrain.model.UserLikeAnswer;
 import com.blueocean.azbrain.service.UserService;
 import com.github.pagehelper.Page;
@@ -36,9 +35,6 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private AnswerMapper answerMapper;
-
-    @Autowired
-    private UserInviteCodeMapper inviteCodeMapper;
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -143,5 +139,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> list(){
         return userMapper.list();
+    }
+
+    @Override
+    public int update(User user) {
+        return userMapper.update(user);
     }
 }

@@ -31,8 +31,7 @@ public class User extends Creator {
     protected String businessUnit;
     protected String pinyin;
 
-    public User(){
-    }
+    public User(){}
 
     public User(String name, String kcode, String pinyin, String businessUnit){
         this.name = name;

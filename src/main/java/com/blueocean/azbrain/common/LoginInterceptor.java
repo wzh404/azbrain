@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.common;
 
+import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        request.setAttribute("userId", userId);
+        request.setAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID, userId);
         return true;
     }
 

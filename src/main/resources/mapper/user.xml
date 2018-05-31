@@ -25,7 +25,6 @@
 
     <insert id="insert" parameterType="com.blueocean.azbrain.model.User" useGeneratedKeys="true" keyProperty="id">
         insert into azbrain_user (
-            id,
             name,
             login_name,
             wxid,
@@ -44,7 +43,6 @@
             pinyin,
             remarks)
         values (
-            #{id,jdbcType=INTEGER},
             #{name,jdbcType=VARCHAR},
             #{loginName,jdbcType=VARCHAR},
             #{wxid,jdbcType=VARCHAR},
@@ -113,6 +111,19 @@
             azbrain_user
         SET
             password = #{password}
+        WHERE
+            id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.blueocean.azbrain.model.User">
+        UPDATE
+            azbrain_user
+        SET
+            name = #{name,jdbcType=VARCHAR},
+            job_number = #{jobNumber,jdbcType=VARCHAR},
+            login_name = #{jobNumber,jdbcType=VARCHAR},
+            pinyin = #{pinyin,jdbcType=VARCHAR},
+            business_unit = #{businessUnit,jdbcType=VARCHAR}
         WHERE
             id = #{id}
     </update>

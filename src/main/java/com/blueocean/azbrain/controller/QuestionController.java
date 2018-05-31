@@ -25,7 +25,7 @@ public class QuestionController {
      */
     @RequestMapping(value="/user/question/followers", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject listUserFollowQuestion(HttpServletRequest request, @RequestParam("page") Integer page){
-        int userId = (int)request.getAttribute("userId");
+        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Page<Question> r = questionService.getUserFollowQuestions(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(r.getResult());
     }
@@ -51,7 +51,7 @@ public class QuestionController {
     public ResultObject answers(HttpServletRequest request,
                                 @RequestParam("question_id") Integer questionId,
                                 @RequestParam(value = "order_by", required = false) String orderBy){
-        int userId = (int)request.getAttribute("userId");
+        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Question q = questionService.get(questionId);
         Map map = new HashMap<String, Object>();
         map.put("follow_flag", questionService.isFollowed(userId, questionId));

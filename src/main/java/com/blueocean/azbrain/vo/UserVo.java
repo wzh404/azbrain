@@ -1,7 +1,6 @@
 package com.blueocean.azbrain.vo;
 
 import com.blueocean.azbrain.model.User;
-import com.blueocean.azbrain.util.AZBrainConstants;
 import lombok.Data;
 import javax.validation.constraints.NotNull;
 

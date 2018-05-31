@@ -50,7 +50,6 @@ public class CryptoUtil {
      * @throws Exception
      */
     public static String encrypt(String val, String key){
-        assert(key != null);
         SecretKeySpec keySpec = generatorKey(key);
         if (keySpec == null || val == null || val.length() == 0){
             throw new IllegalArgumentException("encrypt: invalid key or value!");
@@ -74,7 +73,6 @@ public class CryptoUtil {
      * @throws Exception
      */
     public static String decrypt(String val, String key){
-        assert(key != null);
         SecretKeySpec keySpec = generatorKey(key);
         if (keySpec == null || val == null || val.length() == 0){
             throw new IllegalArgumentException("decrypt: invalid key or value!");

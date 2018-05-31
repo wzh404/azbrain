@@ -5,7 +5,6 @@ import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.Question;
-import com.blueocean.azbrain.model.UserRecommendQuestion;
 import com.blueocean.azbrain.service.AnswerService;
 import com.blueocean.azbrain.service.QuestionService;
 import com.blueocean.azbrain.util.AZBrainConstants;
@@ -115,7 +114,7 @@ public class ManagerQuestionController {
         HttpSession session = request.getSession();
         ManagerSessionObject mso = ManagerSessionObject.fromSession(session);
         String userName = mso.getName();
-        Integer userId = mso.getId();;
+        Integer userId = mso.getId();
         logger.info("{}, {}, {}", session.getId(), userId, userName);
 
         question.setCreateName(userName);
@@ -139,7 +138,7 @@ public class ManagerQuestionController {
         }
 
         String fileName = file.getOriginalFilename();
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        String suffixName = fileName.substring(fileName.lastIndexOf('.'));
 
         // 过滤掉file:前缀
         String filePath = resourceLocation.substring(5);

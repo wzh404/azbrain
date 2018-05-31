@@ -75,4 +75,12 @@ public interface UserMapper {
      * @return
      */
     List<User> list();
+
+    /**
+     * 更新用户信息
+     *
+     * @param user
+     * @return
+     */
+    int update(User user);
 }

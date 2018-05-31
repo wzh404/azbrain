@@ -176,4 +176,28 @@ public class ManagerUserController {
         int rows = userService.insert(user);
         return rows > 0 ? ResultObject.ok() : ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);
     }
+
+    /**
+     * 更新用户信息
+     *
+     * @param userVo
+     * @return
+     */
+    @RequestMapping(value="/edit", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject edit(@Valid @RequestBody UserVo userVo) {
+        Integer userId = userVo.getUserId();
+        if (userId == null || userId <= 0){
+            return ResultObject.fail(ResultCode.USER_ADD_FAILED);
+        }
+
+        User user = userService.get(userId);
+        if (user == null){
+            return ResultObject.fail(ResultCode.USER_ADD_FAILED);
+        }
+
+        user = userVo.asUser();
+        user.setId(userId);
+        userService.update(user);
+        return ResultObject.ok();
+    }
 }

@@ -15,11 +15,12 @@ public class AZBrainApplication{
 		SpringApplication.run(AZBrainApplication.class, args);
 	}
 
+	/*
 	@Bean("smsCache")
 	public Cache<String, String> smsCache(){
 		return CacheBuilder.newBuilder()
 				.initialCapacity(1000)
 				.expireAfterWrite(5, TimeUnit.MINUTES)
 				.build();
-	}
+	}*/
 }

@@ -23,7 +23,6 @@ public class AnswerController {
     @Autowired
     private QuestionService questionService;
 
-
     /**
      * 回答详情
      *
@@ -32,7 +31,7 @@ public class AnswerController {
      */
     @RequestMapping(value="/answer/detail", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject detail(HttpServletRequest request, @RequestParam("answer_id") Integer answerId){
-        int userId = (int)request.getAttribute("userId");
+        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Map map = new HashMap<String, Object>();
         Answer answer = answerService.get(answerId);
         if (answer == null){

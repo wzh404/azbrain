@@ -2,6 +2,7 @@ package com.blueocean.azbrain.service.impl;
 
 import com.blueocean.azbrain.dao.*;
 import com.blueocean.azbrain.model.User;
+import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.model.UserFollowQuestion;
 import com.blueocean.azbrain.model.UserLikeAnswer;
 import com.blueocean.azbrain.service.UserService;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private AnswerMapper answerMapper;
+
+    @Autowired
+    private UserFeedbackMapper userFeedbackMapper;
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -144,5 +148,21 @@ public class UserServiceImpl implements UserService{
     @Override
     public int update(User user) {
         return userMapper.update(user);
+    }
+
+    @Override
+    public int insertUserFeedback(UserFeedback feedback) {
+        return userFeedbackMapper.insert(feedback);
+    }
+
+    @Override
+    public UserFeedback getUserFeedback(int id) {
+        return userFeedbackMapper.get(id);
+    }
+
+    @Override
+    public Page<UserFeedback> listUserFeedback(int page, int pageSize, HashMap<String, Object> conditionMap) {
+        PageHelper.startPage(page, pageSize);
+        return userFeedbackMapper.list(conditionMap);
     }
 }

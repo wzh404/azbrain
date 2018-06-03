@@ -5,6 +5,7 @@ import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.common.status.UserStatus;
 import com.blueocean.azbrain.model.User;
+import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.CryptoUtil;
@@ -40,11 +41,14 @@ public class ManagerUserController {
     @RequestMapping(value="/search", method= {RequestMethod.GET})
     public ResultObject search(@RequestParam(value="name", required = false)  String name, @RequestParam("page") Integer page,
                              @RequestParam(value="start_time", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
-                             @RequestParam(value="end_time", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime){
+                             @RequestParam(value="end_time", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
+                             @RequestParam(value="kcode", required = false)  String kcode){
         HashMap<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("name", name);
         conditionMap.put("startTime", startTime);
         conditionMap.put("endTime", endTime);
+        conditionMap.put("kcode", kcode);
+
         Page<User> users = userService.findByPage(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("users", users.getResult());
@@ -176,6 +180,7 @@ public class ManagerUserController {
         HttpSession session = request.getSession();
         ManagerSessionObject mso = ManagerSessionObject.fromSession(session);
         User user = userVo.asUser();
+        user.setPhoto(userVo.getPhoto());
         user.setCreateBy(mso.getId());
 
         int rows = userService.insert(user);
@@ -204,5 +209,42 @@ public class ManagerUserController {
         user.setId(userId);
         userService.update(user);
         return ResultObject.ok();
+    }
+
+    /**
+     * 分页搜索用户反馈意见
+     *
+     * @param feedback
+     * @param page
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @RequestMapping(value="/list/feedback", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject listFeedback(@RequestParam(value="feedback", required = false)  String feedback, @RequestParam("page") Integer page,
+                                     @RequestParam(value="start_time", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
+                                     @RequestParam(value="end_time", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime){
+        HashMap<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("feedback", feedback);
+        conditionMap.put("startTime", startTime);
+        conditionMap.put("endTime", endTime);
+        Page<UserFeedback> feedbacks = userService.listUserFeedback(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("users", feedbacks.getResult());
+        resultMap.put("page", ResultObject.pageMap(feedbacks));
+        return ResultObject.ok(resultMap);
+    }
+
+    /**
+     * 查询用户反馈意见
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value="/view/feedback", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject getFeedback(@RequestParam(value="id")  Integer id){
+        UserFeedback feedback = userService.getUserFeedback(id);
+        return feedback != null ? ResultObject.ok("feedback", feedback) : ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);
     }
 }

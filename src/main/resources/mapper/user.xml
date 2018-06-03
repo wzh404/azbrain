@@ -81,6 +81,10 @@
         <if test="endTime != null">
             <![CDATA[ AND create_time <= #{endTime} ]]>
         </if>
+        <if test="kcode != null">
+            AND job_number LIKE CONCAT('%',#{kcode},'%')
+        </if>
+        ORDER BY id DESC
     </select>
 
     <select id="list" resultMap="user">

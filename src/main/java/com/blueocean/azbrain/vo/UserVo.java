@@ -15,6 +15,7 @@ public class UserVo {
     private String kcode;
     @NotNull
     private String bu;
+    private String photo;
 
     public User asUser(){
         return new User(name, kcode, pinyin, bu);

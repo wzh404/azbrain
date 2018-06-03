@@ -58,11 +58,11 @@ public class QuestionVo {
     }
 
     public List<Answer> asAnswers(){
-        List<Answer> answers = new ArrayList<>();
+        List<Answer> answerList = new ArrayList<>();
         for (AnswerVo v : this.answers){
-            answers.add(v.asAnswer());
+            answerList.add(v.asAnswer());
         }
 
-        return answers;
+        return answerList;
     }
 }

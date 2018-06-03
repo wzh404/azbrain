@@ -6,6 +6,8 @@ import com.blueocean.azbrain.model.Question;
 import com.blueocean.azbrain.service.QuestionService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.github.pagehelper.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,8 @@ import java.util.Map;
 
 @RestController
 public class QuestionController {
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
+
     @Autowired
     private QuestionService questionService;
 
@@ -26,6 +30,7 @@ public class QuestionController {
     @RequestMapping(value="/user/question/followers", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject listUserFollowQuestion(HttpServletRequest request, @RequestParam("page") Integer page){
         int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+
         Page<Question> r = questionService.getUserFollowQuestions(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(r.getResult());
     }

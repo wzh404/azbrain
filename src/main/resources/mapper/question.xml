@@ -66,6 +66,7 @@
       fq.question_id = q.id
     WHERE
       user_id = #{userId, jdbcType=INTEGER}
+    order by follow_time desc
   </select>
 
   <select id="getUserRecommendQuestions" resultMap="question">
@@ -77,6 +78,7 @@
       azbrain_question q
     ON
       rq.question_id = q.id
+    order by create_time DESC
   </select>
 
   <select id="search" parameterType="java.lang.String" resultMap="question">
@@ -122,6 +124,7 @@
     <if test="endTime != null">
       <![CDATA[ AND create_time <= #{endTime} ]]>
     </if>
+    ORDER BY recommend DESC, id DESC
   </select>
 
   <update id="changeStatus">

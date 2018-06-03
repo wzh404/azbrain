@@ -6,6 +6,8 @@ import com.blueocean.azbrain.model.*;
 import com.blueocean.azbrain.service.QuestionService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +21,8 @@ import java.util.List;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
+    private static final Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
+
     @Autowired
     private QuestionMapper questionMapper;
 
@@ -36,6 +40,7 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public Page<Question> getUserFollowQuestions(int page, int pageSize, Integer userId) {
+        logger.info("----page is {}", page);
         PageHelper.startPage(page, pageSize);
         return questionMapper.getUserFollowQuestions(userId);
     }

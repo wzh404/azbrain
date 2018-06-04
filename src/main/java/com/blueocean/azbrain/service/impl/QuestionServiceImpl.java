@@ -96,6 +96,7 @@ public class QuestionServiceImpl implements QuestionService{
             }
             answer.setCreateName(user.getName());
             answer.setQuestionId(question.getId());
+
             answerMapper.insert(answer);
         }
         return 1;
@@ -135,11 +136,22 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public int update(Question question, List<Answer> answers) {
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor=SQLException.class)
+    public int update(Question question, List<Answer> answers, List<Answer> newAnswers) throws SQLException {
         questionMapper.update(question.getId(), question.getTitle(), question.getContent(), question.getIcon());
         for (Answer answer: answers){
             answerMapper.update(answer.getId(), answer.getContent());
+        }
+
+        for (Answer answer: newAnswers){
+            User user = userMapper.get(answer.getCreateBy());
+            if (user == null){
+                throw new SQLException("user is not exist");
+            }
+            answer.setCreateName(user.getName());
+            answer.setQuestionId(question.getId());
+
+            answerMapper.insert(answer);
         }
         return 1;
     }

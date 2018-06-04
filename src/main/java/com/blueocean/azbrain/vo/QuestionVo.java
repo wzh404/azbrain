@@ -60,7 +60,20 @@ public class QuestionVo {
     public List<Answer> asAnswers(){
         List<Answer> answerList = new ArrayList<>();
         for (AnswerVo v : this.answers){
-            answerList.add(v.asAnswer());
+            if (v.id != null && v.id > 0) {
+                answerList.add(v.asAnswer());
+            }
+        }
+
+        return answerList;
+    }
+
+    public List<Answer> asNewAnswers(){
+        List<Answer> answerList = new ArrayList<>();
+        for (AnswerVo v : this.answers){
+            if (v.id == null || v.id == 0) {
+                answerList.add(v.asAnswer());
+            }
         }
 
         return answerList;

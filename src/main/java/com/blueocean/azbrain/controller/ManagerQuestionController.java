@@ -200,8 +200,8 @@ public class ManagerQuestionController {
      * @return
      */
     @RequestMapping(value="/edit", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject edit(@RequestBody QuestionVo questionVo)  {
-        questionService.update(questionVo.asQuestion(), questionVo.asAnswers());
+    public ResultObject edit(@RequestBody QuestionVo questionVo) throws SQLException {
+        questionService.update(questionVo.asQuestion(), questionVo.asAnswers(), questionVo.asNewAnswers());
         return ResultObject.ok();
     }
 }

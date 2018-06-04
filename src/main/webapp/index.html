@@ -66,9 +66,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    var g_uri = "http://119.254.84.20:8889";
+    //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    //var g_uri = "http://localhost:8889";
+    var g_uri = "http://localhost:8889";
 
     function a() {
         $.ajax({
@@ -127,13 +127,18 @@
             type : "POST",
             url : g_uri + "/manager/question/edit",
             data : JSON.stringify({
-                "id":26,
+                "id":29,
                 "title":"TITLE TEST EDIT",
                 "content":"www EDIT",
                 "icon":icon,
                 "answers":[{
-                    "id":26,
+                    "id":23,
                     "content":"CONTENT---1 EDIT-0",
+                    "create_id" : 7,
+                },
+                {
+                    "id":0,
+                    "content":"NEWANSWER CONTENT---1",
                     "create_id" : 7,
                 }]
             }),

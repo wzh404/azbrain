@@ -138,5 +138,5 @@ public interface QuestionService {
      * @param answers
      * @return
      */
-    int update(Question question, List<Answer> answers);
+    int update(Question question, List<Answer> answers, List<Answer> newAnswers) throws SQLException;
 }

@@ -13,6 +13,10 @@
     <result column="status" jdbcType="CHAR" property="status" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="recommend" jdbcType="INTEGER" property="recommend" />
+    <!--
+    <result column="last_answer_id" jdbcType="INTEGER" property="lastAnswerId" />
+    <result column="user_last_answer_id" jdbcType="INTEGER" property="userLastAnswerId" />
+    -->
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -64,7 +68,7 @@
       azbrain_question q
     ON
       fq.question_id = q.id
-    WHERE
+    AND
       user_id = #{userId, jdbcType=INTEGER}
     order by follow_time desc
   </select>
@@ -78,7 +82,7 @@
       azbrain_question q
     ON
       rq.question_id = q.id
-    order by create_time DESC
+    order by rq.create_time DESC
   </select>
 
   <select id="search" parameterType="java.lang.String" resultMap="question">
@@ -149,6 +153,14 @@
       title = #{title, jdbcType=VARCHAR},
       icon = #{icon, jdbcType=VARCHAR},
       content = #{content, jdbcType=VARCHAR}
+    WHERE
+      id = #{questionId, jdbcType=INTEGER}
+  </update>
+
+  <update id="updateLastAnswer">
+    UPDATE azbrain_question
+    SET
+      last_answer_id = #{answerId, jdbcType=INTEGER}
     WHERE
       id = #{questionId, jdbcType=INTEGER}
   </update>

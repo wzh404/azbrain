@@ -6,11 +6,13 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="feedback" jdbcType="VARCHAR" property="feedback" />
+    <result column="classification" jdbcType="VARCHAR" property="classification" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, user_id, user_name, feedback, create_time
+    id, user_id, user_name, feedback, classification, photo, create_time
   </sql>
   <select id="get" parameterType="java.lang.Integer" resultMap="feedback">
     select
@@ -46,12 +48,16 @@
       user_id,
       user_name,
       feedback,
+      classification,
+      photo,
       create_time)
     values (
       #{id, jdbcType=INTEGER},
       #{userId, jdbcType=INTEGER},
       #{userName,jdbcType=VARCHAR},
       #{feedback,jdbcType=VARCHAR},
+      #{classification,jdbcType=VARCHAR},
+      #{photo,jdbcType=VARCHAR},
       #{createTime, jdbcType=TIMESTAMP})
   </insert>
 </mapper>

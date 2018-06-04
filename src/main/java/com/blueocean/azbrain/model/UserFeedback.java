@@ -19,6 +19,8 @@ public class UserFeedback {
     @JsonProperty("user_name")
     private String userName;
     private String feedback;
+    private String classification;
+    private String photo;
     @JsonProperty("create_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date createTime;

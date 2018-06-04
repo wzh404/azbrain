@@ -47,7 +47,7 @@ public class QuestionController {
     }
 
     /**
-     * 问题答案详情并返回第一个答案
+     * 问题答案详情并返回第一页答案
      *
      * @param questionId
      * @return

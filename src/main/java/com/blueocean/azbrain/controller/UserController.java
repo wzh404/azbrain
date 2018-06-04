@@ -122,12 +122,25 @@ public class UserController {
         return ResultObject.ok("access_token", token);
     }
 
+    /**
+     * 意见反馈
+     *
+     * @param request
+     * @param feedback
+     * @param classification
+     * @param photo
+     * @return
+     */
     @RequestMapping(value="/apply/feedback", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject feedback(HttpServletRequest request,
-                                 @RequestParam("feedback") String feedback){
+                                 @RequestParam("feedback") String feedback,
+                                 @RequestParam("classification") String classification,
+                                 @RequestParam(value="photo", required = false) String photo){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         User user = userService.get(userId);
         UserFeedback userFeedback = new UserFeedback(userId, user.getName(), feedback);
+        userFeedback.setPhoto(photo);
+        userFeedback.setClassification(classification);
         int rows = userService.insertUserFeedback(userFeedback);
 
         return rows > 0 ? ResultObject.ok() : ResultObject.fail(ResultCode.USER_ILLEGAL_STATUS);

@@ -52,7 +52,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         int userId = TokenUtil.getUserId(accessToken);
         if (userId <= 0){
-            logger.info("auserId is null");
+            logger.info("userId is null");
             return false;
         }
 

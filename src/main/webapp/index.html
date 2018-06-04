@@ -62,13 +62,13 @@
 <br><br>
 <a href="#" onclick="javascript:feedback()">新增用户反馈意见</a> |
 <a href="#" onclick="javascript:b('/manager/user/list/feedback?page=1', {})">分页用户反馈意见</a> |
-<a href="#" onclick="javascript:b('/manager/user/view/feedback?id=1', {})">查看用户反馈意见</a> |
+<a href="#" onclick="javascript:b('/manager/user/view/feedback?id=9', {})">查看用户反馈意见</a> |
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    //var g_uri = "http://119.254.84.20:8889";
+    var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    var g_uri = "http://localhost:8889";
+    //var g_uri = "http://localhost:8889";
 
     function a() {
         $.ajax({
@@ -201,7 +201,9 @@
                 "access_token": access_token
             },
             data : {
-                "feedback":"feedback-27456"
+                "feedback":"内容缺失-0001",
+                "classification":"03",
+                "photo":"http://test.com/a.jpg"
             },
             contentType: "application/json; charset=utf-8",
             dataType: "json",

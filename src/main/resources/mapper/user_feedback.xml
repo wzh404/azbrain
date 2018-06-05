@@ -28,8 +28,7 @@
     <include refid="Base_Column_List" />
     FROM
       azbrain_user_feedback
-    WHERE
-      1=1
+    <where>
     <if test="feedback != null">
       AND feedback LIKE CONCAT('%',#{feedback},'%')
     </if>
@@ -39,6 +38,7 @@
     <if test="endTime != null">
       <![CDATA[ AND create_time <= #{endTime} ]]>
     </if>
+    </where>
     ORDER BY id DESC
   </select>
 

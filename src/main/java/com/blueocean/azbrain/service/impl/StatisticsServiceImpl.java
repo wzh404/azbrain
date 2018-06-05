@@ -16,6 +16,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Autowired
     private StatisticsMapper statisticsMapper;
 
+    // TODO 优化定时任务处理
     @Override
     public Map<String, Object> countQuestion() {
         HashMap<String, Object> resultMap = new HashMap<>();

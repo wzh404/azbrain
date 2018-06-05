@@ -48,30 +48,4 @@
       #{questionId, jdbcType=INTEGER},
       #{followTime, jdbcType=TIMESTAMP})
   </insert>
-
-  <select id="getLastAnswer">
-    SELECT a.id
-    FROM
-      azbrain_answer a
-    INNER JOIN
-      azbrain_user_follow_question fq
-    ON
-      a.question_id = fq.question_id
-    WHERE
-      fq.question_id = #{questionId, jdbcType=INTEGER}
-    AND
-      fq.user_Id = #{userId, jdbcType=INTEGER}
-    ORDER BY id DESC
-    LIMIT 1
-  </select>
-
-  <update id="updateLastAnswer">
-    UPDATE azbrain_user_follow_question
-    SET
-      last_answer_id = #{lastAnswerId, jdbcType=INTEGER}
-    WHERE
-      question_id = #{questionId, jdbcType=INTEGER}
-    AND
-      user_Id = #{userId, jdbcType=INTEGER}
-  </update>
 </mapper>

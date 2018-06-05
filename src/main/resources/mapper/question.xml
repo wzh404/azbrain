@@ -157,11 +157,4 @@
       id = #{questionId, jdbcType=INTEGER}
   </update>
 
-  <update id="updateLastAnswer">
-    UPDATE azbrain_question
-    SET
-      last_answer_id = #{answerId, jdbcType=INTEGER}
-    WHERE
-      id = #{questionId, jdbcType=INTEGER}
-  </update>
 </mapper>

@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blueocean.azbrain.dao.StatisticsMapper">
-  <select id="userQuestionRank" resultType="java.util.HashMap">
-    SELECT
-      u.id,COUNT(question_id)
+  <select id="totalQuestion" resultType="java.lang.Integer">
+    SELECT count(*)
     FROM
-      azbrain_question q
-    INNER JION
-      azbrain_user u
-    ON
-      q.user_id = u.id
+      azbrain_question
     WHERE
-
-    GROUP BY
-
-    ORDER BY
-
+      status != '99'
+    <if test="startTime != null">
+      <![CDATA[ AND create_time > #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND create_time < #{endTime} ]]>
+    </if>
   </select>
 
+  <select id="totalAnswer" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM
+      azbrain_answer
+    <where>
+    <if test="startTime != null">
+      <![CDATA[ AND create_time > #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND create_time < #{endTime} ]]>
+    </if>
+    </where>
+  </select>
+
+  <select id="totalLike" resultType="java.lang.Integer">
+    SELECT SUM(like_num)
+    FROM
+      azbrain_answer
+    <where>
+    <if test="startTime != null">
+      <![CDATA[ AND create_time > #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND create_time < #{endTime} ]]>
+    </if>
+    </where>
+  </select>
 </mapper>

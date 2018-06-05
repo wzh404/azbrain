@@ -194,7 +194,7 @@ public class ManagerQuestionController {
     }
 
     /**
-     * 问题编辑
+     * 问题编辑(增加、修改问题答案)
      *
      * @param questionVo
      * @return

@@ -10,7 +10,7 @@ import java.util.Date;
 public class Answer {
     private Integer id;
 
-    @JsonProperty("follow_num")
+    @JsonProperty("question_id")
     private Integer questionId;
 
     private String content;

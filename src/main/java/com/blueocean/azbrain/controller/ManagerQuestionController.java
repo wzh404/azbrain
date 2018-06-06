@@ -120,7 +120,7 @@ public class ManagerQuestionController {
         question.setCreateName(userName);
         question.setCreateBy(userId);
 
-        int ret = questionService.insert(question, questionVo.asAnswers());
+        int ret = questionService.insert(question, questionVo.asNewAnswers());
         return ret == 1 ? ResultObject.ok() : ResultObject.fail(ResultCode.MANAGE_ADD_QUESTION_FAILED);
     }
 
@@ -201,7 +201,7 @@ public class ManagerQuestionController {
      */
     @RequestMapping(value="/edit", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject edit(@RequestBody QuestionVo questionVo) throws SQLException {
-        questionService.update(questionVo.asQuestion(), questionVo.asAnswers(), questionVo.asNewAnswers());
+        questionService.update(questionVo.asQuestion(), questionVo.asUpdateAnswers(), questionVo.asNewAnswers());
         return ResultObject.ok();
     }
 }

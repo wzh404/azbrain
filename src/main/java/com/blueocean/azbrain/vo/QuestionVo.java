@@ -57,7 +57,7 @@ public class QuestionVo {
        return question;
     }
 
-    public List<Answer> asAnswers(){
+    public List<Answer> asUpdateAnswers(){
         List<Answer> answerList = new ArrayList<>();
         for (AnswerVo v : this.answers){
             if (v.id != null && v.id > 0) {

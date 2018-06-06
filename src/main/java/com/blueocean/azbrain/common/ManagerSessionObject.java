@@ -13,12 +13,12 @@ public class ManagerSessionObject {
 
     public static ManagerSessionObject fromSession(HttpSession session){
         ManagerSessionObject mso = new ManagerSessionObject();
-        //mso.setId((Integer)session.getAttribute(AZBrainConstants.SESSION_USER_ID));
-        //mso.setName((String)session.getAttribute(AZBrainConstants.SESSION_USER_NAME));
+        mso.setId((Integer)session.getAttribute(AZBrainConstants.SESSION_USER_ID));
+        mso.setName((String)session.getAttribute(AZBrainConstants.SESSION_USER_NAME));
 
         //TODO
-        mso.setId(7);
-        mso.setName("admin");
+        //mso.setId(7);
+        //mso.setName("admin");
         return mso;
     }
 

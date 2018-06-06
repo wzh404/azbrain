@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class LoginInterceptor implements HandlerInterceptor {
     private final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
@@ -67,6 +68,13 @@ public class LoginInterceptor implements HandlerInterceptor {
      * @return
      */
     private boolean managerHandle(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        if (session.getAttribute(AZBrainConstants.SESSION_USER_ID) == null ||
+            session.getAttribute(AZBrainConstants.SESSION_USER_NAME) == null){
+            logger.error("please login first.");
+            return false;
+        }
+
         return true;
     }
 

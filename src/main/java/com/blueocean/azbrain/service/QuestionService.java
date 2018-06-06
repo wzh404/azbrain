@@ -2,9 +2,7 @@ package com.blueocean.azbrain.service;
 
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.Question;
-import com.blueocean.azbrain.model.UserRecommendQuestion;
 import com.github.pagehelper.Page;
-import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.HashMap;

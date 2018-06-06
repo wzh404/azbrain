@@ -3,7 +3,6 @@ package com.blueocean.azbrain.service;
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.AnswerComment;
 import com.github.pagehelper.Page;
-import org.apache.ibatis.annotations.Param;
 
 
 public interface AnswerService {

@@ -20,7 +20,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("{}----------{}", request.getRequestURI(),  String.join(",", uris));
+        logger.info("----------{}", request.getRequestURI());
         if (request.getMethod().equalsIgnoreCase("OPTIONS")){
             return true;
         }
@@ -80,10 +80,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
+        // Do nothing
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        // Do nothing
     }
 }

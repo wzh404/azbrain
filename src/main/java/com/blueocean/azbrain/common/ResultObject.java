@@ -31,7 +31,7 @@ public class ResultObject {
         return new ResultObject(true, ResultCode.OK.getCode(), null, map);
     }
 
-    public static HashMap<String, Object> pageMap(Page page){
+    public static Map<String, Object> pageMap(Page page){
         HashMap<String, Object> pageMap = new HashMap<>();
         pageMap.put("total", page.getTotal());
         pageMap.put("pages", page.getPages());

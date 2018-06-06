@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     private String getErrorMessage(FieldError fieldError){
-        StringBuilder errorMessage = new StringBuilder(fieldError.getField().toString());
+        StringBuilder errorMessage = new StringBuilder(fieldError.getField());
         errorMessage.append("-");
         errorMessage.append(fieldError.getDefaultMessage());
         return  errorMessage.toString();

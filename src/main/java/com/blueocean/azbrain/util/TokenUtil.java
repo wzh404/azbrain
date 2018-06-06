@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public class TokenUtil {
     private static final Logger logger = LoggerFactory.getLogger(TokenUtil.class);
+
+    private TokenUtil(){
+        throw new IllegalStateException("Utility class");
+    }
     /**
      * create jwt token by json string of user.
      *

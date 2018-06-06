@@ -16,9 +16,6 @@ public class ManagerSessionObject {
         mso.setId((Integer)session.getAttribute(AZBrainConstants.SESSION_USER_ID));
         mso.setName((String)session.getAttribute(AZBrainConstants.SESSION_USER_NAME));
 
-        //TODO
-        //mso.setId(7);
-        //mso.setName("admin");
         return mso;
     }
 

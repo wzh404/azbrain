@@ -35,8 +35,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/follow-question", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject follow(
-            HttpServletRequest request,
+    public ResultObject follow(HttpServletRequest request,
             @RequestParam("question_id") Integer questionId){
         int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         int ret = userService.follow(userId, questionId);
@@ -118,7 +117,7 @@ public class UserController {
             return ResultObject.fail(ResultCode.USER_ACCESS_TOKEN);
         }
         SessionObject sessionObject = new SessionObject(user.getId(), code);
-        String token = TokenUtil.createJwtToken(sessionObject.toJson()).get();
+        String token = TokenUtil.createJwtToken(sessionObject.toJson()).orElse(AZBrainConstants.EMPTY_STRING);
         return ResultObject.ok("access_token", token);
     }
 

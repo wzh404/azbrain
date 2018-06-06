@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.TokenUtil;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,9 @@ public class UserController {
     @RequestMapping(value="/follow-question", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject follow(HttpServletRequest request,
             @RequestParam("question_id") Integer questionId){
-        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkNotNull(userId, "please log in");
+
         int ret = userService.follow(userId, questionId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_QUESTION_FOLLOWED);
@@ -56,7 +59,9 @@ public class UserController {
     @RequestMapping(value="/unfollow-question", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject unfollow(HttpServletRequest request,
             @RequestParam("question_id") Integer questionId){
-        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkNotNull(userId, "please log in");
+
         int ret = userService.unfollow(userId, questionId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_QUESTION_FOLLOWED);
@@ -75,7 +80,9 @@ public class UserController {
     @RequestMapping(value="/like-answer", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject like(HttpServletRequest request,
             @RequestParam("answer_id") Integer answerId){
-        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkNotNull(userId, "please log in");
+
         int ret = userService.like(userId, answerId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_ANSWER_LIKED);
@@ -94,7 +101,9 @@ public class UserController {
     @RequestMapping(value="/unlike-answer", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject unlike(HttpServletRequest request,
             @RequestParam("answer_id") Integer answerId){
-        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkNotNull(userId, "please log in");
+
         int ret = userService.unlike(userId, answerId);
         if (ret < 0){
             return ResultObject.fail(ResultCode.USER_ANSWER_LIKED);
@@ -136,6 +145,8 @@ public class UserController {
                                  @RequestParam("classification") String classification,
                                  @RequestParam(value="photo", required = false) String photo){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkNotNull(userId, "please log in");
+
         User user = userService.get(userId);
         UserFeedback userFeedback = new UserFeedback(userId, user.getName(), feedback);
         userFeedback.setPhoto(photo);

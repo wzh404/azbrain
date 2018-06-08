@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.controller;
 
+import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.model.Answer;
 import com.blueocean.azbrain.model.AnswerComment;
@@ -8,6 +9,7 @@ import com.blueocean.azbrain.service.AnswerService;
 import com.blueocean.azbrain.service.QuestionService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.github.pagehelper.Page;
+import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +33,13 @@ public class AnswerController {
      */
     @RequestMapping(value="/answer/detail", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject detail(HttpServletRequest request, @RequestParam("answer_id") Integer answerId){
-        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please login");
+
         Map map = new HashMap<String, Object>();
         Answer answer = answerService.get(answerId);
         if (answer == null){
-            return ResultObject.fail("");
+            return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
         Question question = questionService.get(answer.getQuestionId());

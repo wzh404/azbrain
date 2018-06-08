@@ -6,6 +6,7 @@ import com.blueocean.azbrain.model.Question;
 import com.blueocean.azbrain.service.QuestionService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.github.pagehelper.Page;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,8 @@ public class QuestionController {
      */
     @RequestMapping(value="/user/question/followers", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject listUserFollowQuestion(HttpServletRequest request, @RequestParam("page") Integer page){
-        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please login");
 
         Page<Question> r = questionService.getUserFollowQuestions(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(r.getResult());
@@ -56,7 +58,9 @@ public class QuestionController {
     public ResultObject answers(HttpServletRequest request,
                                 @RequestParam("question_id") Integer questionId,
                                 @RequestParam(value = "order_by", required = false) String orderBy){
-        int userId = (int)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please login");
+
         Question q = questionService.get(questionId);
         Map map = new HashMap<String, Object>();
         map.put("follow_flag", questionService.isFollowed(userId, questionId));

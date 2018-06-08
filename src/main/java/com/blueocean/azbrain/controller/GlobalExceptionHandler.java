@@ -16,13 +16,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value=MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResultObject handleException(MethodArgumentNotValidException exception) {
+    public ResultObject handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         String errorMsg = exception.getBindingResult().getFieldErrors().stream()
                 .map(this::getErrorMessage)
                 .findFirst()
                 .orElse(exception.getMessage());
         logger.error(errorMsg);
         return ResultObject.fail(ResultCode.BAD_REQUEST.getCode(), errorMsg);
+    }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ResponseBody
+    public ResultObject handleIllegalArgumentException(IllegalArgumentException e){
+        return ResultObject.fail(ResultCode.BAD_REQUEST.getCode(), e.getMessage());
     }
 
     private String getErrorMessage(FieldError fieldError){

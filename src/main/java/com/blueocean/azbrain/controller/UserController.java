@@ -39,7 +39,7 @@ public class UserController {
     public ResultObject follow(HttpServletRequest request,
             @RequestParam("question_id") Integer questionId){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkNotNull(userId, "please log in");
+        Preconditions.checkArgument(userId != null, "please login");
 
         int ret = userService.follow(userId, questionId);
         if (ret < 0){
@@ -60,7 +60,7 @@ public class UserController {
     public ResultObject unfollow(HttpServletRequest request,
             @RequestParam("question_id") Integer questionId){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkNotNull(userId, "please log in");
+        Preconditions.checkArgument(userId != null, "please log in");
 
         int ret = userService.unfollow(userId, questionId);
         if (ret < 0){
@@ -81,7 +81,7 @@ public class UserController {
     public ResultObject like(HttpServletRequest request,
             @RequestParam("answer_id") Integer answerId){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkNotNull(userId, "please log in");
+        Preconditions.checkArgument(userId != null, "please log in");
 
         int ret = userService.like(userId, answerId);
         if (ret < 0){
@@ -102,7 +102,7 @@ public class UserController {
     public ResultObject unlike(HttpServletRequest request,
             @RequestParam("answer_id") Integer answerId){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkNotNull(userId, "please log in");
+        Preconditions.checkArgument(userId != null, "please log in");
 
         int ret = userService.unlike(userId, answerId);
         if (ret < 0){
@@ -145,7 +145,7 @@ public class UserController {
                                  @RequestParam("classification") String classification,
                                  @RequestParam(value="photo", required = false) String photo){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkNotNull(userId, "please log in");
+        Preconditions.checkArgument(userId != null, "please log in");
 
         User user = userService.get(userId);
         UserFeedback userFeedback = new UserFeedback(userId, user.getName(), feedback);

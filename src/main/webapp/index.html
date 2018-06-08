@@ -27,7 +27,8 @@
 <a href="#" onclick="javascript:b('/user/question/recommends?page=1', {})">推荐问题</a>|
 <br/>
 <a href="#" onclick="javascript:b('/question/detail?question_id=1&order_by=time', {})">问题详情</a>|
-<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=time', {})">下拉刷新回答!</a>|
+<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=time', {})">下拉刷新回答time!</a>|
+<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=like', {})">下拉刷新回答like!</a>|
 <a href="#" onclick="javascript:b('/answer/detail?answer_id=1', {})">回答详情</a>|
 <a href="#" onclick="javascript:b('/answer/comments?answer_id=1&page=1', {})">下拉刷新回答评论</a>|
 
@@ -71,6 +72,17 @@
     //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
     var g_uri = "http://localhost:8889";
+
+let promise = new Promise(function(resolve, reject) {
+  console.log('Promise');
+  resolve();
+});
+
+promise.then(function() {
+  console.log('resolved.');
+});
+
+console.log('Hi!');
 
     function a() {
         $.ajax({

@@ -1,55 +1,20 @@
 package com.blueocean.azbrain.service.impl;
 
-import com.blueocean.azbrain.dao.*;
+import com.blueocean.azbrain.dao.UserMapper;
 import com.blueocean.azbrain.model.User;
-import com.blueocean.azbrain.model.UserFeedback;
-import com.blueocean.azbrain.model.UserFollowQuestion;
-import com.blueocean.azbrain.model.UserLikeAnswer;
 import com.blueocean.azbrain.service.UserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
-/**
- * Created by @author wangzunhui on 2018/3/13.
- */
 @Service("userService")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private UserFollowQuestionMapper userFollowQuestionMapper;
-
-    @Autowired
-    private UserLikeAnswerMapper userLikeAnswerMapper;
-
-    @Autowired
-    private QuestionMapper questionMapper;
-
-    @Autowired
-    private AnswerMapper answerMapper;
-
-    @Autowired
-    private UserFeedbackMapper userFeedbackMapper;
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public int insert(User user) {
-        return userMapper.insert(user);
-    }
-
-    @Override
-    public int delete(Integer id) {
-        return userMapper.delete(id);
-    }
 
     @Override
     public User get(Integer id) {
@@ -62,107 +27,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Page<User> findByPage(int page, int pageSize, HashMap<String, Object> conditionMap) {
+    public Page<User> findByPage(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
         return userMapper.findByPage(conditionMap);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public int follow(int userId, int questionId) {
-        UserFollowQuestion ufq  = userFollowQuestionMapper.getUserFollowQuestion(userId, questionId);
-        if (ufq != null){
-            // 已关注
-            return -1;
-        }
-
-        ufq = new UserFollowQuestion();
-        ufq.setUserId(userId);
-        ufq.setQuestionId(questionId);
-        ufq.setFollowTime(new Date());
-
-        // uid & quesiton_id设置为唯一索引
-        userFollowQuestionMapper.insert(ufq);
-        questionMapper.incrementFollower(questionId);
-
-        return 0;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public int unfollow(int userId, int questionId) {
-        UserFollowQuestion ufq = userFollowQuestionMapper.getUserFollowQuestion(userId, questionId);
-        if (ufq == null || ufq.getId() == null){
-            return -1;
-        }
-
-        userFollowQuestionMapper.delete(ufq.getId());
-        questionMapper.decrementFollower(ufq.getQuestionId());
-
-        return 0;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public int like(int userId, int answerId) {
-        UserLikeAnswer ula = userLikeAnswerMapper.getUserLikeAnswer(userId, answerId);
-        if (ula != null){
-            // 已点赞
-            return -1;
-        }
-
-        ula = new UserLikeAnswer();
-        ula.setAnswerId(answerId);
-        ula.setUserId(userId);
-        ula.setCreateTime(new Date());
-
-        userLikeAnswerMapper.insert(ula);
-        answerMapper.incrementLiker(answerId);
-
-        return 0;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public int unlike(int userId, int answerId) {
-        UserLikeAnswer ula = userLikeAnswerMapper.getUserLikeAnswer(userId, answerId);
-        if (ula == null){
-            return -1;
-        }
-        userLikeAnswerMapper.delete(ula.getId());
-        answerMapper.decrementLiker(ula.getAnswerId());
-
-        return 0;
-    }
-
-    @Override
-    public int changeStatus(int id, String status) {
-        return userMapper.changeStatus(id, status);
-    }
-
-    @Override
-    public List<User> list(){
-        return userMapper.list();
-    }
-
-    @Override
-    public int update(User user) {
-        return userMapper.update(user);
-    }
-
-    @Override
-    public int insertUserFeedback(UserFeedback feedback) {
-        return userFeedbackMapper.insert(feedback);
-    }
-
-    @Override
-    public UserFeedback getUserFeedback(int id) {
-        return userFeedbackMapper.get(id);
-    }
-
-    @Override
-    public Page<UserFeedback> listUserFeedback(int page, int pageSize, HashMap<String, Object> conditionMap) {
-        PageHelper.startPage(page, pageSize);
-        return userFeedbackMapper.list(conditionMap);
     }
 }

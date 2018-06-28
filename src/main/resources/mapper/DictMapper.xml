@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blueocean.azbrain.dao.DictMapper">
+  <resultMap id="BaseResultMap" type="com.blueocean.azbrain.model.Dict">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dtype" jdbcType="CHAR" property="dtype" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, dtype, code, value, descr
+  </sql>
+
+  <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from azbrain_dict
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="com.blueocean.azbrain.model.Dict">
+    insert into azbrain_dict (id, dtype, code, 
+      value, descr)
+    values (#{id,jdbcType=INTEGER}, #{dtype,jdbcType=CHAR}, #{code,jdbcType=VARCHAR}, 
+      #{value,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.blueocean.azbrain.model.Dict">
+    update azbrain_dict
+    set dtype = #{dtype,jdbcType=CHAR},
+      code = #{code,jdbcType=VARCHAR},
+      value = #{value,jdbcType=VARCHAR},
+      descr = #{descr,jdbcType=VARCHAR}
+    where
+      id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

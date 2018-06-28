@@ -1,12 +1,7 @@
 package com.blueocean.azbrain;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class AZBrainApplication{

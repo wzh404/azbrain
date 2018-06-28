@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blueocean.azbrain.dao.ArticleMapper">
+  <resultMap id="article" type="com.blueocean.azbrain.model.Article">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="follower_num" jdbcType="INTEGER" property="followerNum" />
+    <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="status" jdbcType="CHAR" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, content, icon, follower_num, favorite_num, create_time, create_by, status
+  </sql>
+  <select id="get" parameterType="java.lang.Integer" resultMap="article">
+    select 
+    <include refid="Base_Column_List" />
+    from azbrain_article
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="com.blueocean.azbrain.model.Article">
+    insert into azbrain_article (
+      id,
+      title,
+      content,
+      icon,
+      follower_num,
+      favorite_num,
+      create_time,
+      create_by,
+      status)
+    values (
+      #{id,jdbcType=INTEGER},
+      #{title,jdbcType=VARCHAR},
+      #{content,jdbcType=VARCHAR},
+      #{icon,jdbcType=VARCHAR},
+      #{followerNum,jdbcType=INTEGER},
+      #{favoriteNum,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{createBy,jdbcType=INTEGER},
+      #{status,jdbcType=CHAR})
+  </insert>
+
+  <select id="search" parameterType="java.lang.String" resultMap="article">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+      azbrain_article
+    WHERE
+      <!-- MATCH(title) AGAINST(#{key,jdbcType=VARCHAR}) -->
+      title LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+  </select>
+
+  <select id="listByOrder" parameterType="java.util.Map" resultMap="article">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+      azbrain_article
+    ORDER BY create_time DESC
+  </select>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blueocean.azbrain.dao.UserMapper">
+    <resultMap id="user" type="com.blueocean.azbrain.model.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="job_number" jdbcType="VARCHAR" property="jobNumber"/>
+        <result column="user_type" jdbcType="CHAR" property="userType"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="likes_num" jdbcType="INTEGER" property="likesNum"/>
+        <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum"/>
+        <result column="bad_num" jdbcType="INTEGER" property="badNum"/>
+        <result column="good_num" jdbcType="INTEGER" property="goodNum"/>
+        <result column="break_contract_num" jdbcType="INTEGER" property="breakContractNum"/>
+        <result column="consultation_num" jdbcType="INTEGER" property="consultationNum"/>
+        <result column="consultation_duration" jdbcType="INTEGER" property="consultationDuration"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+
+        <result column="business_unit" jdbcType="VARCHAR" property="businessUnit" />
+        <result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, login_name, password, job_number, user_type, photo, email, mobile, remarks,
+        likes_num, favorite_num, negative_num, break_contract_num, consultation_time, create_by,
+        create_time, status
+    </sql>
+
+    <select id="get" resultMap="user" parameterType="int">
+        SELECT * FROM azbrain_user
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="findByPage" resultMap="user">
+        SELECT * FROM azbrain_user
+        WHERE
+            status != '99'
+        <if test="name != null">
+            AND name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[ AND create_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[ AND create_time <= #{endTime} ]]>
+        </if>
+        <if test="kcode != null">
+            AND job_number LIKE CONCAT('%',#{kcode},'%')
+        </if>
+        ORDER BY id DESC
+    </select>
+
+    <select id="list" resultMap="user">
+        SELECT *
+        FROM
+            azbrain_user
+        WHERE
+            status = '00'
+    </select>
+
+    <select id="getUserByName" resultMap="user" parameterType="java.lang.String">
+        SELECT * FROM azbrain_user
+        WHERE
+            login_name = #{name}
+    </select>
+
+    <select id="" resultMap="user" parameterType="java.util.Map">
+        SELECT
+            u.id, u.name, u.label, u.star, u.
+    </select>
+</mapper>

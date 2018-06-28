@@ -18,13 +18,12 @@
 <br/><br/><br/>
 
 <a href="#" onclick="javascript:a()">access_token!</a> |
-<a href="#" onclick="javascript:b('/search/answer?key=为什么&page=1', {})">搜索回答!</a>|
-<a href="#" onclick="javascript:b('/search/question?key=医药代表&page=1', {})">搜索问题!</a>|
+<a href="#" onclick="javascript:b('/search/article?key=医药代表&page=1', {})">搜索文章!</a>|
 <br/>
 
 <a href="#" onclick="javascript:b('/user/question/followers?page=1', {})">我的关注问题</a>|
-<a href="#" onclick="javascript:b('/user/question/followers?page=2', {})">我的关注问题2</a>|
-<a href="#" onclick="javascript:b('/user/question/recommends?page=1', {})">推荐问题</a>|
+<a href="#" onclick="javascript:b('/usr/watch/articles?page=1', {})">大家都在看</a>|
+<a href="#" onclick="javascript:b('/usr/follow/topics?page=1', {})">我关注的话题</a>|
 <br/>
 <a href="#" onclick="javascript:b('/question/detail?question_id=1&order_by=time', {})">问题详情</a>|
 <a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=time', {})">下拉刷新回答time!</a>|
@@ -89,7 +88,7 @@ console.log('Hi!');
             type : "GET",
             url : g_uri + "/user/apply/access-token",
             data : {
-                "code": "13911709225"
+                "code": "wangzh"
             },
             contentType: "application/json; charset=utf-8",
             dataType: "json",

@@ -6,14 +6,14 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
-    <result column="follower_num" jdbcType="INTEGER" property="followerNum" />
+    <result column="like_num" jdbcType="INTEGER" property="likeNum" />
     <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="status" jdbcType="CHAR" property="status" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, content, icon, follower_num, favorite_num, create_time, create_by, status
+    id, title, content, icon, like_num, favorite_num, create_time, create_by, status
   </sql>
   <select id="get" parameterType="java.lang.Integer" resultMap="article">
     select 
@@ -28,7 +28,7 @@
       title,
       content,
       icon,
-      follower_num,
+      like_num,
       favorite_num,
       create_time,
       create_by,
@@ -38,7 +38,7 @@
       #{title,jdbcType=VARCHAR},
       #{content,jdbcType=VARCHAR},
       #{icon,jdbcType=VARCHAR},
-      #{followerNum,jdbcType=INTEGER},
+      #{likerNum,jdbcType=INTEGER},
       #{favoriteNum,jdbcType=INTEGER},
       #{createTime,jdbcType=TIMESTAMP},
       #{createBy,jdbcType=INTEGER},

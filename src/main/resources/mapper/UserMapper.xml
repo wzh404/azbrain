@@ -19,6 +19,7 @@
         <result column="break_contract_num" jdbcType="INTEGER" property="breakContractNum"/>
         <result column="consultation_num" jdbcType="INTEGER" property="consultationNum"/>
         <result column="consultation_duration" jdbcType="INTEGER" property="consultationDuration"/>
+        <result column="label" jdbcType="VARCHAR" property="label"/>
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="status" jdbcType="CHAR" property="status"/>
@@ -72,8 +73,43 @@
             login_name = #{name}
     </select>
 
-    <select id="" resultMap="user" parameterType="java.util.Map">
+    <select id="searchSpecialist" resultMap="user" parameterType="com.blueocean.azbrain.vo.SpecialistVo">
         SELECT
-            u.id, u.name, u.label, u.star, u.
+            u.id,
+            u.photo,
+            u.name,
+            u.label,
+            u.star,
+            u.consulted_num,
+            u.consulted_duration
+        FROM
+            azbrain_user u
+        LEFT JOIN azbrain_user_specialist_label s ON u.id = s.user_id
+        LEFT JOIN azbrain_user_appointment_time t ON u.id = t.user_id
+        LEFT JOIN azbrain_user_consultation_way c ON u.id = c.user_id
+        WHERE
+            u.status = '00'
+        <if test="label != null">
+            <![CDATA[ AND s.label_code = #{label} ]]>
+        </if>
+        <if test="week != null">
+            <![CDATA[ AND t.week = #{week} ]]>
+        </if>
+        <if test="timeline != null">
+            <![CDATA[ AND t.code = #{timeline} ]]>
+        </if>
+        <if test="way != null">
+            <![CDATA[ AND c.way = #{way} ]]>
+        </if>
+        <if test="bad != null">
+            <![CDATA[ AND u.bad_num = 0 ]]>
+        </if>
+        <if test="contract != null">
+            <![CDATA[ AND u.break_contract_num = 0 ]]>
+        </if>
+        <if test="duration != null">
+            <![CDATA[ AND u.consultation_duration >= #{duration} ]]>
+        </if>
+        ORDER BY u.create_time DESC
     </select>
 </mapper>

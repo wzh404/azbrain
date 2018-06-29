@@ -3,6 +3,7 @@ package com.blueocean.azbrain.service.impl;
 import com.blueocean.azbrain.dao.UserMapper;
 import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.service.UserService;
+import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,11 @@ public class UserServiceImpl implements UserService {
     public Page<User> findByPage(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
         return userMapper.findByPage(conditionMap);
+    }
+
+    @Override
+    public Page<User> searchSpecialist(int page, int pageSize, SpecialistVo vo) {
+        PageHelper.startPage(page, pageSize);
+        return userMapper.searchSpecialist(vo);
     }
 }

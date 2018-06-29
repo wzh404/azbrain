@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -31,19 +32,33 @@ public class User {
 
     private String remarks;
 
+    /** 点赞数 */
     private Integer likesNum;
 
+    /** 收藏数 */
     private Integer favoriteNum;
 
+    /** 差评数 */
     private Integer badNum;
+
+    /** 好评数 */
     private Integer goodNum;
 
+    /** 已咨询数 */
     private Integer consultedNum;
+
+    /** 已咨询时长 */
     private Integer consultedDuration;
 
+    /** 爽约数 */
     private Integer breakContractNum;
 
+    /** 可预约咨询时长 */
     private Integer consultationDuration;
+
+    private String label;
+
+    private BigDecimal star;
 
     private Integer createBy;
 

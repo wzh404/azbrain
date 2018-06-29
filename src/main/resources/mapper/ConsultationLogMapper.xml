@@ -4,30 +4,52 @@
   <resultMap id="BaseResultMap" type="com.blueocean.azbrain.model.ConsultationLog">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="user_cid" jdbcType="INTEGER" property="userCid" />
+    <result column="by_user_id" jdbcType="INTEGER" property="byUserId" />
     <result column="way" jdbcType="VARCHAR" property="way" />
-    <result column="cdate" jdbcType="TIMESTAMP" property="cdate" />
-    <result column="time_label_code" jdbcType="VARCHAR" property="timeLabelCode" />
+    <result column="cdate" jdbcType="DATE" property="cdate" />
+    <result column="week" jdbcType="INTEGER" property="week" />
+    <result column="code" jdbcType="VARCHAR" property="timeLabelCode" />
     <result column="start_time" jdbcType="TIME" property="startTime" />
     <result column="end_time" jdbcType="TIME" property="endTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     <result column="status" jdbcType="CHAR" property="status" />
   </resultMap>
+
   <sql id="Base_Column_List">
-    id, user_id, user_cid, way, cdate, time_label_code, start_time, end_time, status
+    id, user_id, by_user_id, way, cdate, week, code, start_time, end_time, createTime,status
   </sql>
+
   <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from azbrain_user_consultation_log
-    where id = #{id,jdbcType=INTEGER}
+    from
+      azbrain_user_consultation_log
+    where
+      id = #{id,jdbcType=INTEGER}
   </select>
 
   <insert id="insert" parameterType="com.blueocean.azbrain.model.ConsultationLog">
-    insert into azbrain_user_consultation_log (id, user_id, user_cid, 
-      way, cdate, time_label_code, 
-      start_time, end_time, status)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{userCid,jdbcType=INTEGER}, 
-      #{way,jdbcType=VARCHAR}, #{cdate,jdbcType=TIMESTAMP}, #{timeLabelCode,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIME}, #{endTime,jdbcType=TIME}, #{status,jdbcType=CHAR})
+    insert into azbrain_user_consultation_log (
+      user_id,
+      by_user_id,
+      way,
+      cdate,
+      week,
+      code,
+      start_time,
+      end_time,
+      create_time,
+      status)
+    values (
+      #{userId,jdbcType=INTEGER},
+      #{byUserId,jdbcType=INTEGER},
+      #{way,jdbcType=VARCHAR},
+      #{cdate,jdbcType=DATE},
+      #{week,jdbcType=INTEGER},
+      #{code,jdbcType=VARCHAR},
+      #{startTime,jdbcType=TIME},
+      #{endTime,jdbcType=TIME},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{status,jdbcType=CHAR})
   </insert>
 </mapper>

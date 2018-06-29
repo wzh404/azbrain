@@ -21,11 +21,11 @@
 <a href="#" onclick="javascript:b('/search/article?key=医药代表&page=1', {})">搜索文章!</a>|
 <br/>
 
-<a href="#" onclick="javascript:b('/user/question/followers?page=1', {})">我的关注问题</a>|
+<a href="#" onclick="javascript:s1('/user/search/specialist')">我要问专家</a>|
 <a href="#" onclick="javascript:b('/usr/watch/articles?page=1', {})">大家都在看</a>|
 <a href="#" onclick="javascript:b('/usr/follow/topics?page=1', {})">我关注的话题</a>|
 <br/>
-<a href="#" onclick="javascript:b('/question/detail?question_id=1&order_by=time', {})">问题详情</a>|
+<a href="#" onclick="javascript:s2('/user/apply/consultation')">咨询申请</a>|
 <a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=time', {})">下拉刷新回答time!</a>|
 <a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=like', {})">下拉刷新回答like!</a>|
 <a href="#" onclick="javascript:b('/answer/detail?answer_id=1', {})">回答详情</a>|
@@ -88,7 +88,7 @@ console.log('Hi!');
             type : "GET",
             url : g_uri + "/user/apply/access-token",
             data : {
-                "code": "wangzh"
+                "code": "student"
             },
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -114,18 +114,46 @@ console.log('Hi!');
     }
 
 
-    function c() {
+    function s1(url) {
         $.ajax({
             type : "POST",
-            url : g_uri + "/manager/question/add",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
             data : JSON.stringify({
-                "title":"TITLE TEST",
-                "content":"www",
-                "icon":icon,
-                "answers":[{
-                    "content":"CONTENT---1",
-                    "create_id" : 5,
-                }]
+                "label":"1001",
+                "page":1,
+                "bad":"0",
+                "contract":"0",
+                "week": 2,
+                "timeline": "10001030",
+                "duration": 30,
+                "way": "mobile"
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function s2(url) {
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : JSON.stringify({
+                "byUserId":1,
+                "cdate":"2018-07-04",
+                "code":"10001030",
+                "week": 2,
+                "startTime": "10:10",
+                "endTime": "10:20",
+                "way": "mobile"
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

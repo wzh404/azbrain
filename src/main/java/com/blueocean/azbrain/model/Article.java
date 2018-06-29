@@ -17,7 +17,7 @@ public class Article {
 
     private String icon;
 
-    private Integer followerNum;
+    private Integer likeNum;
 
     private Integer favoriteNum;
 

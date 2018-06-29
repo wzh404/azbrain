@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.User;
+import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -31,4 +32,12 @@ public interface UserMapper {
      * @return
      */
     Page<User> findByPage(Map<String, Object> conditionMap);
+
+    /**
+     * 查找专家
+     *
+     * @param vo
+     * @return
+     */
+    Page<User> searchSpecialist(SpecialistVo vo);
 }

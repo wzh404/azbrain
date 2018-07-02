@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.pagehelper.Page;
 import lombok.Data;
 
+import javax.xml.transform.Result;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,5 +59,13 @@ public class ResultObject {
 
     public static ResultObject fail(String code, String error){
         return new ResultObject(false, code, error, null);
+    }
+
+    public static ResultObject cond(boolean b, ResultCode r){
+        if (b){
+            return ok();
+        } else {
+            return fail(r);
+        }
     }
 }

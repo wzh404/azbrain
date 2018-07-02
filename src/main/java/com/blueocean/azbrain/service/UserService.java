@@ -1,9 +1,12 @@
 package com.blueocean.azbrain.service;
 
 import com.blueocean.azbrain.model.User;
+import com.blueocean.azbrain.model.UserPoints;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -39,5 +42,47 @@ public interface UserService {
      * @return
      */
     Page<User> searchSpecialist(int page, int pageSize, SpecialistVo vo);
+
+    /**
+     * 我的详情
+     *
+     * @param userId
+     * @return
+     */
+    Map<String, Object> profile(Integer userId);
+
+    /**
+     * 专家详情
+     *
+     * @param userId
+     * @return
+     */
+    Map<String, Object> specialistProfile(Integer userId);
+
+    /**
+     * 可咨询条件
+     *
+     * @param userId
+     * @return
+     */
+    Map<String, Object> consultationConditions(Integer userId);
+
+    /**
+     * 用户积分列表
+     *
+     * @param userId
+     * @return
+     */
+    Page<UserPoints> listUserPoints(int page, int pageSize, Integer userId);
+
+    /**
+     * 列表主题专家
+     *
+     * @param page
+     * @param pageSize
+     * @param topicId
+     * @return
+     */
+    Page<User> topicSpecialists(int page, int pageSize, Integer topicId);
 }
 

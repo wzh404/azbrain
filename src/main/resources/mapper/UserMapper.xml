@@ -17,9 +17,15 @@
         <result column="bad_num" jdbcType="INTEGER" property="badNum"/>
         <result column="good_num" jdbcType="INTEGER" property="goodNum"/>
         <result column="break_contract_num" jdbcType="INTEGER" property="breakContractNum"/>
-        <result column="consultation_num" jdbcType="INTEGER" property="consultationNum"/>
-        <result column="consultation_duration" jdbcType="INTEGER" property="consultationDuration"/>
+        <result column="consulted_num" jdbcType="INTEGER" property="consultedNum"/>
+        <result column="consult_num" jdbcType="INTEGER" property="consultNum"/>
+        <result column="consult_duration" jdbcType="INTEGER" property="consultDuration"/>
+        <result column="consulted_duration" jdbcType="INTEGER" property="consultedDuration"/>
+        <result column="once_consultation_duration" jdbcType="INTEGER" property="onceConsultationDuration"/>
         <result column="label" jdbcType="VARCHAR" property="label"/>
+        <result column="consult_star" jdbcType="DECIMAL" property="consultStar"/>
+        <result column="consulted_star" jdbcType="DECIMAL" property="consultedStar"/>
+
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="status" jdbcType="CHAR" property="status"/>
@@ -30,8 +36,9 @@
 
     <sql id="Base_Column_List">
         id, name, login_name, password, job_number, user_type, photo, email, mobile, remarks,
-        likes_num, favorite_num, negative_num, break_contract_num, consultation_time, create_by,
-        create_time, status
+        likes_num, favorite_num, bad_num, good_num, break_contract_num, consulted_num, consult_num,
+        consult_duration, consulted_duration, once_consultation_duration, consult_star, consulted_star,
+        label, create_by, create_time, status
     </sql>
 
     <select id="get" resultMap="user" parameterType="int">
@@ -79,7 +86,7 @@
             u.photo,
             u.name,
             u.label,
-            u.star,
+            u.consulted_star,
             u.consulted_num,
             u.consulted_duration
         FROM
@@ -108,8 +115,86 @@
             <![CDATA[ AND u.break_contract_num = 0 ]]>
         </if>
         <if test="duration != null">
-            <![CDATA[ AND u.consultation_duration >= #{duration} ]]>
+            <![CDATA[ AND u.once_consultation_duration >= #{duration} ]]>
         </if>
         ORDER BY u.create_time DESC
+    </select>
+
+    <select id="userAvgScore" resultType="java.util.Map">
+        SELECT
+            avg(attitude) as attitude,
+            avg(polite) as polite,
+            avg(punctuality) as punctuality
+        FROM
+            azbrain_user_score_log
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="specialistAvgScore" resultType="java.util.Map">
+        SELECT
+            avg(specialization) as specialization,
+            avg(attitude) as attitude,
+            avg(patience) as patience,
+            avg(articulation) as articulation,
+            avg(logical_clarity) as logical,
+            avg(punctuality) as punctuality
+        FROM
+            azbrain_specialist_score_log
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="appointmentTime" resultType="java.util.Map">
+        SELECT
+            week,
+            code
+        FROM
+            azbrain_user_appointment_time
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="consultWay" resultType="java.util.Map">
+        SELECT
+            way
+        FROM
+            azbrain_user_consultation_way
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="listUserPoints" resultType="com.blueocean.azbrain.model.UserPoints">
+        SELECT
+            user_id as userId,
+            log_id as logId,
+            point,
+            create_time as createTime
+        FROM
+            azbrain_user_points
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="topicSpecialists" resultMap="user">
+        SELECT
+            u.id,
+            u.photo,
+            u.name,
+            u.label,
+            u.consulted_star,
+            u.consulted_num,
+            u.consulted_duration
+        FROM
+            azbrain_user u
+        INNER JOIN
+            azbrain_topic_specialist s
+        ON
+            u.id = s.user_id
+        WHERE
+            s.topic_id = #{topicId,jdbcType=INTEGER}
+        AND
+            u.status = '00'
+        ORDER BY consulted_num DESC
     </select>
 </mapper>

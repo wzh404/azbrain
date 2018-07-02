@@ -17,26 +17,39 @@
 
 <br/><br/><br/>
 
-<a href="#" onclick="javascript:a()">access_token!</a> |
+<a href="#" onclick="javascript:a('specialist')">专家登陆</a> |
+<a href="#" onclick="javascript:a('student')">普通职员登陆</a> |
 <a href="#" onclick="javascript:b('/search/article?key=医药代表&page=1', {})">搜索文章!</a>|
+<a href="#" onclick="javascript:b('/user/article?article_id=1', {})">文章详情!</a>|
 <br/>
 
-<a href="#" onclick="javascript:s1('/user/search/specialist')">我要问专家</a>|
-<a href="#" onclick="javascript:b('/usr/watch/articles?page=1', {})">大家都在看</a>|
-<a href="#" onclick="javascript:b('/usr/follow/topics?page=1', {})">我关注的话题</a>|
+<a href="#" onclick="javascript:b('/user/profile', {})">用户咨询详情</a>|
+<a href="#" onclick="javascript:b('/user/specialist/profile', {})">专家详情</a>|
+<a href="#" onclick="javascript:b('/user/specialist/articles?page=1', {})">专家文章列表</a>|
+<a href="#" onclick="javascript:b('/user/my/consult?page=1', {})">我咨询的</a>|
+<a href="#" onclick="javascript:b('/user/consult/me?page=1', {})">咨询我的</a>|
+<a href="#" onclick="javascript:b('/user/consultation/conditions', {})">可咨询条件</a>|
+<a href="#" onclick="javascript:b('/user/points?page=1', {})">我的积分</a>|
+</br>
+
+<a href="#" onclick="javascript:s1('/user/search/specialist?page=1')">我要问专家</a>|
+<a href="#" onclick="javascript:b('/user/watch/articles?page=1', {})">大家都在看</a>|
+<a href="#" onclick="javascript:b('/user/follow/topics?page=1', {})">我关注的话题</a>|
 <br/>
-<a href="#" onclick="javascript:s2('/user/apply/consultation')">咨询申请</a>|
-<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=time', {})">下拉刷新回答time!</a>|
-<a href="#" onclick="javascript:b('/question/answers?question_id=1&page=1&order_by=like', {})">下拉刷新回答like!</a>|
-<a href="#" onclick="javascript:b('/answer/detail?answer_id=1', {})">回答详情</a>|
-<a href="#" onclick="javascript:b('/answer/comments?answer_id=1&page=1', {})">下拉刷新回答评论</a>|
+<a href="#" onclick="javascript:s2('/user/apply/consultation')">咨询</a>|
+<a href="#" onclick="javascript:b('/user/confirm/consultation?id=8&op=confirm', {})">确认申请!</a>|
+<a href="#" onclick="javascript:b('/user/reject/consultation?id=3&op=reject', {})">拒绝申请!</a>|
+<a href="#" onclick="javascript:b('/user/topic/details?topic_id=1', {})">主题详情</a>|
+<a href="#" onclick="javascript:b('/user/topic/articles?topic_id=1&page=2', {})">下拉主题文章</a>|
 
 <br/>
-
-<a href="#" onclick="javascript:b('/user/follow-question?question_id=1', {})">关注问题</a>|
-<a href="#" onclick="javascript:b('/user/unfollow-question?question_id=1', {})">取消关注</a>|
-<a href="#" onclick="javascript:b('/user/like-answer?answer_id=1', {})">点赞回答</a>|
-<a href="#" onclick="javascript:b('/user/unlike-answer?answer_id=1', {})">取消点赞</a>|
+<a href="#" onclick="javascript:b('/user/topic/specialists?topic_id=1&page=1', {})">主题专家列表</a>|
+<a href="#" onclick="javascript:comment2('/user/specialist/score')">对专家评价</a>|
+<a href="#" onclick="javascript:comment('/user/score')">对用户评价</a>|
+<a href="#" onclick="javascript:b('/user/follow/topic?topic_id=1', {})">关注主题</a>|
+<a href="#" onclick="javascript:b('/user/unfollow/topic?topic_id=1', {})">取消关注主题</a>|
+<a href="#" onclick="javascript:b('/user/like/article?article_id=1', {})">点赞文章</a>|
+<a href="#" onclick="javascript:b('/user/unlike/article?article_id=1', {})">取消点赞</a>|
 </br></br></br>
 【</br>
 <span id="msg_id" >off</span>
@@ -83,12 +96,12 @@ promise.then(function() {
 
 console.log('Hi!');
 
-    function a() {
+    function a(name) {
         $.ajax({
             type : "GET",
             url : g_uri + "/user/apply/access-token",
             data : {
-                "code": "student"
+                "code": name
             },
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -123,7 +136,6 @@ console.log('Hi!');
             },
             data : JSON.stringify({
                 "label":"1001",
-                "page":1,
                 "bad":"0",
                 "contract":"0",
                 "week": 2,
@@ -149,11 +161,61 @@ console.log('Hi!');
             data : JSON.stringify({
                 "byUserId":1,
                 "cdate":"2018-07-04",
+                "topicId": 1,
                 "code":"10001030",
-                "week": 2,
                 "startTime": "10:10",
                 "endTime": "10:20",
-                "way": "mobile"
+                "way": "mobile",
+                "mobile": "13911709225"
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function comment(url) {
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : JSON.stringify({
+                "logId":3,
+                "breakContract": 0,
+                "attitude":4,
+                "polite": 4,
+                "punctuality": 3,
+                "other": "10:20"
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function comment2(url) {
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : JSON.stringify({
+                "logId":3,
+                "breakContract": 0,
+                "attitude":3,
+                "specialization": 4,
+                "patience": 5,
+                "articulation": 4,
+                "logicalClarity": 4,
+                "punctuality": 3,
+                "other": "10:20"
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

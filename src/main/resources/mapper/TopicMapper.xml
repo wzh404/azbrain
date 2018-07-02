@@ -26,9 +26,15 @@
 
   <insert id="insert" parameterType="com.blueocean.azbrain.model.Topic">
     insert into azbrain_topic (
-      id, title, content,
-      icon, follower_num, consulted_num, create_time,
-      create_by, status)
+      id,
+      title,
+      content,
+      icon,
+      follower_num,
+      consulted_num,
+      create_time,
+      create_by,
+      status)
     values (
       #{id,jdbcType=INTEGER},
       #{title,jdbcType=VARCHAR},
@@ -62,4 +68,59 @@
       uft.user_id = #{userId,jdbcType=INTEGER}
     ORDER BY create_time DESC
   </select>
+
+  <select id="followNum" resultType="java.lang.Integer">
+    SELECT COUNT(0)
+    FROM
+      azbrain_user_follow_topic
+    WHERE
+      user_id = #{userId}
+    AND
+      topic_id = #{topicId}
+  </select>
+
+  <insert id="follow" parameterType="com.blueocean.azbrain.model.UserFollowTopic">
+    INSERT INTO azbrain_user_follow_topic(
+      user_id,
+      topic_id,
+      follow_time)
+    VALUES(
+      #{userId},
+      #{topicId},
+      #{followTime})
+    ;
+    UPDATE azbrain_topic
+    SET
+      follower_num = follower_num + 1
+    WHERE
+      id = #{topicId}
+    ;
+  </insert>
+
+  <delete id="unfollow">
+    DELETE FROM
+      azbrain_user_follow_topic
+    WHERE
+      user_id = #{userId}
+    AND
+      topic_id = #{topicId}
+    ;
+    UPDATE azbrain_topic
+    SET
+      follower_num = follower_num - 1
+    WHERE
+      id = #{topicId}
+    AND
+      follower_num > 0
+    ;
+  </delete>
+
+  <update id="incrConsultedNum">
+    UPDATE
+      azbrain_topic
+    SET
+      consulted_num = consulted_num + 1
+    WHERE
+      id = #{topicId}
+  </update>
 </mapper>

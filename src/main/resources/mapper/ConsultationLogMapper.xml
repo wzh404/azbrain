@@ -1,55 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blueocean.azbrain.dao.ConsultationLogMapper">
-  <resultMap id="BaseResultMap" type="com.blueocean.azbrain.model.ConsultationLog">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="by_user_id" jdbcType="INTEGER" property="byUserId" />
-    <result column="way" jdbcType="VARCHAR" property="way" />
-    <result column="cdate" jdbcType="DATE" property="cdate" />
-    <result column="week" jdbcType="INTEGER" property="week" />
-    <result column="code" jdbcType="VARCHAR" property="timeLabelCode" />
-    <result column="start_time" jdbcType="TIME" property="startTime" />
-    <result column="end_time" jdbcType="TIME" property="endTime" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-    <result column="status" jdbcType="CHAR" property="status" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.blueocean.azbrain.model.ConsultationLog">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="by_user_id" jdbcType="INTEGER" property="byUserId"/>
+        <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
+        <result column="way" jdbcType="VARCHAR" property="way"/>
+        <result column="cdate" jdbcType="DATE" property="cdate"/>
+        <result column="week" jdbcType="INTEGER" property="week"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="start_time" jdbcType="TIME" property="startTime"/>
+        <result column="end_time" jdbcType="TIME" property="endTime"/>
+        <result column="week" jdbcType="INTEGER" property="week"/>
+        <result column="user_comment_flag" jdbcType="INTEGER" property="userCommentFlag"/>
+        <result column="specialist_comment_flag" jdbcType="INTEGER" property="specialistCommentFlag"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="meeting_pwd" jdbcType="VARCHAR" property="meetingPwd"/>
 
-  <sql id="Base_Column_List">
-    id, user_id, by_user_id, way, cdate, week, code, start_time, end_time, createTime,status
-  </sql>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="last_updated" jdbcType="TIMESTAMP" property="lastUpdated"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
 
-  <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from
-      azbrain_user_consultation_log
-    where
-      id = #{id,jdbcType=INTEGER}
-  </select>
+    <sql id="Base_Column_List">
+        id, user_id, by_user_id, topic_id, way, cdate, week, code, start_time, end_time, create_time, last_updated,
+        user_comment_flag,specialist_comment_flag, mobile, meeting_pwd, status
+    </sql>
 
-  <insert id="insert" parameterType="com.blueocean.azbrain.model.ConsultationLog">
-    insert into azbrain_user_consultation_log (
-      user_id,
-      by_user_id,
-      way,
-      cdate,
-      week,
-      code,
-      start_time,
-      end_time,
-      create_time,
-      status)
-    values (
-      #{userId,jdbcType=INTEGER},
-      #{byUserId,jdbcType=INTEGER},
-      #{way,jdbcType=VARCHAR},
-      #{cdate,jdbcType=DATE},
-      #{week,jdbcType=INTEGER},
-      #{code,jdbcType=VARCHAR},
-      #{startTime,jdbcType=TIME},
-      #{endTime,jdbcType=TIME},
-      #{createTime,jdbcType=TIMESTAMP},
-      #{status,jdbcType=CHAR})
-  </insert>
+    <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+            azbrain_user_consultation_log
+        where
+            id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="myConsult" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            azbrain_user_consultation_log
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="consultMe" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            azbrain_user_consultation_log
+        WHERE
+            by_user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="com.blueocean.azbrain.model.ConsultationLog">
+        insert into azbrain_user_consultation_log (
+            user_id,
+            by_user_id,
+            topic_id,
+            way,
+            cdate,
+            week,
+            code,
+            start_time,
+            end_time,
+            create_time,
+            last_updated,
+            user_comment_flag,
+            specialist_comment_flag,
+            mobile,
+            meeting_pwd,
+            status)
+        values (
+            #{userId,jdbcType=INTEGER},
+            #{byUserId,jdbcType=INTEGER},
+            #{topicId,jdbcType=INTEGER},
+            #{way,jdbcType=VARCHAR},
+            #{cdate,jdbcType=DATE},
+            #{week,jdbcType=INTEGER},
+            #{code,jdbcType=VARCHAR},
+            #{startTime,jdbcType=TIME},
+            #{endTime,jdbcType=TIME},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{lastUpdated,jdbcType=TIMESTAMP},
+            0,
+            0,
+            #{mobile,jdbcType=VARCHAR},
+            #{meetingPwd,jdbcType=VARCHAR},
+            #{status,jdbcType=CHAR})
+    </insert>
+
+    <update id="changeStatus">
+        UPDATE azbrain_user_consultation_log
+        SET
+            status = #{status,jdbcType=VARCHAR},
+            last_updated = now()
+        WHERE
+            id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="setSpecialistCommented">
+        UPDATE azbrain_user_consultation_log
+        SET
+            specialist_comment_flag = 1
+        WHERE
+            id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="setUserCommented">
+        UPDATE azbrain_user_consultation_log
+        SET
+            user_comment_flag = 1
+        WHERE
+            id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

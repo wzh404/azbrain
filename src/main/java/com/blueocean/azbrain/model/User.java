@@ -32,10 +32,10 @@ public class User {
 
     private String remarks;
 
-    /** 点赞数 */
+    /** 点赞文章数 */
     private Integer likesNum;
 
-    /** 收藏数 */
+    /** 收藏文章数 */
     private Integer favoriteNum;
 
     /** 差评数 */
@@ -44,21 +44,31 @@ public class User {
     /** 好评数 */
     private Integer goodNum;
 
-    /** 已咨询数 */
+    /** 被咨询次数 */
     private Integer consultedNum;
 
-    /** 已咨询时长 */
+    /** 咨询次数 */
+    private Integer consultNum;
+
+    /** 被咨询时长 */
     private Integer consultedDuration;
+
+    /** 咨询时长 */
+    private Integer consultDuration;
 
     /** 爽约数 */
     private Integer breakContractNum;
 
-    /** 可预约咨询时长 */
-    private Integer consultationDuration;
+    /** 一次最大可预约咨询时长 */
+    private Integer onceConsultationDuration;
 
     private String label;
 
-    private BigDecimal star;
+    /** 咨询总评价 */
+    private BigDecimal consultStar;
+
+    /** 被咨询总评价 */
+    private BigDecimal consultedStar;
 
     private Integer createBy;
 

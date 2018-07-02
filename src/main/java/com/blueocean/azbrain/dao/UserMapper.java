@@ -1,11 +1,13 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.User;
+import com.blueocean.azbrain.model.UserPoints;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -40,4 +42,52 @@ public interface UserMapper {
      * @return
      */
     Page<User> searchSpecialist(SpecialistVo vo);
+
+    /**
+     * 专家评分
+     *
+     * @param userId
+     * @return
+     */
+    Map<String, Object> specialistAvgScore(@Param("userId")Integer userId);
+
+    /**
+     * 个人评分
+     *
+     * @param userId
+     * @return
+     */
+    Map<String, Object> userAvgScore(@Param("userId")Integer userId);
+
+    /**
+     * 可预约时间
+     *
+     * @param userId
+     * @return
+     */
+    List<Map<String, Object>> appointmentTime(@Param("userId")Integer userId);
+
+    /**
+     * 可咨询方式
+     *
+     * @param userId
+     * @return
+     */
+    List<Map<String, Object>> consultWay(@Param("userId")Integer userId);
+
+    /**
+     * 用户积分列表
+     *
+     * @param userId
+     * @return
+     */
+    Page<UserPoints> listUserPoints(@Param("userId")Integer userId);
+
+    /**
+     * 列表主题专家
+     *
+     * @param topicId
+     * @return
+     */
+    Page<User> topicSpecialists(@Param("topicId")Integer topicId);
 }

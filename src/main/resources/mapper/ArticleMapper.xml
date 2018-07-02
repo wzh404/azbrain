@@ -1,65 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blueocean.azbrain.dao.ArticleMapper">
-  <resultMap id="article" type="com.blueocean.azbrain.model.Article">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="icon" jdbcType="VARCHAR" property="icon" />
-    <result column="like_num" jdbcType="INTEGER" property="likeNum" />
-    <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="create_by" jdbcType="INTEGER" property="createBy" />
-    <result column="status" jdbcType="CHAR" property="status" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, title, content, icon, like_num, favorite_num, create_time, create_by, status
-  </sql>
-  <select id="get" parameterType="java.lang.Integer" resultMap="article">
-    select 
-    <include refid="Base_Column_List" />
-    from azbrain_article
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+    <resultMap id="article" type="com.blueocean.azbrain.model.Article">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="like_num" jdbcType="INTEGER" property="likeNum"/>
+        <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="author" jdbcType="VARCHAR" property="author"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, title, content, icon, like_num, favorite_num, source, author, create_time, create_by, status
+    </sql>
 
-  <insert id="insert" parameterType="com.blueocean.azbrain.model.Article">
-    insert into azbrain_article (
-      id,
-      title,
-      content,
-      icon,
-      like_num,
-      favorite_num,
-      create_time,
-      create_by,
-      status)
-    values (
-      #{id,jdbcType=INTEGER},
-      #{title,jdbcType=VARCHAR},
-      #{content,jdbcType=VARCHAR},
-      #{icon,jdbcType=VARCHAR},
-      #{likerNum,jdbcType=INTEGER},
-      #{favoriteNum,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP},
-      #{createBy,jdbcType=INTEGER},
-      #{status,jdbcType=CHAR})
-  </insert>
+    <select id="get" parameterType="java.lang.Integer" resultMap="article">
+        select
+        <include refid="Base_Column_List"/>
+        from azbrain_article
+        where id = #{id,jdbcType=INTEGER}
+    </select>
 
-  <select id="search" parameterType="java.lang.String" resultMap="article">
-    SELECT
-    <include refid="Base_Column_List" />
-    FROM
-      azbrain_article
-    WHERE
-      <!-- MATCH(title) AGAINST(#{key,jdbcType=VARCHAR}) -->
-      title LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
-  </select>
+    <select id="specialistArticles" resultMap="article">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            azbrain_article
+        WHERE
+            create_by = #{userId, jdbcType=INTEGER}
+        AND
+            status = '00'
+    </select>
 
-  <select id="listByOrder" parameterType="java.util.Map" resultMap="article">
-    SELECT
-    <include refid="Base_Column_List" />
-    FROM
-      azbrain_article
-    ORDER BY create_time DESC
-  </select>
+    <insert id="insert" parameterType="com.blueocean.azbrain.model.Article">
+        insert into azbrain_article (
+        title,
+        content,
+        icon,
+        like_num,
+        favorite_num,
+        source,
+        author,
+        create_time,
+        create_by,
+        status)
+        values (
+        #{title,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR},
+        #{icon,jdbcType=VARCHAR},
+        #{likerNum,jdbcType=INTEGER},
+        #{favoriteNum,jdbcType=INTEGER},
+        #{source,jdbcType=VARCHAR},
+        #{author,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=INTEGER},
+        #{status,jdbcType=CHAR})
+    </insert>
+
+    <select id="search" parameterType="java.lang.String" resultMap="article">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+            azbrain_article
+        WHERE
+        <!-- MATCH(title) AGAINST(#{key,jdbcType=VARCHAR}) -->
+            title LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="listByOrder" parameterType="java.util.Map" resultMap="article">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            azbrain_article
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="listByTopic" resultMap="article">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+            azbrain_article a
+        INNER JOIN
+            azbrain_topic_article ta
+        ON
+            a.id = ta.article_id
+        WHERE
+            ta.topic_id = #{topicId}
+        AND
+            a.status = '00'
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="likeNum" resultType="java.lang.Integer">
+        SELECT
+            COUNT(0)
+        FROM
+            azbrain_user_likes_article
+        WHERE
+            article_id = #{articleId}
+        AND
+            user_id = #{userId}
+    </select>
+
+    <insert id="like" parameterType="com.blueocean.azbrain.model.UserLikeArticle">
+        INSERT INTO azbrain_user_likes_article(
+            user_id,
+            article_id,
+            like_time)
+        VALUES(
+            #{userId},
+            #{articleId},
+            #{likeTime}
+        )
+        ;
+        UPDATE
+            azbrain_article
+        SET
+            like_num = like_num + 1
+        WHERE
+            id = #{articleId}
+        ;
+    </insert>
+
+    <delete id="unlike">
+        DELETE FROM
+            azbrain_user_likes_article
+        WHERE
+            article_id = #{articleId}
+        AND
+            user_id = #{userId}
+        ;
+        UPDATE
+            azbrain_article
+        SET
+            like_num = like_num - 1
+        WHERE
+            id = #{articleId}
+        AND
+            like_num > 0
+        ;
+    </delete>
 </mapper>

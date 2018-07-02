@@ -21,6 +21,11 @@ public class Article {
 
     private Integer favoriteNum;
 
+    // 平台， 专家， 转载
+    private String source;
+
+    private String author;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createTime;
 

@@ -90,4 +90,12 @@ public interface UserMapper {
      * @return
      */
     Page<User> topicSpecialists(@Param("topicId")Integer topicId);
+
+    /**
+     * 新建积分
+     *
+     * @param userPoints
+     * @return
+     */
+    int insertPoints(UserPoints userPoints);
 }

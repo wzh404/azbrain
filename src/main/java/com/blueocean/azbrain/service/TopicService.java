@@ -4,7 +4,6 @@ import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.model.Topic;
 import com.blueocean.azbrain.model.UserFollowTopic;
 import com.github.pagehelper.Page;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 

@@ -7,11 +7,11 @@ import java.util.Arrays;
  */
 public enum ConsultationStatus {
     EMPTY(""),
-    APPLIED("00"),
+    UNCONFIRMED("00"),
     EDITED("01"),
     CONFIRMED("02"),
-    EVALUATING("03"),
-    COMPLETED("09"),
+    UNEVALUATED("03"),
+    COMPLETED("10"),
     REJECTED("98"),
     CANCELED("99");
 

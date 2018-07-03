@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.ConsultationLog;
+import com.blueocean.azbrain.vo.ConsultationLogVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,7 +36,7 @@ public interface ConsultationLogMapper {
      * @param id
      * @return
      */
-    int setSpecialistCommented(@Param("id")Integer id);
+    int byUserEvaluated(@Param("id")Integer id);
 
     /**
      * 设置用户已评论
@@ -43,7 +44,7 @@ public interface ConsultationLogMapper {
      * @param id
      * @return
      */
-    int setUserCommented(@Param("id")Integer id);
+    int userEvaluated(@Param("id")Integer id);
 
     /**
      * 我的咨询
@@ -60,4 +61,12 @@ public interface ConsultationLogMapper {
      * @return
      */
     Page<ConsultationLog> consultMe(@Param("userId")Integer userId);
+
+    /**
+     * 编辑
+     *
+     * @param consultationLogVo
+     * @return
+     */
+    int edit(ConsultationLogVo consultationLogVo);
 }

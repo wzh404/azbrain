@@ -10,4 +10,6 @@ public class AZBrainConstants {
     public static final  String SESSION_USER_ID = "session.user.id";
     public static final  String SESSION_USER_NAME = "session.user.name";
     public static final  String REQUEST_ATTRIBUTE_UID = "x-user-id";
+
+    public static final String PLEASE_LOG_IN = "please log in";
 }

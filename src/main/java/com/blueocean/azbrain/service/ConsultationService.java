@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.service;
 
 import com.blueocean.azbrain.model.*;
+import com.blueocean.azbrain.vo.ConsultationLogVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,6 +37,14 @@ public interface ConsultationService {
      * @return
      */
     int confirm(Integer id, Integer topicId);
+
+    /**
+     * 用户或专家编辑
+     *
+     * @param consultationLogVo
+     * @return
+     */
+    int edit(ConsultationLogVo consultationLogVo);
 
     /**
      * user's score log

@@ -29,4 +29,15 @@ public class JsoupTests {
         LocalDateTime dt = LocalDateTime.of(ld, LocalTime.MIN);
         System.out.println(dt);
     }
+
+    @Test
+    public void testCode(){
+        String code = "10001030";
+
+        LocalTime s = LocalTime.parse(code.substring(0, 2) + ":" + code.substring(2,4));
+        LocalTime e = LocalTime.parse(code.substring(4, 6) + ":" + code.substring(6,8));
+        System.out.println(s);
+        System.out.println(e);
+        Assert.assertTrue(1==1);
+    }
 }

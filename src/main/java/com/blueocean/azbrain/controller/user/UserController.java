@@ -5,6 +5,7 @@ import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.model.User;
+import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.model.UserPoints;
 import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.service.UserService;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -79,7 +79,7 @@ public class UserController {
     @RequestMapping(value="/profile", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject profile(HttpServletRequest request){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, "please log in");
+        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         Map<String, Object> map = userService.profile(userId);
         return ResultObject.ok(map);
@@ -94,7 +94,7 @@ public class UserController {
     @RequestMapping(value="/specialist/profile", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject specialistProfile(HttpServletRequest request){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, "please log in");
+        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         Map<String, Object> map = userService.specialistProfile(userId);
         return ResultObject.ok(map);
@@ -110,7 +110,7 @@ public class UserController {
     @RequestMapping(value="/specialist/articles", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject articles(HttpServletRequest request, @RequestParam("page") Integer page) {
         Integer userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, "please log in");
+        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         Page<Article> articlePage = articleService.specialistArticles(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok("articles", articlePage.getResult());
@@ -126,7 +126,7 @@ public class UserController {
     @RequestMapping(value="/consultation/conditions", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject conditions(HttpServletRequest request){
         Integer userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, "please log in");
+        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         Map<String, Object> map = userService.consultationConditions(userId);
         return ResultObject.ok(map);
@@ -142,7 +142,7 @@ public class UserController {
     @RequestMapping(value="/points", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject listUserPoints(HttpServletRequest request, @RequestParam("page") Integer page){
         Integer userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, "please log in");
+        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         Page<UserPoints> mapPage = userService.listUserPoints(page,AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(mapPage.getResult());
@@ -160,5 +160,31 @@ public class UserController {
                                          @RequestParam("page") Integer page){
         Page<User> userPage = userService.topicSpecialists(page, AZBrainConstants.PAGE_SIZE, topicId);
         return ResultObject.ok(userPage.getResult());
+    }
+
+    /**
+     * 意见反馈
+     *
+     * @param request
+     * @param feedback
+     * @param classification
+     * @param photo
+     * @return
+     */
+    @RequestMapping(value="/apply/feedback", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject feedback(HttpServletRequest request,
+                                 @RequestParam("feedback") String feedback,
+                                 @RequestParam("classification") String classification,
+                                 @RequestParam(value="photo", required = false) String photo){
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please log in");
+
+        User user = userService.get(userId);
+        UserFeedback userFeedback = new UserFeedback(userId, user.getName(), feedback);
+        userFeedback.setPhoto(photo);
+        userFeedback.setClassification(classification);
+
+        int rows = userService.insertUserFeedback(userFeedback);
+        return ResultObject.cond(rows > 0, ResultCode.USER_ILLEGAL_STATUS);
     }
 }

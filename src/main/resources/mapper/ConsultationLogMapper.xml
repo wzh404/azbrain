@@ -13,8 +13,8 @@
         <result column="start_time" jdbcType="TIME" property="startTime"/>
         <result column="end_time" jdbcType="TIME" property="endTime"/>
         <result column="week" jdbcType="INTEGER" property="week"/>
-        <result column="user_comment_flag" jdbcType="INTEGER" property="userCommentFlag"/>
-        <result column="specialist_comment_flag" jdbcType="INTEGER" property="specialistCommentFlag"/>
+        <result column="user_evaluated" jdbcType="INTEGER" property="userEvaluated"/>
+        <result column="by_user_evaluated" jdbcType="INTEGER" property="byUserEvaluated"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="meeting_pwd" jdbcType="VARCHAR" property="meetingPwd"/>
 
@@ -25,7 +25,7 @@
 
     <sql id="Base_Column_List">
         id, user_id, by_user_id, topic_id, way, cdate, week, code, start_time, end_time, create_time, last_updated,
-        user_comment_flag,specialist_comment_flag, mobile, meeting_pwd, status
+        mobile, meeting_pwd, user_evaluated, by_user_evaluated, status
     </sql>
 
     <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -68,10 +68,10 @@
             end_time,
             create_time,
             last_updated,
-            user_comment_flag,
-            specialist_comment_flag,
             mobile,
             meeting_pwd,
+            user_evaluated,
+            by_user_evaluated,
             status)
         values (
             #{userId,jdbcType=INTEGER},
@@ -85,10 +85,10 @@
             #{endTime,jdbcType=TIME},
             #{createTime,jdbcType=TIMESTAMP},
             #{lastUpdated,jdbcType=TIMESTAMP},
-            0,
-            0,
             #{mobile,jdbcType=VARCHAR},
             #{meetingPwd,jdbcType=VARCHAR},
+            0,
+            0,
             #{status,jdbcType=CHAR})
     </insert>
 
@@ -101,19 +101,35 @@
             id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="setSpecialistCommented">
+    <update id="userEvaluated">
         UPDATE azbrain_user_consultation_log
         SET
-            specialist_comment_flag = 1
+            user_evaluated = 1
         WHERE
             id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="setUserCommented">
+    <update id="byUserEvaluated">
         UPDATE azbrain_user_consultation_log
         SET
-            user_comment_flag = 1
+            by_user_evaluated = 1
         WHERE
             id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="edit" parameterType="com.blueocean.azbrain.vo.ConsultationLogVo">
+        UPDATE
+            azbrain_user_consultation_log
+        SET
+            cdate = #{cdate,jdbcType=DATE},
+            start_time = #{startTime, jdbcType=TIME},
+            end_time = #{endTime, jdbcType=TIME},
+            way = #{way, jdbcType=VARCHAR},
+            status = #{status, jdbcType=VARCHAR},
+            mobile = #{mobile, jdbcType=VARCHAR},
+            meeting_pwd = #{meetingPwd, jdbcType=VARCHAR},
+            last_updated = #{lastUpdated, jdbcType=TIMESTAMP}
+        WHERE
+            id = #{id}
     </update>
 </mapper>

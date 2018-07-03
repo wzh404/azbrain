@@ -36,16 +36,23 @@
 <a href="#" onclick="javascript:b('/user/watch/articles?page=1', {})">大家都在看</a>|
 <a href="#" onclick="javascript:b('/user/follow/topics?page=1', {})">我关注的话题</a>|
 <br/>
-<a href="#" onclick="javascript:s2('/user/apply/consultation')">咨询</a>|
-<a href="#" onclick="javascript:b('/user/confirm/consultation?id=8&op=confirm', {})">确认申请!</a>|
-<a href="#" onclick="javascript:b('/user/reject/consultation?id=3&op=reject', {})">拒绝申请!</a>|
+<a href="#" onclick="javascript:s2('/user/apply/consultation')">用户咨询</a>|
+<a href="#" onclick="javascript:b('/user/specialist/confirm/consultation?id=8', {})">专家确认!</a>|
+<a href="#" onclick="javascript:edit('/user/specialist/edit/consultation')">专家编辑!</a>|
+<a href="#" onclick="javascript:b('/user/specialist/reject/consultation?id=8', {})">专家拒绝!</a>|
+<a href="#" onclick="javascript:b('/user/cancel/consultation?id=8', {})">用户取消!</a>|
+<a href="#" onclick="javascript:edit('/user/edit/consultation')">用户编辑!</a>|
+<a href="#" onclick="javascript:b('/user/confirm/consultation?id=8', {})">用户确认!</a>|
+<a href="#" onclick="javascript:comment2('/user/specialist/score')">对专家评价</a>|
+<a href="#" onclick="javascript:comment('/user/score')">对用户评价</a>|
+<br/>
+<img src="/static/1.png">
+<br/>
 <a href="#" onclick="javascript:b('/user/topic/details?topic_id=1', {})">主题详情</a>|
 <a href="#" onclick="javascript:b('/user/topic/articles?topic_id=1&page=2', {})">下拉主题文章</a>|
 
 <br/>
 <a href="#" onclick="javascript:b('/user/topic/specialists?topic_id=1&page=1', {})">主题专家列表</a>|
-<a href="#" onclick="javascript:comment2('/user/specialist/score')">对专家评价</a>|
-<a href="#" onclick="javascript:comment('/user/score')">对用户评价</a>|
 <a href="#" onclick="javascript:b('/user/follow/topic?topic_id=1', {})">关注主题</a>|
 <a href="#" onclick="javascript:b('/user/unfollow/topic?topic_id=1', {})">取消关注主题</a>|
 <a href="#" onclick="javascript:b('/user/like/article?article_id=1', {})">点赞文章</a>|
@@ -55,29 +62,6 @@
 <span id="msg_id" >off</span>
 </br>
 】
-<br/>
-<a href="#" onclick="javascript:login('/manager/user/login', {'name':'admin', 'pwd':'admin'})">登录</a> |
-<a href="#" onclick="javascript:c()">新增问题</a> |
-<a href="#" onclick="javascript:d()">编辑问题</a> |
-<a href="#" onclick="javascript:user()">新增用户</a> |
-<a href="#" onclick="javascript:b('/manager/question/detail?question_id=26', {})">查看问题</a> |
-<a href="#" onclick="javascript:b('/manager/question/close?question_id=1', {})">关闭问题</a> |
-<a href="#" onclick="javascript:b('/manager/question/recommend?question_id=7', {})">推荐问题</a> |
-<a href="#" onclick="javascript:b('/manager/question/unrecommend?question_id=7', {})">取消推荐</a> |
-<a href="#" onclick="javascript:b('/manager/question/search?title=医药代表&start_time=2018-01-01&end_time=2018-06-01&page=1', {})">问题管理</a> |
-<a href="#" onclick="javascript:b('/manager/user/search?name=adm&start_time=2018-01-01&end_time=2018-06-01&page=1', {})">用户管理</a> |
-<a href="#" onclick="javascript:b('/manager/user/search?page=1', {})">用户管理2</a> |
-<a href="#" onclick="javascript:b('/manager/user/close?user_id=1', {})">停止用户</a> |
-<a href="#" onclick="javascript:b('/manager/user/active?user_id=1', {})">激活用户</a> |
-<a href="#" onclick="javascript:b('/manager/user/delete?user_id=1', {})">删除用户</a> |
-<a href="#" onclick="javascript:b('/manager/user/view?user_id=1', {})">查看用户</a> |
-<a href="#" onclick="javascript:b('/manager/user/list', {})">列表用户</a> |
-<br><br>
-<a href="#" onclick="javascript:feedback()">新增用户反馈意见</a> |
-<a href="#" onclick="javascript:b('/manager/user/list/feedback?page=1', {})">分页用户反馈意见</a> |
-<a href="#" onclick="javascript:b('/manager/user/view/feedback?id=9', {})">查看用户反馈意见</a> |
-
-<a href="#" onclick="javascript:b('/manager/stat/question', {})">统计</a> |
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
@@ -125,7 +109,6 @@ console.log('Hi!');
             }
         });
     }
-
 
     function s1(url) {
         $.ajax({
@@ -216,6 +199,30 @@ console.log('Hi!');
                 "logicalClarity": 4,
                 "punctuality": 3,
                 "other": "10:20"
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function edit(url) {
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : JSON.stringify({
+                "id":9,
+                "cdate": "2018-07-11",
+                "startTime": "10:05",
+                "endTime": "10:30",
+                "way": "mobile",
+                "mobile":"18611330404",
+                "meetingPwd": ""
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

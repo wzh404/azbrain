@@ -169,12 +169,29 @@
             user_id as userId,
             log_id as logId,
             point,
-            create_time as createTime
+            create_time as createTime,
+            remark
         FROM
             azbrain_user_points
         WHERE
             user_id = #{userId}
     </select>
+
+    <insert id="insertPoints" parameterType="com.blueocean.azbrain.model.UserPoints">
+        INSERT INTO azbrain_user_points(
+            user_id,
+            log_id,
+            point,
+            create_time,
+            remark)
+        VALUES(
+            #{userId},
+            #{logId},
+            #{point},
+            #{createTime},
+            #{remark}
+        )
+    </insert>
 
     <select id="topicSpecialists" resultMap="user">
         SELECT

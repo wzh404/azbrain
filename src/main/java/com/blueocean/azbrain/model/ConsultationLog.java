@@ -3,6 +3,8 @@ package com.blueocean.azbrain.model;
 import com.blueocean.azbrain.common.status.ConsultationStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConsultationLog {
     private Integer id;
 
@@ -48,9 +51,9 @@ public class ConsultationLog {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lastUpdated;
 
-    private Integer userCommentFlag;
+    private Integer userEvaluated;
 
-    private Integer specialistCommentFlag;
+    private Integer byUserEvaluated;
 
     private String mobile;
 
@@ -58,6 +61,7 @@ public class ConsultationLog {
 
     private String status;
 
+    @JsonProperty("duration")
     public Long duration(){
         return ChronoUnit.MINUTES.between(startTime, endTime);
     }
@@ -67,18 +71,43 @@ public class ConsultationLog {
      *
      * @return
      */
-    public boolean isExpire(){
-        return LocalDateTime.of(cdate, endTime).isAfter(LocalDateTime.now());
+    @JsonProperty("expired")
+    public boolean expired(){
+        return LocalDateTime.of(cdate, endTime).isBefore(LocalDateTime.now());
     }
 
     @JsonIgnore
-    public boolean isConfirmed(){
-        return status.equalsIgnoreCase(ConsultationStatus.CONFIRMED.getCode());
+    public boolean confirmed(){
+        return cond(ConsultationStatus.CONFIRMED);
     }
 
     @JsonIgnore
-    public boolean isApplied(){
-        return status.equalsIgnoreCase(ConsultationStatus.APPLIED.getCode());
+    public boolean unconfirmed(){
+        return cond(ConsultationStatus.UNCONFIRMED);
+    }
+
+    /**
+     * 咨询人已评价
+     * @return
+     */
+    public boolean userEvaluated(){
+        return this.userEvaluated.intValue() == 1;
+    }
+
+    /**
+     * 被咨询人已评价
+     * @return
+     */
+    public boolean byUserEvaluated(){
+        return this.byUserEvaluated.intValue() == 1;
+    }
+
+    public boolean edited(){
+        return cond(ConsultationStatus.EDITED);
+    }
+
+    public boolean cond(ConsultationStatus _status){
+        return status.equalsIgnoreCase(_status.getCode());
     }
 
     @JsonIgnore
@@ -89,5 +118,19 @@ public class ConsultationLog {
     @JsonIgnore
     public boolean isConsultant(int userId){
         return this.userId.intValue() == userId;
+    }
+
+    public boolean checkWeek(LocalDate date){
+        return date.getDayOfWeek().getValue() == this.week.intValue();
+    }
+
+    public boolean checkTime(LocalTime time){
+        if (this.code.length() != 8){
+            return false;
+        }
+
+        LocalTime s = LocalTime.parse(this.code.substring(0, 2) + ":" + this.code.substring(2,4));
+        LocalTime e = LocalTime.parse(this.code.substring(4, 6) + ":" + this.code.substring(6,8));
+        return time.equals(s) || time.equals(e) || (time.isAfter(s) && time.isBefore(e));
     }
 }

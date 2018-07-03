@@ -25,8 +25,6 @@ public class SessionObject {
     }
 
     public static SessionObject asSessionObject(String json){
-        assert json != null;
-
         try {
             return (new ObjectMapper()).readValue(json, SessionObject.class);
         } catch (IOException e) {

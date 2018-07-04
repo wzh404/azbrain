@@ -43,13 +43,13 @@
 <a href="#" onclick="javascript:b('/user/cancel/consultation?id=8', {})">用户取消!</a>|
 <a href="#" onclick="javascript:edit('/user/edit/consultation')">用户编辑!</a>|
 <a href="#" onclick="javascript:b('/user/confirm/consultation?id=8', {})">用户确认!</a>|
-<a href="#" onclick="javascript:comment2('/user/specialist/score')">对专家评价</a>|
-<a href="#" onclick="javascript:comment('/user/score')">对用户评价</a>|
+<a href="#" onclick="javascript:comment('/user/score')">用户评价</a>|
 <br/>
 <img src="/static/1.png">
 <br/>
 <a href="#" onclick="javascript:b('/user/topic/details?topic_id=1', {})">主题详情</a>|
 <a href="#" onclick="javascript:b('/user/topic/articles?topic_id=1&page=2', {})">下拉主题文章</a>|
+<a href="#" onclick="javascript:eval_article('/user/evaluate/article')">评价文章</a>|
 
 <br/>
 <a href="#" onclick="javascript:b('/user/topic/specialists?topic_id=1&page=1', {})">主题专家列表</a>|
@@ -68,7 +68,7 @@
     //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
     var g_uri = "http://localhost:8889";
-
+/*
 let promise = new Promise(function(resolve, reject) {
   console.log('Promise');
   resolve();
@@ -79,7 +79,7 @@ promise.then(function() {
 });
 
 console.log('Hi!');
-
+*/
     function a(name) {
         $.ajax({
             type : "GET",
@@ -168,9 +168,37 @@ console.log('Hi!');
             },
             data : JSON.stringify({
                 "logId":3,
+                "evaluates":[
+                    {"code":"breakContract", "name": "爽约", "value": "0"},
+                    {"code":"attitude", "name": "态度", "value": "4"},
+                    {"code":"polite", "name": "礼貌", "value": "5"},
+                    {"code":"punctuality", "name": "准时", "value": "4"},
+                    {"code":"other", "name": "其它", "value": "hello"}
+                ]
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function eval_user(url) {
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : JSON.stringify({
+                "articleId":3,
                 "breakContract": 0,
-                "attitude":4,
-                "polite": 4,
+                "attitude":3,
+                "specialization": 4,
+                "patience": 5,
+                "articulation": 4,
+                "logicalClarity": 4,
                 "punctuality": 3,
                 "other": "10:20"
             }),
@@ -182,7 +210,8 @@ console.log('Hi!');
         });
     }
 
-    function comment2(url) {
+
+    function eval_article(url) {
         $.ajax({
             type : "POST",
             url : g_uri + url,
@@ -190,15 +219,13 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "logId":3,
-                "breakContract": 0,
-                "attitude":3,
-                "specialization": 4,
-                "patience": 5,
-                "articulation": 4,
-                "logicalClarity": 4,
-                "punctuality": 3,
-                "other": "10:20"
+                "articleId":3,
+                "evaluates":[
+                    {"code":"specialization", "name": "专业程度", "value": "0"},
+                    {"code":"harvest", "name": "收获很大", "value": "4"},
+                    {"code":"interest", "name": "趣味性", "value": "5"},
+                    {"code":"luency", "name": "流畅性", "value": "4"}
+                ]
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

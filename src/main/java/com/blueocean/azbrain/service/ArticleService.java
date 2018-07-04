@@ -1,9 +1,13 @@
 package com.blueocean.azbrain.service;
 
 import com.blueocean.azbrain.model.Article;
+import com.blueocean.azbrain.model.ArticleEvaluate;
 import com.blueocean.azbrain.model.UserLikeArticle;
+import com.blueocean.azbrain.vo.ArticleEvaluateVo;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ArticleService {
@@ -67,4 +71,27 @@ public interface ArticleService {
      * @return
      */
     Page<Article> specialistArticles(int page, int pageSize, Integer userId);
+
+    /**
+     *
+     * @param v
+     * @return
+     */
+    int insertArticleEvaluate(ArticleEvaluateVo v);
+
+    /**
+     *
+     * @param userId
+     * @param articleId
+     * @return
+     */
+    List<ArticleEvaluate> getArticleEvaluate(Integer userId, Integer articleId);
+
+    /**
+     *
+     * @param userId
+     * @param articleId
+     * @return
+     */
+    int deleteArticleEvaluate(Integer userId, Integer articleId);
 }

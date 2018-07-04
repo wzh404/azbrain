@@ -111,12 +111,12 @@ public class ConsultationLog {
     }
 
     @JsonIgnore
-    public boolean isSpecialist(int userId){
+    public boolean byUser(int userId){
         return this.byUserId.intValue() == userId;
     }
 
     @JsonIgnore
-    public boolean isConsultant(int userId){
+    public boolean user(int userId){
         return this.userId.intValue() == userId;
     }
 

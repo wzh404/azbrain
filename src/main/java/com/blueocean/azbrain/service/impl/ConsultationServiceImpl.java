@@ -5,6 +5,7 @@ import com.blueocean.azbrain.dao.*;
 import com.blueocean.azbrain.model.*;
 import com.blueocean.azbrain.service.ConsultationService;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
+import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,16 @@ public class ConsultationServiceImpl implements ConsultationService {
     @Autowired
     private ConsultationLogMapper consultationLogMapper;
 
-    @Autowired
-    private UserScoreLogMapper userScoreLogMapper;
 
-    @Autowired
-    private SpecialistScoreLogMapper specialistScoreLogMapper;
 
     @Autowired
     private TopicMapper topicMapper;
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserEvaluateMapper userEvaluateMapper;
 
     @Override
     public int insert(ConsultationLog record) {
@@ -61,12 +61,17 @@ public class ConsultationServiceImpl implements ConsultationService {
         return consultationLogMapper.edit(consultationLogVo);
     }
 
+
+
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public int insertUserScoreLog(UserScoreLog record) {
-        // 设置专家已评论
-        consultationLogMapper.byUserEvaluated(record.getLogId());
-
+    public int insertUserEvaluate(UserEvaluateVo record) {
+        if (record.getFlag()){
+            consultationLogMapper.byUserEvaluated(record.getLogId());
+        } else {
+            consultationLogMapper.userEvaluated(record.getLogId());
+        }
+        // 积分
         UserPoints userPoints = new UserPoints();
         userPoints.setUserId(record.getByUserId());
         userPoints.setLogId(record.getLogId());
@@ -75,26 +80,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         userPoints.setRemark("EVALUATED");
         userMapper.insertPoints(userPoints);
 
-        // 专家（被咨询人）咨询为完成状态
-        //consultationLogMapper.changeStatus(record.getLogId(), ConsultationStatus.BYCOMPLETED.getCode());
-        return userScoreLogMapper.insert(record);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public int insertSpecialistScoreLog(SpecialistScoreLog record) {
-        consultationLogMapper.userEvaluated(record.getLogId());
-        // 咨询人为完成状态
-        UserPoints userPoints = new UserPoints();
-        userPoints.setUserId(record.getByUserId());
-        userPoints.setLogId(record.getLogId());
-        userPoints.setPoint(20);
-        userPoints.setCreateTime(LocalDateTime.now());
-        userPoints.setRemark("EVALUATED");
-        userMapper.insertPoints(userPoints);
-
-        //consultationLogMapper.changeStatus(record.getLogId(), ConsultationStatus.COMPLETED.getCode());
-        return specialistScoreLogMapper.insert(record);
+        return userEvaluateMapper.insertBatch(record.asUserEvaluates());
     }
 
     @Override

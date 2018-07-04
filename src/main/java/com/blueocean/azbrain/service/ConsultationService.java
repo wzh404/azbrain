@@ -2,6 +2,7 @@ package com.blueocean.azbrain.service;
 
 import com.blueocean.azbrain.model.*;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
+import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
@@ -46,22 +47,14 @@ public interface ConsultationService {
      */
     int edit(ConsultationLogVo consultationLogVo);
 
+
     /**
-     * user's score log
+     * insert user evaluate
      *
      * @param record
      * @return
      */
-    int insertUserScoreLog(UserScoreLog record);
-
-    /**
-     * specialist's score log
-     *
-     * @param record
-     * @return
-     */
-    int insertSpecialistScoreLog(SpecialistScoreLog record);
-
+    int insertUserEvaluate(UserEvaluateVo record);
     /**
      * 我的咨询
      *

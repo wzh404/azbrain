@@ -4,13 +4,12 @@ import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.common.status.ConsultationStatus;
 import com.blueocean.azbrain.model.Topic;
-import com.blueocean.azbrain.model.UserScoreLog;
-import com.blueocean.azbrain.model.SpecialistScoreLog;
 import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.service.ConsultationService;
 import com.blueocean.azbrain.service.TopicService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
+import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
 import com.google.common.base.Preconditions;
 import com.mysql.jdbc.StringUtils;
@@ -111,7 +110,7 @@ public class ConsultationController {
         }
 
         // 用户才能进行取消操作
-        if (consultationLog.isConsultant(userId)){
+        if (consultationLog.user(userId)){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -191,7 +190,7 @@ public class ConsultationController {
         }
 
         // 被咨询人员(专家)才能进行确认操作
-        if (consultationLog.isSpecialist(userId)){
+        if (!consultationLog.byUser(userId)){
             logger.warn("consultation by-user <> login");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
@@ -238,7 +237,7 @@ public class ConsultationController {
         }
 
         // 是否专家（被咨询人）
-        if (!consultationLog.isSpecialist(userId)){
+        if (!consultationLog.byUser(userId)){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -281,7 +280,7 @@ public class ConsultationController {
         }
 
         // 是否用户
-        if (!consultationLog.isConsultant(userId)){
+        if (!consultationLog.user(userId)){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -324,7 +323,7 @@ public class ConsultationController {
         }
 
         // 是否用户
-        if (!consultationLog.isConsultant(userId)){
+        if (!consultationLog.user(userId)){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -342,17 +341,17 @@ public class ConsultationController {
      * 专家对用户评价
      *
      * @param request
-     * @param scoreLog
+     * @param userEvaluateVo
      * @return
      */
     @RequestMapping(value = "/score", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject toUser(HttpServletRequest request,
-                                @RequestBody UserScoreLog scoreLog){
+                                @RequestBody UserEvaluateVo userEvaluateVo){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         // 咨询记录存在
-        ConsultationLog consultationLog = consultationService.get(scoreLog.getLogId());
+        ConsultationLog consultationLog = consultationService.get(userEvaluateVo.getLogId());
         if (consultationLog == null){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
@@ -373,66 +372,23 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        // 当前用户不是专家
-        if (!consultationLog.isSpecialist(userId)){
+        // 当前用户是被咨询人
+        if (consultationLog.byUser(userId)){
+            userEvaluateVo.setUserId(consultationLog.getUserId());
+            userEvaluateVo.setByUserId(userId);
+            userEvaluateVo.setFlag(true);
+        }
+        // 当前用户是咨询人
+        else if (consultationLog.user(userId)){
+            userEvaluateVo.setUserId(userId);
+            userEvaluateVo.setByUserId(consultationLog.getByUserId());
+            userEvaluateVo.setFlag(false);
+        }
+        else {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        // 得分人
-        scoreLog.setUserId(consultationLog.getUserId());
-        scoreLog.setByUserId(0);
-        scoreLog.setCreateTime(LocalDateTime.now());
-
-        int rows = consultationService.insertUserScoreLog(scoreLog);
-        return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_COMMENT_FAILED);
-    }
-
-    /**
-     * 用户对专家的评价
-     *
-     * @param request
-     * @param scoreLog
-     * @return
-     */
-    @RequestMapping(value = "/specialist/score", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject toSpecialist(HttpServletRequest request,
-                                @RequestBody SpecialistScoreLog scoreLog){
-        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
-
-        // 咨询记录存在
-        ConsultationLog consultationLog = consultationService.get(scoreLog.getLogId());
-        if (consultationLog == null){
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
-        // 咨询时间未结束
-        if (!consultationLog.expired()){
-            logger.warn("consultation not due");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
-        // 用户已评论
-        if (consultationLog.userEvaluated()){
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
-        // 状态已确认
-        if (!consultationLog.confirmed()){
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
-        // 当前用户不是咨询者
-        if (!consultationLog.isConsultant(userId)){
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
-        // 得分人
-        scoreLog.setUserId(consultationLog.getByUserId());
-        scoreLog.setByUserId(0);
-        scoreLog.setCreateTime(LocalDateTime.now());
-
-        int rows = consultationService.insertSpecialistScoreLog(scoreLog);
+        int rows = consultationService.insertUserEvaluate(userEvaluateVo);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_COMMENT_FAILED);
     }
 

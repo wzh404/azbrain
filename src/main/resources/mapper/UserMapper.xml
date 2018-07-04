@@ -166,6 +166,7 @@
 
     <select id="listUserPoints" resultType="com.blueocean.azbrain.model.UserPoints">
         SELECT
+            id,
             user_id as userId,
             log_id as logId,
             point,

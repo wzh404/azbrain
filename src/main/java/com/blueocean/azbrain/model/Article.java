@@ -21,6 +21,8 @@ public class Article {
 
     private Integer favoriteNum;
 
+    private Integer topicId;
+
     // 平台， 专家， 转载
     private String source;
 

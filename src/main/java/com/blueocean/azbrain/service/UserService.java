@@ -26,14 +26,6 @@ public interface UserService {
      */
     User getUserByName(String login);
 
-    /**
-     * paging query user.
-     *
-     * @param page
-     * @param pageSize
-     * @return
-     */
-    Page<User> findByPage(int page, int pageSize, Map<String, Object> conditionMap);
 
     /**
      * 查找专家

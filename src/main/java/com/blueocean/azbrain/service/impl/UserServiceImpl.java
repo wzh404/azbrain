@@ -44,12 +44,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findByPage(int page, int pageSize, Map<String, Object> conditionMap) {
-        PageHelper.startPage(page, pageSize);
-        return userMapper.findByPage(conditionMap);
-    }
-
-    @Override
     public Page<User> searchSpecialist(int page, int pageSize, SpecialistVo vo) {
         PageHelper.startPage(page, pageSize);
         return userMapper.searchSpecialist(vo);

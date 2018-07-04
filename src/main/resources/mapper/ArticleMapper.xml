@@ -10,12 +10,13 @@
         <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum"/>
         <result column="source" jdbcType="VARCHAR" property="source"/>
         <result column="author" jdbcType="VARCHAR" property="author"/>
+        <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="status" jdbcType="CHAR" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, title, content, icon, like_num, favorite_num, source, author, create_time, create_by, status
+        id, title, content, icon, like_num, favorite_num, source, author, topic_id, create_time, create_by, status
     </sql>
 
     <select id="get" parameterType="java.lang.Integer" resultMap="article">
@@ -38,27 +39,29 @@
 
     <insert id="insert" parameterType="com.blueocean.azbrain.model.Article">
         insert into azbrain_article (
-        title,
-        content,
-        icon,
-        like_num,
-        favorite_num,
-        source,
-        author,
-        create_time,
-        create_by,
-        status)
+            title,
+            content,
+            icon,
+            like_num,
+            favorite_num,
+            source,
+            author,
+            topic_id,
+            create_time,
+            create_by,
+            status)
         values (
-        #{title,jdbcType=VARCHAR},
-        #{content,jdbcType=VARCHAR},
-        #{icon,jdbcType=VARCHAR},
-        #{likerNum,jdbcType=INTEGER},
-        #{favoriteNum,jdbcType=INTEGER},
-        #{source,jdbcType=VARCHAR},
-        #{author,jdbcType=VARCHAR},
-        #{createTime,jdbcType=TIMESTAMP},
-        #{createBy,jdbcType=INTEGER},
-        #{status,jdbcType=CHAR})
+            #{title,jdbcType=VARCHAR},
+            #{content,jdbcType=VARCHAR},
+            #{icon,jdbcType=VARCHAR},
+            #{likerNum,jdbcType=INTEGER},
+            #{favoriteNum,jdbcType=INTEGER},
+            #{source,jdbcType=VARCHAR},
+            #{author,jdbcType=VARCHAR},
+            #{topicId,jdbcType=INTEGER},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{createBy,jdbcType=INTEGER},
+            #{status,jdbcType=CHAR})
     </insert>
 
     <select id="search" parameterType="java.lang.String" resultMap="article">
@@ -83,15 +86,11 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-            azbrain_article a
-        INNER JOIN
-            azbrain_topic_article ta
-        ON
-            a.id = ta.article_id
+            azbrain_article
         WHERE
-            ta.topic_id = #{topicId}
+            topic_id = #{topicId}
         AND
-            a.status = '00'
+            status = '00'
         ORDER BY create_time DESC
     </select>
 

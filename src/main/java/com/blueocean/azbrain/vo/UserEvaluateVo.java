@@ -4,6 +4,7 @@ import com.blueocean.azbrain.model.UserEvaluate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +32,43 @@ public class UserEvaluateVo {
         u.setCode(v.getCode());
         u.setName(v.getName());
         u.setValue(v.getValue());
+        u.setValueType(v.getType());
 
         return u;
     };
 
+    public boolean empty(){
+        return evaluates == null || evaluates.isEmpty();
+    }
+
     public List<UserEvaluate> asUserEvaluates(){
-        if (evaluates == null || evaluates.isEmpty()){
+        if (empty()){
             return new ArrayList<>();
         }
 
         return evaluates.stream()
                 .map(f)
                 .collect(Collectors.toList());
+    }
+
+    public BigDecimal avgStar(){
+        if (empty()){
+            return new BigDecimal(0);
+        }
+
+        double d = evaluates.stream()
+                .filter(v -> v.getType().equalsIgnoreCase("star"))
+                .mapToDouble(v->Double.parseDouble(v.getValue()))
+                .average()
+                .orElse(0);
+        return new BigDecimal(d).setScale(1, BigDecimal.ROUND_HALF_UP);
+    }
+
+    public boolean breakContract(){
+        return evaluates.stream()
+                .filter(v -> v.getCode().equalsIgnoreCase("breakContract"))
+                .findFirst()
+                .map(v -> v.getValue().equalsIgnoreCase("1"))
+                .orElse(false);
     }
 }

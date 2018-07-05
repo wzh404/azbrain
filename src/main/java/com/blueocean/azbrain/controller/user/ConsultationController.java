@@ -160,7 +160,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        int rows = consultationService.confirm(id, consultationLog.getTopicId());
+        int rows = consultationService.confirm(consultationLog);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
 
@@ -333,7 +333,7 @@ public class ConsultationController {
         }
 
         // 变为确认状态
-        int rows = consultationService.confirm(id, consultationLog.getTopicId());
+        int rows = consultationService.confirm(consultationLog);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
 

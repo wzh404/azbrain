@@ -14,10 +14,8 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -57,13 +55,26 @@ public class UserServiceImpl implements UserService {
             return map;
         }
 
-        Map<String, Object> score = userMapper.userAvgScore(userId);
-        if (score == null) {
-            score = new HashMap<>();
+        List<Map<String, Object>> scores = userMapper.userAvgScore(userId);
+        if (scores == null) {
+            scores = new ArrayList<>();
         }
 
+        Map<String, Object> score = scores.stream()
+                .map(m -> {
+                    Map<String, Object> m1 = new HashMap();
+                    m1.put(m.get("code").toString(), m.get("value"));
+                    return m1;
+                })
+                .flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        double d = scores.stream().mapToDouble(s ->((BigDecimal)s.get("value")).doubleValue())
+                .average()
+                .orElse(0);
         map.put("profile", user);
         map.put("score", score);
+        map.put("star", new BigDecimal(d).setScale(1, BigDecimal.ROUND_HALF_UP));
         return map;
     }
 
@@ -75,16 +86,29 @@ public class UserServiceImpl implements UserService {
             return map;
         }
 
-        Map<String, Object> score = userMapper.specialistAvgScore(userId);
-        if (score == null) {
-            score = new HashMap<>();
+        List<Map<String, Object>> scores = userMapper.byUserAvgScore(userId);
+        if (scores == null) {
+            scores = new ArrayList<>();
         }
+
+        Map<String, Object> score = scores.stream()
+                .map(m -> {
+                    Map<String, Object> m1 = new HashMap();
+                    m1.put(m.get("code").toString(), m.get("value"));
+                    return m1;
+                })
+                .flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        double d = scores.stream().mapToDouble(s ->((BigDecimal)s.get("value")).doubleValue())
+                .average()
+                .orElse(0);
 
         Page<Article> articlePage = articleService.specialistArticles(1, 4, userId);
         map.put("articles", articlePage.getResult());
         map.put("profile", user);
         map.put("score", score);
-
+        map.put("star", new BigDecimal(d).setScale(1, BigDecimal.ROUND_HALF_UP));
         return map;
     }
 

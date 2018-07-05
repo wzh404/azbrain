@@ -44,7 +44,6 @@
 
   <insert id="insert" parameterType="com.blueocean.azbrain.model.UserFeedback" useGeneratedKeys="true" keyProperty="id">
     insert into azbrain_user_feedback (
-      id,
       user_id,
       user_name,
       feedback,
@@ -52,7 +51,6 @@
       photo,
       create_time)
     values (
-      #{id, jdbcType=INTEGER},
       #{userId, jdbcType=INTEGER},
       #{userName,jdbcType=VARCHAR},
       #{feedback,jdbcType=VARCHAR},

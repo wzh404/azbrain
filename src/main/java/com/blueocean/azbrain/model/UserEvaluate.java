@@ -13,5 +13,6 @@ public class UserEvaluate {
     private String code;
     private String name;
     private String value;
+    private String valueType;
     private LocalDateTime createTime;
 }

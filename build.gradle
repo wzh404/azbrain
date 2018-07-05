@@ -41,6 +41,8 @@ dependencies {
 	compile('org.apache.httpcomponents:httpclient:4.5.5')
 	compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
 
+	compile group: 'bouncycastle', name: 'bcprov-jdk15', version: '140'
+
 
 	compile('org.projectlombok:lombok')
 	testCompile('javax.servlet:javax.servlet-api:3.1.0')

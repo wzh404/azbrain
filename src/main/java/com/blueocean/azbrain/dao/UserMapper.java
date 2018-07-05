@@ -49,7 +49,7 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    Map<String, Object> specialistAvgScore(@Param("userId")Integer userId);
+    List<Map<String, Object>> byUserAvgScore(@Param("userId")Integer userId);
 
     /**
      * 个人评分
@@ -57,7 +57,7 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    Map<String, Object> userAvgScore(@Param("userId")Integer userId);
+    List<Map<String, Object>> userAvgScore(@Param("userId")Integer userId);
 
     /**
      * 可预约时间
@@ -98,4 +98,24 @@ public interface UserMapper {
      * @return
      */
     int insertPoints(UserPoints userPoints);
+
+    /**
+     * 增加用户的咨询次数及咨询时长
+     *
+     * @param userId
+     * @param duration
+     * @param byUser  true : 被咨询人  false: 咨询人
+     * @return
+     */
+    int incrConsultation(@Param("userId")Integer userId, @Param("duration")Integer duration, @Param("byUser")Boolean byUser);
+
+    /**
+     * 增加爽约次数及好评，差评次数
+     *
+     * @param userId
+     * @param contract
+     * @param level
+     * @return
+     */
+    int updateContractAndLevel(@Param("userId")Integer userId, @Param("contract")Boolean contract, @Param("level")Integer level);
 }

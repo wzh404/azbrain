@@ -8,19 +8,22 @@ import com.blueocean.azbrain.vo.ConsultationLogVo;
 import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service("consultationService")
 public class ConsultationServiceImpl implements ConsultationService {
+    private static final Logger logger = LoggerFactory.getLogger(ConsultationServiceImpl.class);
+
     @Autowired
     private ConsultationLogMapper consultationLogMapper;
-
-
 
     @Autowired
     private TopicMapper topicMapper;
@@ -48,11 +51,20 @@ public class ConsultationServiceImpl implements ConsultationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public int confirm(Integer id, Integer topicId) {
+    public int confirm(ConsultationLog consultationLog) {
+        Integer id = consultationLog.getId();
+        Integer topicId = consultationLog.getTopicId();
+
+        // 主题咨询？
         if (topicId > 0){
-            // 增加topic咨询次数
+            // topic咨询次数+1
             topicMapper.incrConsultedNum(topicId);
         }
+
+        // 被咨询人增加被咨询次数及被咨询时长
+        userMapper.incrConsultation(consultationLog.getByUserId(), consultationLog.duration().intValue(), true);
+        // 咨询人增加咨询次数及咨询时长
+        userMapper.incrConsultation(consultationLog.getUserId(), consultationLog.duration().intValue(), false);
         return changeStatus(id, ConsultationStatus.CONFIRMED.getCode());
     }
 
@@ -71,6 +83,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         } else {
             consultationLogMapper.userEvaluated(record.getLogId());
         }
+
         // 积分
         UserPoints userPoints = new UserPoints();
         userPoints.setUserId(record.getByUserId());
@@ -80,6 +93,22 @@ public class ConsultationServiceImpl implements ConsultationService {
         userPoints.setRemark("EVALUATED");
         userMapper.insertPoints(userPoints);
 
+        //评级 好评>=4 差评 < 3
+        BigDecimal star = record.avgStar();
+        int level = 0;
+        if (star.compareTo(new BigDecimal(4)) >= 0){
+            level = 1; // 好评
+        }
+        else if (star.compareTo(new BigDecimal(3)) == -1){
+            level = -1; // 差评
+        }
+
+        logger.info("***** average star is {} - {}", star, level);
+        //是否爽约
+        boolean contract = record.breakContract();
+        if (level != 0 || contract) {
+            userMapper.updateContractAndLevel(record.getByUserId(), contract, level);
+        }
         return userEvaluateMapper.insertBatch(record.asUserEvaluates());
     }
 

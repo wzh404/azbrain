@@ -79,6 +79,8 @@
             <include refid="Base_Column_List"/>
         FROM
             azbrain_article
+        WHERE
+            status = '00'
         ORDER BY create_time DESC
     </select>
 

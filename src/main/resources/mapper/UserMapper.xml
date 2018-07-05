@@ -121,28 +121,29 @@
     </select>
 
     <select id="userAvgScore" resultType="java.util.Map">
-        SELECT
-            avg(attitude) as attitude,
-            avg(polite) as polite,
-            avg(punctuality) as punctuality
-        FROM
-            azbrain_user_score_log
-        WHERE
+        select
+            evaluate_code as code,
+            round(avg(CAST(evaluate_value as SIGNED )), 1) as value
+        from
+            azbrain_user_evaluate
+        where
             user_id = #{userId}
+        and
+            evaluate_value_type = "star"
+        group by evaluate_code
     </select>
 
-    <select id="specialistAvgScore" resultType="java.util.Map">
-        SELECT
-            avg(specialization) as specialization,
-            avg(attitude) as attitude,
-            avg(patience) as patience,
-            avg(articulation) as articulation,
-            avg(logical_clarity) as logical,
-            avg(punctuality) as punctuality
-        FROM
-            azbrain_specialist_score_log
-        WHERE
-            user_id = #{userId}
+    <select id="byUserAvgScore" resultType="java.util.Map">
+        select
+            evaluate_code as code,
+            round(avg(CAST(evaluate_value as SIGNED )), 1) as value
+        from
+            azbrain_user_evaluate
+        where
+            by_user_id = #{userId}
+        and
+            evaluate_value_type = "star"
+        group by evaluate_code
     </select>
 
     <select id="appointmentTime" resultType="java.util.Map">
@@ -215,4 +216,41 @@
             u.status = '00'
         ORDER BY consulted_num DESC
     </select>
+
+    <update id="incrConsultation">
+        UPDATE
+            azbrain_user
+        SET
+        <if test="byUser">
+            consulted_num = consulted_num + 1,
+            consulted_duration = consulted_duration + #{duration,jdbcType=INTEGER}
+        </if>
+
+        <if test="!byUser">
+            consult_num = consult_num + 1,
+            consult_duration = consult_duration + #{duration,jdbcType=INTEGER}
+        </if>
+        WHERE
+            id = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateContractAndLevel">
+        UPDATE
+            azbrain_user
+        <trim prefix="SET" suffixOverrides=",">
+        <if test="contract">
+            break_contract_num = break_contract_num + 1,
+        </if>
+
+        <if test="level == 1">
+            good_num = good_num + 1,
+        </if>
+
+        <if test="level == -1">
+            bad_num = bad_num + 1
+        </if>
+        </trim>
+        WHERE
+            id = #{userId,jdbcType=INTEGER}
+    </update>
 </mapper>

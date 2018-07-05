@@ -12,6 +12,7 @@ public enum ConsultationStatus {
     CONFIRMED("02"),
     UNEVALUATED("03"),
     COMPLETED("10"),
+    EXPIRED("97"),
     REJECTED("98"),
     CANCELED("99");
 

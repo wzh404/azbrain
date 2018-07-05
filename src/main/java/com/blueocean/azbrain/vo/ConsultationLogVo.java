@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * 我要找专家vo
+ */
 @Data
 public class ConsultationLogVo {
     private Integer id;

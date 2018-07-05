@@ -9,11 +9,12 @@
     <result column="evaluate_code" jdbcType="VARCHAR" property="code" />
     <result column="evaluate_name" jdbcType="VARCHAR" property="name" />
     <result column="evaluate_value" jdbcType="VARCHAR" property="value" />
+    <result column="evaluate_value_type" jdbcType="VARCHAR" property="valueType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, log_id, user_id, by_user_id, evaluate_code, evaluate_name, evaluate_value, create_time
+    id, log_id, user_id, by_user_id, evaluate_code, evaluate_name, evaluate_value, evaluate_value_type, create_time
   </sql>
 
   <select id="get" parameterType="java.lang.Integer" resultMap="user_evaluate">
@@ -33,6 +34,7 @@
       evaluate_code,
       evaluate_name,
       evaluate_value,
+      evaluate_value_type,
       create_time
     )
     values
@@ -44,6 +46,7 @@
       #{eval.code,jdbcType=VARCHAR},
       #{eval.name,jdbcType=VARCHAR},
       #{eval.value,jdbcType=VARCHAR},
+      #{eval.valueType,jdbcType=VARCHAR},
       #{eval.createTime,jdbcType=TIMESTAMP}
     )
     </foreach>

@@ -33,11 +33,10 @@ public interface ConsultationService {
     /**
      * confirm consultation status
      *
-     * @param id
-     * @param topicId
+     * @param consultationLog
      * @return
      */
-    int confirm(Integer id, Integer topicId);
+    int confirm(ConsultationLog consultationLog);
 
     /**
      * 用户或专家编辑

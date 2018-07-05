@@ -9,4 +9,5 @@ public class EvaluateVo {
     private String code;
     private String name;
     private String value;
+    private String type;
 }

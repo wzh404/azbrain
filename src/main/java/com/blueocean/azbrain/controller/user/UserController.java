@@ -11,9 +11,11 @@ import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.TokenUtil;
+import com.blueocean.azbrain.util.WxUtils;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 import com.google.common.base.Preconditions;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -187,4 +190,27 @@ public class UserController {
         int rows = userService.insertUserFeedback(userFeedback);
         return ResultObject.cond(rows > 0, ResultCode.USER_ILLEGAL_STATUS);
     }
+
+
+
+
+/*
+    @RequestMapping(value="/wx/openid", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject openid(@RequestParam("code") String jscode){
+        String appid = "wx86faae0cc74bbf0e";
+        String secret = "5e5829e1b0b13484baf6a48c4783178a";
+
+        Optional<String> openid = WxUtils.getOpenId(appid, secret, jscode);
+
+        return ResultObject.ok(openid.orElse("error"));
+    }
+
+    @RequestMapping(value="/wx/userinfo", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject userinfo(@RequestParam("code") String jscode,
+                                 @RequestParam("iv") String iv,
+                                 @RequestParam("data") String data){
+        WxUtils.getUserInfo(data, WxUtils.SESSION_KEY, iv);
+        return ResultObject.ok("unknow");
+    }
+*/
 }

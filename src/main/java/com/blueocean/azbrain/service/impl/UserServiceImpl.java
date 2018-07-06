@@ -8,11 +8,14 @@ import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.model.UserPoints;
 import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.service.UserService;
+import com.blueocean.azbrain.vo.SpecialistEditVo;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -160,5 +163,13 @@ public class UserServiceImpl implements UserService {
     public Page<UserFeedback> listUserFeedback(int page, int pageSize, HashMap<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
         return userFeedbackMapper.list(conditionMap);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public int editSpecialist(SpecialistEditVo vo) {
+        userMapper.insertUserAppointmentTime(vo.getUserId(), vo.getTimes());
+        userMapper.insertUserConsultationWay(vo.getUserId(), vo.getWays());
+        return userMapper.insertSpecialistLabel(vo.getUserId(), vo.getLabels(), vo.userLabel(), vo.getDuration());
     }
 }

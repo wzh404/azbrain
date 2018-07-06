@@ -4,13 +4,15 @@
     <resultMap id="user" type="com.blueocean.azbrain.model.User">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="pinyin" jdbcType="VARCHAR" property="pinyin"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="job_number" jdbcType="VARCHAR" property="jobNumber"/>
         <result column="user_type" jdbcType="CHAR" property="userType"/>
         <result column="photo" jdbcType="VARCHAR" property="photo"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="business_unit" jdbcType="VARCHAR" property="businessUnit"/>
         <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
         <result column="likes_num" jdbcType="INTEGER" property="likesNum"/>
         <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum"/>
@@ -35,20 +37,36 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, login_name, password, job_number, user_type, photo, email, mobile, remarks,
+        id, name, pinyin, gender, password, job_number, user_type, photo, email, mobile, business_unit, remarks,
         likes_num, favorite_num, bad_num, good_num, break_contract_num, consulted_num, consult_num,
         consult_duration, consulted_duration, once_consultation_duration, consult_star, consulted_star,
         label, create_by, create_time, status
     </sql>
 
     <select id="get" resultMap="user" parameterType="int">
-        SELECT * FROM azbrain_user
+        SELECT *
+        FROM
+            azbrain_user
         WHERE
         id = #{id}
     </select>
 
     <select id="findByPage" resultMap="user">
-        SELECT * FROM azbrain_user
+        SELECT id,
+            name,
+            gender,
+            job_number,
+            business_unit,
+            photo,
+            mobile,
+            consult_num,
+            consult_duration,
+            likes_num,
+            favorite_num,
+            status,
+            create_time
+        FROM
+            azbrain_user
         WHERE
             status != '99'
         <if test="name != null">
@@ -77,7 +95,7 @@
     <select id="getUserByName" resultMap="user" parameterType="java.lang.String">
         SELECT * FROM azbrain_user
         WHERE
-            login_name = #{name}
+            name = #{name}
     </select>
 
     <select id="searchSpecialist" resultMap="user" parameterType="com.blueocean.azbrain.vo.SpecialistVo">
@@ -253,4 +271,125 @@
         WHERE
             id = #{userId,jdbcType=INTEGER}
     </update>
+
+    <!-- manager -->
+    <update id="changeStatus">
+        UPDATE azbrain_user
+        SET
+            status = #{status}
+        WHERE
+            id = #{id}
+    </update>
+
+    <update id="edit" parameterType="com.blueocean.azbrain.model.User">
+        UPDATE
+            azbrain_user
+        SET
+            name = #{name},
+            pinyin = #{pinyin}
+            gender = #{gender},
+            job_number = #{jobNum},
+            photo = #{photo},
+            email = #{email},
+            mobile = #{mobile},
+            business_unit = #{businessUnit}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="listSpecialist" resultMap="user">
+        SELECT id,
+            name,
+            gender,
+            job_number,
+            business_unit,
+            photo,
+            mobile,
+            consulted_num,
+            consulted_duration,
+            once_consultation_duration,
+            status,
+            create_time
+        FROM
+            azbrain_user
+        WHERE
+            status != '99'
+        <if test="name != null">
+            AND name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[ AND create_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[ AND create_time <= #{endTime} ]]>
+        </if>
+        <if test="kcode != null">
+            AND job_number LIKE CONCAT('%',#{kcode},'%')
+        </if>
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insertUserAppointmentTime">
+        DELETE FROM azbrain_user_appointment_time
+        WHERE
+            user_id = #{userId}
+        ;
+        INSERT INTO azbrain_user_appointment_time(
+            user_id,
+            week,
+            code)
+        VALUES
+        <foreach collection ="times" item="t" separator =",">
+        (
+            #{userId},
+            #{t.week},
+            #{t.code})
+        </foreach>
+        ;
+    </insert>
+
+    <insert id="insertUserConsultationWay">
+        DELETE FROM azbrain_user_consultation_way
+        WHERE
+            user_id = #{userId}
+        ;
+        INSERT INTO azbrain_user_consultation_way(
+            user_id,
+            way)
+        VALUES
+        <foreach collection ="ways" item="w" separator =",">
+        (
+            #{userId},
+            #{w.way}
+        )
+        </foreach>
+        ;
+    </insert>
+
+    <insert id="insertSpecialistLabel">
+        DELETE FROM
+            azbrain_user_specialist_label
+        WHERE
+            user_id = #{userId}
+        ;
+        INSERT INTO azbrain_user_specialist_label(
+            user_id,
+            label_code,
+            label_name)
+        VALUES
+        <foreach collection ="labels" item="l" separator =",">
+        (
+            #{userId},
+            #{l.code},
+            #{l.name}
+        )
+        </foreach>
+        ;
+        UPDATE azbrain_user
+        SET
+            label = #{label},
+            once_consultation_duration = #{duration}
+        WHERE
+            id = #{userId}
+    </insert>
 </mapper>

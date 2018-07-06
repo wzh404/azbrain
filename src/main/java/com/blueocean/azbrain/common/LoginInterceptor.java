@@ -32,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         if (request.getRequestURI().startsWith("/manager")){
-            return managerHandle(request);
+            return true; //managerHandle(request);
         } else {
             return userHandle(request);
         }

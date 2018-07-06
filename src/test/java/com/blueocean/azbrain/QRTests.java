@@ -1,6 +1,7 @@
 package com.blueocean.azbrain;
 
 import com.alibaba.fastjson.JSON;
+import com.blueocean.azbrain.util.WxUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -17,13 +18,22 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.security.AlgorithmParameters;
 import java.security.Security;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * {"errcode":40029,"errmsg":"invalid code, hints: [ req_id: tXhjOa06452030 ]"}
+ * {"session_key":"OACTXbb8D8uwCq8gjMmVww==","expires_in":7200,"openid":"oZxbt0EcQeB2Kkj1OnKUbWhZ9Ctc"}
+ *
+ */
 public class QRTests {
     public static void main(String[] args){
-        openid();
+        //openid();
+        String appid = "wx86faae0cc74bbf0e";
+        String secret = "5e5829e1b0b13484baf6a48c4783178a";
+        String jscode = "00178tqj2f6vuG0SO0qj2T9Cqj278tqu";
+        WxUtils.getOpenId(appid, secret, jscode);
     }
 
     public static void main2(String[] args) throws Exception {
@@ -76,8 +86,9 @@ public class QRTests {
         String endata = "rNpYmpoL2sgfoC2JkNh4uVtDnLDx3VMiIOMfiiy9L+biQT1r7otuye8/JoR98clxUS3awvM3vQOC6QNWXnl8FCqRvJ0L1pX6xvBBvZA/Nn393eHsXStlxIbGxreLKEkPVkAJLJQbtpjS1CQgjOxe5hrXIeRQz7wF4Svc8yyNDM9m6lS5ni0VmjigbZL5moYMXoHd3gijJvUx4s6SxT3rxOK0eW0/uFSID8fReTa7UchMPPjfRGC9eJWDVnnggTngrQ7qIhyTOZ6W0WIcZUuF6e8ImCmZ2VL6Tn3fv09ukvwzh0sDOQuiOZel+3FS1PoFn9pCGsc0FPR3MKZNzVxwa2rPhwfJkrqCkkynodjX/NgJvEj+VaW4cL7NBdlgQ2XmJmxaRkBWN8LzMo0pWhDZs3PnBff0w4lLJQoW1PqNa6ovq1El8ou0lJdUapbD91xRmv7qhBZLwYfjm7FZxBSZNzwgvy1RZEx6WuugYT1mEss=";
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + secret + "&js_code=" + jscode + "&grant_type=authorization_code";
         HttpGet httpGet = new HttpGet(url);
+
         try {
-            HttpResponse response =httpClient.execute(httpGet);
+            HttpResponse response = httpClient.execute(httpGet);
             BufferedReader bufReader = new BufferedReader(new InputStreamReader(
                     response.getEntity().getContent()));
             StringBuilder builder = new StringBuilder();
@@ -93,6 +104,8 @@ public class QRTests {
             getUserInfo(endata, sk, iv);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+
         }
     }
 

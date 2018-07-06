@@ -46,7 +46,7 @@
 <a href="#" onclick="javascript:eval_user('/user/score')">评价咨询人</a>|
 <a href="#" onclick="javascript:eval_by_user('/user/score')">评价被咨询人</a>|
 <br/>
-<img src="/static/1.png">
+
 <br/>
 <a href="#" onclick="javascript:b('/user/topic/details?topic_id=1', {})">主题详情</a>|
 <a href="#" onclick="javascript:b('/user/topic/articles?topic_id=1&page=2', {})">下拉主题文章</a>|
@@ -59,6 +59,9 @@
 <a href="#" onclick="javascript:b('/user/like/article?article_id=1', {})">点赞文章</a>|
 <a href="#" onclick="javascript:b('/user/unlike/article?article_id=1', {})">取消点赞</a>|
 </br></br></br>
+
+
+<a href="#" onclick="javascript:editSpecialist('/manager/edit/specialist')">编辑专家</a>
 【</br>
 <span id="msg_id" >off</span>
 </br>
@@ -260,6 +263,34 @@ console.log('Hi!');
                 $('#msg_id').html(JSON.stringify(result));
             }
         });
+    }
+
+    function editSpecialist(url) {
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : JSON.stringify({
+                "userId":1,
+                "duration":50,
+                "labels":[
+                    {"code":"0100", "name":"糖尿病专家1"},
+                    {"code":"0101", "name":"糖尿病专家2"}
+                ],
+                "way":["way":"mobile"],
+                "times":[
+                    {"week":2, "code": "10001029"},
+                    {"week":5, "code": "15001530"}
+                ]
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        })
     }
 
     function d() {

@@ -3,6 +3,7 @@ package com.blueocean.azbrain.service;
 import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.model.UserPoints;
+import com.blueocean.azbrain.vo.SpecialistEditVo;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 
@@ -102,5 +103,11 @@ public interface UserService {
      */
     Page<UserFeedback> listUserFeedback(int page, int pageSize, HashMap<String, Object> conditionMap);
 
+    /**
+     *
+     * @param vo
+     * @return
+     */
+    int editSpecialist(SpecialistEditVo vo);
 }
 

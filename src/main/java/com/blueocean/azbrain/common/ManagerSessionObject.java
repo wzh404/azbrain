@@ -21,6 +21,6 @@ public class ManagerSessionObject {
 
     public static void toSession(HttpSession session, User user){
         session.setAttribute(AZBrainConstants.SESSION_USER_ID, user.getId());
-        session.setAttribute(AZBrainConstants.SESSION_USER_NAME, user.getLoginName());
+        session.setAttribute(AZBrainConstants.SESSION_USER_NAME, user.getName());
     }
 }

@@ -118,4 +118,53 @@ public interface UserMapper {
      * @return
      */
     int updateContractAndLevel(@Param("userId")Integer userId, @Param("contract")Boolean contract, @Param("level")Integer level);
+
+    /**
+     *
+     * @param userId
+     * @param labels
+     * @param label
+     * @param duration
+     * @return
+     */
+    int insertSpecialistLabel(@Param("userId")Integer userId, @Param("labels")List<Map<String, Object>> labels,
+                              @Param("label")String label, @Param("duration") Integer duration);
+
+    /**
+     *
+     * @param userId
+     * @param ways
+     * @return
+     */
+    int insertUserConsultationWay(@Param("userId")Integer userId, @Param("ways")List<Map<String, Object>> ways);
+
+    /**
+     *
+     * @param userId
+     * @param times
+     * @return
+     */
+    int insertUserAppointmentTime(@Param("userId")Integer userId, @Param("times")List<Map<String, Object>> times);
+
+    /**
+     *
+     * @param userId
+     * @param status
+     * @return
+     */
+    int changeStatus(@Param("userId")Integer userId, @Param("status")String status);
+
+    /**
+     *
+     * @param user
+     * @return
+     */
+    int edit(User user);
+
+    /**
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<User> listSpecialist(Map<String, Object> conditionMap);
 }

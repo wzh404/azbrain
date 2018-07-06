@@ -15,7 +15,7 @@ public class User {
 
     private String name;
 
-    private String loginName;
+    private String pinyin;
 
     @JsonIgnore
     private String password;
@@ -29,6 +29,10 @@ public class User {
     private String email;
 
     private String mobile;
+
+    private String businessUnit;
+
+    private String gender;
 
     private String remarks;
 

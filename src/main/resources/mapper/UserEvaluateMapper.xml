@@ -51,4 +51,28 @@
     )
     </foreach>
   </insert>
+
+  <select id="getEvaluationByLog" resultMap="user_evaluate">
+    SELECT
+      e.evaluate_name,
+      e.evaluate_value,
+      e.create_time,
+      u1.name as userName,
+      u2.name as byUserName
+    FROM
+      azbrain_user_evaluate e
+    INNER JOIN
+      azbrain_user u1
+    ON
+      e.user_id = u1.id
+    INNER JOIN
+      azbrain_user u2
+    ON
+      e.by_user_id = u2.id
+    WHERE
+      e.log_id = #{logId}
+    <if test="userId != null">
+      AND e.by_user_id = #{userId}
+    </if>
+  </select>
 </mapper>

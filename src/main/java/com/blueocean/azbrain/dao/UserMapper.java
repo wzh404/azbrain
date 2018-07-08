@@ -76,6 +76,14 @@ public interface UserMapper {
     List<Map<String, Object>> consultWay(@Param("userId")Integer userId);
 
     /**
+     * 专家标签
+     *
+     * @param userId
+     * @return
+     */
+    List<Map<String, Object>> specialistLabels(@Param("userId")Integer userId);
+
+    /**
      * 用户积分列表
      *
      * @param userId
@@ -90,6 +98,14 @@ public interface UserMapper {
      * @return
      */
     Page<User> topicSpecialists(@Param("topicId")Integer topicId);
+
+    /**
+     * 分页查询主题专家
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<User> searchTopicSpecialists(Map<String, Object> conditionMap);
 
     /**
      * 新建积分
@@ -163,8 +179,38 @@ public interface UserMapper {
 
     /**
      *
+     * @param userId
+     * @return
+     */
+    User viewUser(@Param("userId")Integer userId);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    User viewSpecialist(@Param("userId")Integer userId);
+
+    /**
+     *
      * @param conditionMap
      * @return
      */
     Page<User> listSpecialist(Map<String, Object> conditionMap);
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    List<User> findSpecialistByKey(@Param("key")String key);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    String getUserStatus(@Param("userId")Integer userId);
+
+    Page<User> findSpecialistByLabel(@Param("labels")List<String> labels);
 }

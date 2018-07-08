@@ -362,11 +362,6 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        // 已评论
-        if (consultationLog.byUserEvaluated()){
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
         // 状态已确认
         if (!consultationLog.confirmed()){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
@@ -374,12 +369,24 @@ public class ConsultationController {
 
         // 当前用户是被咨询人
         if (consultationLog.byUser(userId)){
-            userEvaluateVo.setUserId(consultationLog.getUserId());
-            userEvaluateVo.setByUserId(userId);
+            // 已评论
+            if (consultationLog.byUserEvaluated()){
+                logger.warn("by user evaluated.");
+                return ResultObject.fail(ResultCode.BAD_REQUEST);
+            }
+
+            userEvaluateVo.setUserId(userId);
+            userEvaluateVo.setByUserId(consultationLog.getUserId());
             userEvaluateVo.setFlag(true);
         }
         // 当前用户是咨询人
         else if (consultationLog.user(userId)){
+            // 已评论
+            if (consultationLog.userEvaluated()){
+                logger.warn("user evaluated.");
+                return ResultObject.fail(ResultCode.BAD_REQUEST);
+            }
+
             userEvaluateVo.setUserId(userId);
             userEvaluateVo.setByUserId(consultationLog.getByUserId());
             userEvaluateVo.setFlag(false);

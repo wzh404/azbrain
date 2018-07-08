@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+<form id="frm">
+    <div id="box2" style="margin:0px auto; width:100%; min-height:150px; background:#FF9">
+        <input type="file" name="file" id="file" />
+        <a href="#" onclick="javascript:upload()">上传</a>
+        <img src="#" id="icon"/>
+    </div>
+</form>
+
+<br/><br/><br/>
+<a href="#" onclick="javascript:login('/manager/login')">Login</a>
+<br/>
+<a href="#" onclick="javascript:b('/manager/users?page=1', {})">用户列表</a>|
+<a href="#" onclick="javascript:b('/manager/view/user?user_id=1', {})">查看用户</a>|
+<a href="#" onclick="javascript:b('/manager/user/disable?user_id=1', {})">停用用户</a>|
+<a href="#" onclick="javascript:b('/manager/user/enable?user_id=1', {})">启用用户</a>|
+<a href="#" onclick="javascript:b('/manager/user/delete?user_id=1', {})">删除用户</a>|
+<br/><br/>
+<a href="#" onclick="javascript:b('/manager/specialists?page=1', {})">专家列表</a>|
+<a href="#" onclick="javascript:b('/manager/view/specialist?user_id=1', {})">查看专家</a>|
+<a href="#" onclick="javascript:editSpecialist('/manager/edit/specialist')">编辑专家</a>
+<a href="#" onclick="javascript:editSpecialist('/manager/search/specialist?key=specia')">根据手机号或名称搜索专家</a>
+<a href="#" onclick="javascript:editSpecialist('/manager/labels?classify=specialist&page=1')">专家标签</a>
+<br/><br/>
+<a href="#" onclick="javascript:b('/manager/articles?page=1', {})">文章列表</a>|
+<a href="#" onclick="javascript:b('/manager/draft/articles?page=1', {})">文章列表（草稿）</a>|
+<a href="#" onclick="javascript:b('/manager/top/articles?page=1', {})">文章列表（置顶）</a>|
+<a href="#" onclick="javascript:b('/manager/view/article?article_id=1', {})">view文章</a>|
+<a href="#" onclick="javascript:b('/manager/top/article?article_id=1', {})">置顶1</a>|
+<a href="#" onclick="javascript:b('/manager/untop/article?article_id=1', {})">取消置顶1</a>|
+<a href="#" onclick="javascript:newA('/manager/new/article')">new文章</a>|
+<a href="#" onclick="javascript:editA('/manager/edit/article')">编辑文章</a>|
+</br></br></br>
+<a href="#" onclick="javascript:b('/manager/page/topics?page=1', {})">主题列表</a>|
+<a href="#" onclick="javascript:b('/manager/view/topic?topic_id=1', {})">view主题</a>|
+<a href="#" onclick="javascript:b('/manager/topic/specialists?page=1&topic_id=1', {})">主题专家列表</a>|
+<a href="#" onclick="javascript:newT('/manager/new/topic')">new主题</a>|
+<a href="#" onclick="javascript:editT('/manager/edit/topic')">edit主题</a>|
+<a href="#" onclick="javascript:specialistByLabel('/manager/search/label/specialist?page=1')">标签找专家</a>|
+<a href="#" onclick="javascript:b('/manager/new/topic/specialist?topic_id=1&user_id=2')">新增主题专家</a>
+<a href="#" onclick="javascript:b('/manager/delete/topic/specialist?topic_id=1&user_id=2')">删除主题专家</a>
+</br>
+<a href="#" onclick="javascript:listC('/manager/list/consultation?page=1')">咨询列表</a>
+<a href="#" onclick="javascript:b('/manager/log/evaluation?log_id=3', {})">查看咨询评价</a>
+
+</br></br>
+【</br>
+<span id="msg_id" >off</span>
+</br>
+】
+<script type="text/javascript">
+    var access_token = "";
+    var icon = "";
+    //var g_uri = "http://119.254.84.20:8889";
+    //var g_uri = "http://10.13.202.49:8889";
+    var g_uri = "http://localhost:8889";
+
+    function b(url, data) {
+        $.ajax({
+            type : "GET",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : data,
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function listC(url){
+        data = {
+            "status": "unconfirmed",
+            "way": "mobile",
+            "userName":"",
+            "byUserName":""
+        };
+        ajax_post(url, data);
+    }
+
+    function specialistByLabel(url){
+        data = {
+            "labels":["0100","0101"]
+        };
+        b(url, data);
+    }
+
+    function newT(url){
+        data = {
+            "title":"Topic Title",
+            "content":"content test",
+            "icon":"icon"
+        };
+        ajax_post(url, data);
+    }
+
+    function editT(url){
+        data = {
+            "id":2,
+            "title":"Topic Title Edit",
+            "content":"content test Edit",
+            "icon":"icon edit"
+        };
+        ajax_post(url, data);
+    }
+
+    function login(url){
+        data = {
+            "name":"admin",
+            "pwd":"admin"
+        };
+        ajax_post(url, data);
+    }
+
+    function newA(url){
+        data = {
+            "title":"阿里云数字化转型专家",
+            "content":"依托阿里云可靠和灵活的云计算基础设施和平台服务，结合 SAP 世界领先的企业级数据库和商务应用解决方案，帮助企业简化 IT 架构、实现商业价值、加速数字化转型的步伐。",
+            "topicId":1,
+            "source":"01",
+            "author":"author1",
+            "icon":"icon1",
+            "status":"00"
+        };
+        ajax_post(url, data);
+    }
+
+    function editA(url){
+        data = {
+            "id":13,
+            "title":"阿里云数字化转型专家",
+            "content":"依托阿里云可靠和灵活的云计算基础设施和平台服务",
+            "topicId":1,
+            "source":"01",
+            "author":"author1",
+            "icon":"icon1",
+            "status":"00"
+        };
+        ajax_post(url, data);
+    }
+
+
+    function editSpecialist(url){
+        data = {
+                "userId":1,
+                "duration":50,
+                "labels":[
+                    {"code":"0100", "name":"糖尿病专家1"},
+                    {"code":"0101", "name":"糖尿病专家2"}
+                ],
+                "ways":[{"way":"mobile"}],
+                "times":[
+                    {"week":2, "code": "10001029"},
+                    {"week":5, "code": "15001530"}
+                ]
+            };
+        ajax_post(url, data);
+    }
+
+    function ajax_post(url, data) {
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            data : JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

@@ -19,6 +19,8 @@ public class Topic {
 
     private Integer consultedNum;
 
+    private Integer specialistNum;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createTime;
 

@@ -9,6 +9,8 @@
         <result column="like_num" jdbcType="INTEGER" property="likeNum"/>
         <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum"/>
         <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="source_url" jdbcType="VARCHAR" property="sourceUrl"/>
+        <result column="source_site" jdbcType="VARCHAR" property="sourceSite"/>
         <result column="author" jdbcType="VARCHAR" property="author"/>
         <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -16,14 +18,33 @@
         <result column="status" jdbcType="CHAR" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, title, content, icon, like_num, favorite_num, source, author, topic_id, create_time, create_by, status
+        id, title, content, icon, like_num, favorite_num, source, source_url, source_site, author, topic_id, create_time, create_by, status
     </sql>
 
     <select id="get" parameterType="java.lang.Integer" resultMap="article">
-        select
-        <include refid="Base_Column_List"/>
-        from azbrain_article
-        where id = #{id,jdbcType=INTEGER}
+        SELECT
+            a.id,
+            a.title AS title,
+            a.content AS content,
+            a.icon AS icon,
+            source,
+            author,
+            topic_id,
+            t.title AS topicTitle,
+            like_num,
+            favorite_num,
+            a.create_time,
+            a.status
+        FROM
+            azbrain_article a
+        INNER JOIN
+            azbrain_topic t
+        ON
+            a.topic_id = t.id
+        WHERE
+            a.status != '99'
+        AND
+            a.id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="specialistArticles" resultMap="article">
@@ -42,9 +63,9 @@
             title,
             content,
             icon,
-            like_num,
-            favorite_num,
             source,
+            source_url,
+            source_site,
             author,
             topic_id,
             create_time,
@@ -54,9 +75,9 @@
             #{title,jdbcType=VARCHAR},
             #{content,jdbcType=VARCHAR},
             #{icon,jdbcType=VARCHAR},
-            #{likerNum,jdbcType=INTEGER},
-            #{favoriteNum,jdbcType=INTEGER},
             #{source,jdbcType=VARCHAR},
+            #{sourceUrl,jdbcType=VARCHAR},
+            #{sourceSite,jdbcType=VARCHAR},
             #{author,jdbcType=VARCHAR},
             #{topicId,jdbcType=INTEGER},
             #{createTime,jdbcType=TIMESTAMP},
@@ -145,4 +166,86 @@
             like_num > 0
         ;
     </delete>
+
+    <!-- Manager -->
+    <select id="pageList" resultMap="article">
+        SELECT
+            a.id AS id,
+            a.title AS title,
+            source,
+            author,
+            topic_id,
+            t.title AS topicTitle,
+            like_num,
+            favorite_num,
+            a.create_time AS create_time
+        FROM
+            azbrain_article a
+        INNER JOIN
+            azbrain_topic t
+        ON
+            a.topic_id = t.id
+        WHERE
+            a.status = #{status}
+        <if test="top != null">
+            AND top_flag = 1
+        </if>
+        <if test="name != null">
+            AND name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[ AND create_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[ AND create_time <= #{endTime} ]]>
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="changeStatus">
+        UPDATE
+            azbrain_article
+        SET
+            status = #{status}
+        WHERE
+            id = #{articleId}
+    </update>
+
+    <update id="top">
+        UPDATE
+            azbrain_article
+        SET
+            top_flag = 1
+        WHERE
+            id = #{articleId}
+        AND
+            status != '99'
+    </update>
+
+    <update id="untop">
+        UPDATE
+            azbrain_article
+        SET
+            top_flag = 0
+        WHERE
+            id = #{articleId}
+        AND
+            status != '99'
+    </update>
+
+    <update id="edit" parameterType="com.blueocean.azbrain.model.Article">
+        UPDATE
+            azbrain_article
+        SET
+            title = #{title},
+            content = #{content},
+            icon = #{icon},
+            source = #{source},
+            source_url = #{sourceUrl},
+            source_site = #{sourceSite},
+            author = #{author},
+            topic_id = #{topicId}
+        WHERE
+            id = #{id}
+    </update>
 </mapper>

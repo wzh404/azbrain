@@ -2,8 +2,10 @@ package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.UserEvaluate;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserEvaluateMapper {
@@ -22,4 +24,13 @@ public interface UserEvaluateMapper {
      * @return
      */
     UserEvaluate get(Integer id);
+
+    /**
+     *
+     * @param logId
+     * @param userId
+     * @return
+     */
+    List<UserEvaluate> getEvaluationByLog(@Param("logId") Integer logId, @Param("userId")Integer userId);
+
 }

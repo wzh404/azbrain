@@ -50,4 +50,51 @@ public interface TopicService {
      * @return
      */
     boolean isFollowed(Integer userId, Integer topicId);
+
+    /**
+     * 分页列表主题
+     *
+     * @param page
+     * @param pageSize
+     * @param conditionMap
+     * @return
+     */
+    Page<Topic> pageTopics(int page, int pageSize, Map<String, Object> conditionMap);
+
+    /**
+     *
+     * @param topic
+     * @return
+     */
+    int newTopic(Topic topic);
+
+    /**
+     *
+     * @param topic
+     * @return
+     */
+    int editTopic(Topic topic);
+
+    /**
+     *
+     * @param topic
+     * @return
+     */
+    Topic viewTopic(Integer topic);
+
+    /**
+     *
+     * @param topicId
+     * @param userId
+     * @return
+     */
+    int newTopicSpecialist(Integer topicId, Integer userId);
+
+    /**
+     *
+     * @param topicId
+     * @param userId
+     * @return
+     */
+    int deleteTopicSpecialist(Integer topicId, Integer userId);
 }

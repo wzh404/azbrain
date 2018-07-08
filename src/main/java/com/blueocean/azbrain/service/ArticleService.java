@@ -94,4 +94,73 @@ public interface ArticleService {
      * @return
      */
     int deleteArticleEvaluate(Integer userId, Integer articleId);
+
+    // manager
+
+    /**
+     * 草稿列表
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    Page<Article> draftList(Integer page, Integer pageSize,Map<String, Object> conditionMap);
+
+    /**
+     * 发布列表
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    Page<Article> list(Integer page, Integer pageSize,Map<String, Object> conditionMap);
+
+    /**
+     * 置顶列表
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    Page<Article> topList(Integer page, Integer pageSize,Map<String, Object> conditionMap);
+
+    /**
+     * 发布
+     *
+     * @param articleId
+     * @return
+     */
+    int publish(Integer articleId);
+
+    /**
+     * 置顶
+     *
+     * @param articleId
+     * @return
+     */
+    int top(Integer articleId);
+
+    /**
+     * 取消置顶
+     *
+     * @param articleId
+     * @return
+     */
+    int untop(Integer articleId);
+
+    /**
+     * 编辑
+     *
+     * @param record
+     * @return
+     */
+    int edit(Article record);
+
+    /**
+     * 新增
+     *
+     * @param record
+     * @return
+     */
+    int insert(Article record);
 }

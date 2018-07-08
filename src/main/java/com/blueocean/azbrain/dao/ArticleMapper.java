@@ -22,7 +22,7 @@ public interface ArticleMapper {
      * @param id
      * @return
      */
-    Article get(Integer id);
+    Article get(@Param("id")Integer id);
 
     /**
      * 关键字搜索文章
@@ -80,5 +80,47 @@ public interface ArticleMapper {
      * @return
      */
     Page<Article> specialistArticles(@Param("userId") Integer userId);
+
+    /**********************Manager *********************/
+
+    /**
+     * 分页列表文章
+     * 草稿09，
+     * 已发布00，
+     * 置顶00 && top_flag = 1
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<Article> pageList(Map<String, Object> conditionMap);
+
+    /**
+     *
+     * @param articleId
+     * @param status
+     * @return
+     */
+    int changeStatus(@Param("articleId")Integer articleId, @Param("status")String status);
+
+    /**
+     *
+     * @param articleId
+     * @return
+     */
+    int top(@Param("articleId")Integer articleId);
+
+    /**
+     *
+     * @param articleId
+     * @return
+     */
+    int untop(@Param("articleId")Integer articleId);
+
+    /**
+     *
+     * @param record
+     * @return
+     */
+    int edit(Article record);
 }
 

@@ -20,7 +20,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("----------{}", request.getRequestURI());
         if (request.getMethod().equalsIgnoreCase("OPTIONS")){
             return true;
         }
@@ -32,7 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         if (request.getRequestURI().startsWith("/manager")){
-            return true; //managerHandle(request);
+            return managerHandle(request);
         } else {
             return userHandle(request);
         }

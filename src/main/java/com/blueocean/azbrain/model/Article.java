@@ -26,6 +26,10 @@ public class Article {
     // 平台， 专家， 转载
     private String source;
 
+    private String sourceUrl;
+
+    private String sourceSite;
+
     private String author;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
@@ -34,4 +38,6 @@ public class Article {
     private Integer createBy;
 
     private String status;
+
+    private String topicTitle;
 }

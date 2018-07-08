@@ -10,7 +10,25 @@ import java.util.Map;
 
 @Mapper
 public interface TopicMapper {
+    /**
+     *
+     * @param record
+     * @return
+     */
     int insert(Topic record);
+
+    /**
+     *
+     * @param topic
+     * @return
+     */
+    int edit(Topic topic);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     Topic get(Integer id);
 
     /**
@@ -53,4 +71,28 @@ public interface TopicMapper {
      * @return
      */
     int incrConsultedNum(@Param("topicId")Integer topicId);
+
+    /**
+     * 分页显示专题
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<Topic> pageTopics(Map<String, Object> conditionMap);
+
+    /**
+     *
+     * @param topicId
+     * @param userId
+     * @return
+     */
+    int insertTopicSpecialist(@Param("topicId")Integer topicId, @Param("userId")Integer userId);
+
+    /**
+     *
+     * @param topicId
+     * @param userId
+     * @return
+     */
+    int deleteTopicSpecialist(@Param("topicId")Integer topicId, @Param("userId")Integer userId);
 }

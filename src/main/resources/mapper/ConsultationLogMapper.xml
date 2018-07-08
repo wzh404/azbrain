@@ -18,6 +18,9 @@
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="meeting_pwd" jdbcType="VARCHAR" property="meetingPwd"/>
 
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="by_user_name" jdbcType="VARCHAR" property="byUserName"/>
+
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="last_updated" jdbcType="TIMESTAMP" property="lastUpdated"/>
         <result column="status" jdbcType="CHAR" property="status"/>
@@ -132,4 +135,71 @@
         WHERE
             id = #{id}
     </update>
+
+    <!-- manager -->
+    <select id="listConsultation" resultMap="BaseResultMap">
+        SELECT
+            l.id,
+            l.user_id,
+            u1.name as user_name,
+            l.by_user_id,
+            u2.name as by_user_name,
+            l.way,
+            l.mobile,
+            l.meeting_pwd,
+            l.cdate,
+            l.start_time,
+            l.end_time,
+            l.user_evaluated,
+            l.by_user_evaluated,
+            l.create_time,
+            l.status
+        FROM
+            azbrain_user_consultation_log l
+        INNER JOIN
+            azbrain_user u1
+        ON
+            l.user_id = u1.id
+        INNER JOIN
+            azbrain_user u2
+        ON
+            l.by_user_id = u2.id
+        WHERE
+            1=1
+        <if test="status != null">
+            <![CDATA[ AND l.status = #{status} ]]>
+        </if>
+
+        <if test="userEvaluated != null">
+            <![CDATA[ AND l.user_evaluated = #{userEvaluated} ]]>
+        </if>
+
+        <if test="byUserEvaluated != null">
+            <![CDATA[ AND l.by_user_evaluated = #{byUserEvaluated} ]]>
+        </if>
+
+        <if test="way != null">
+            <![CDATA[ AND l.way = #{way} ]]>
+        </if>
+
+        <if test="uncompleted != null">
+            <![CDATA[
+            AND
+                (l.user_evaluated = 0 OR l.by_user_evaluated = 0)
+            AND
+                l.status != '98'
+            AND
+                l.status != '99'
+            ]]>
+        </if>
+        <if test="userName != null">
+            <![CDATA[ AND u1.name LIKE CONCAT('%',#{userName},'%') ]]>
+        </if>
+        <if test="byUserName != null">
+            <![CDATA[ AND u2.name LIKE CONCAT('%',#{byUserName},'%') ]]>
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+
 </mapper>

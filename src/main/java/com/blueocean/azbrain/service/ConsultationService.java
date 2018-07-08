@@ -6,6 +6,9 @@ import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
+
 public interface ConsultationService {
     /**
      *
@@ -69,4 +72,19 @@ public interface ConsultationService {
      * @return
      */
     Page<ConsultationLog> consultMe(int page, int pageSize, Integer userId);
+
+    // manager
+    /**
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<ConsultationLog> listConsultation(int page, int pageSize, Map<String, Object> conditionMap);
+
+    /**
+     *
+     * @param logId
+     * @return
+     */
+    Map<String, Object> getEvaluationByLog(Integer logId);
 }

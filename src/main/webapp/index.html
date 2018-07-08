@@ -7,13 +7,7 @@
     <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
-<form id="frm">
-    <div id="box2" style="margin:0px auto; width:100%; min-height:150px; background:#FF9">
-        <input type="file" name="file" id="file" />
-        <a href="#" onclick="javascript:upload()">上传</a>
-        <img src="#" id="icon"/>
-    </div>
-</form>
+
 
 <br/><br/><br/>
 
@@ -61,7 +55,7 @@
 </br></br></br>
 
 
-<a href="#" onclick="javascript:editSpecialist('/manager/edit/specialist')">编辑专家</a>
+
 【</br>
 <span id="msg_id" >off</span>
 </br>
@@ -101,6 +95,7 @@ console.log('Hi!');
     }
 
     function b(url, data) {
+        console.log(g_uri);
         $.ajax({
             type : "GET",
             url : g_uri + url,
@@ -279,7 +274,7 @@ console.log('Hi!');
                     {"code":"0100", "name":"糖尿病专家1"},
                     {"code":"0101", "name":"糖尿病专家2"}
                 ],
-                "way":["way":"mobile"],
+                "ways":[{"way":"mobile"}],
                 "times":[
                     {"week":2, "code": "10001029"},
                     {"week":5, "code": "15001530"}

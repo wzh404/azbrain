@@ -6,8 +6,10 @@ import com.blueocean.azbrain.model.UserPoints;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -78,7 +80,6 @@ public interface UserService {
      */
     Page<User> topicSpecialists(int page, int pageSize, Integer topicId);
 
-    /*------------------------------manager ---------------------*/
     /**
      * 新增用户反馈意见
      *
@@ -87,27 +88,5 @@ public interface UserService {
      */
     int insertUserFeedback(UserFeedback feedback);
 
-    /**
-     * 查看用户反馈意见
-     *
-     * @param id
-     * @return
-     */
-    UserFeedback getUserFeedback(int id);
-
-    /**
-     * 分页查询用户反馈意见
-     *
-     * @param conditionMap
-     * @return
-     */
-    Page<UserFeedback> listUserFeedback(int page, int pageSize, HashMap<String, Object> conditionMap);
-
-    /**
-     *
-     * @param vo
-     * @return
-     */
-    int editSpecialist(SpecialistEditVo vo);
 }
 

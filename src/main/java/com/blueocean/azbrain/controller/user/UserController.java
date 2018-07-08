@@ -89,7 +89,7 @@ public class UserController {
     }
 
     /**
-     * 用户详情
+     * 详情
      *
      * @param request
      * @return

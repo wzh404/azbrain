@@ -69,6 +69,8 @@
             azbrain_user
         WHERE
             status != '99'
+        AND
+            user_type = '01'
         <if test="name != null">
             AND name LIKE CONCAT('%',#{name},'%')
         </if>
@@ -78,8 +80,8 @@
         <if test="endTime != null">
             <![CDATA[ AND create_time <= #{endTime} ]]>
         </if>
-        <if test="kcode != null">
-            AND job_number LIKE CONCAT('%',#{kcode},'%')
+        <if test="keycode != null">
+            AND job_number LIKE CONCAT('%',#{keycode},'%')
         </if>
         ORDER BY id DESC
     </select>
@@ -183,6 +185,16 @@
             user_id = #{userId}
     </select>
 
+    <select id="specialistLabels" resultType="java.util.Map">
+        SELECT
+            label_code as code,
+            label_name as name
+        FROM
+            azbrain_user_specialist_label
+        WHERE
+            user_id = #{userId}
+    </select>
+
     <select id="listUserPoints" resultType="com.blueocean.azbrain.model.UserPoints">
         SELECT
             id,
@@ -278,7 +290,7 @@
         SET
             status = #{status}
         WHERE
-            id = #{id}
+            id = #{userId}
     </update>
 
     <update id="edit" parameterType="com.blueocean.azbrain.model.User">
@@ -297,6 +309,37 @@
             id = #{id}
     </update>
 
+    <select id="viewUser"  resultMap="user">
+        SELECT
+            id,
+            name,
+            pinyin,
+            gender,
+            job_number,
+            photo,
+            email,
+            mobile,
+            business_unit,
+            status
+        FROM
+            azbrain_user
+        WHERE
+            id = #{userId}
+    </select>
+
+    <select id="viewSpecialist" resultMap="user">
+        SELECT
+            id,
+            name,
+            job_number,
+            once_consultation_duration,
+            status
+        FROM
+            azbrain_user
+        WHERE
+            id = #{userId}
+    </select>
+
     <select id="listSpecialist" resultMap="user">
         SELECT id,
             name,
@@ -314,6 +357,8 @@
             azbrain_user
         WHERE
             status != '99'
+        AND
+            user_type = '10'
         <if test="name != null">
             AND name LIKE CONCAT('%',#{name},'%')
         </if>
@@ -323,8 +368,8 @@
         <if test="endTime != null">
             <![CDATA[ AND create_time <= #{endTime} ]]>
         </if>
-        <if test="kcode != null">
-            AND job_number LIKE CONCAT('%',#{kcode},'%')
+        <if test="keycode != null">
+            AND job_number LIKE CONCAT('%',#{keycode},'%')
         </if>
         ORDER BY id DESC
     </select>
@@ -387,9 +432,89 @@
         ;
         UPDATE azbrain_user
         SET
+            user_type = '10',
             label = #{label},
             once_consultation_duration = #{duration}
         WHERE
             id = #{userId}
     </insert>
+
+    <select id="findSpecialistByKey" resultMap="user">
+        SELECT
+            id,
+            name,
+            mobile
+        FROM
+            azbrain_user
+        WHERE
+            status = '00'
+        AND
+            user_type = '10'
+        AND (
+            name LIKE CONCAT('%',#{key},'%')
+        OR
+            mobile = #{key}
+            )
+        LIMIT 10
+    </select>
+
+    <select id="getUserStatus" resultType="java.lang.String">
+        SELECT status
+        FROM
+            azbrain_user
+        WHERE
+            id = #{userId}
+    </select>
+
+    <select id="searchTopicSpecialists" resultMap="user">
+        SELECT
+            u.id,
+            u.photo,
+            u.name,
+            u.label,
+            u.consulted_star,
+            u.consulted_num,
+            u.consulted_duration
+        FROM
+            azbrain_user u
+        INNER JOIN
+            azbrain_topic_specialist s
+        ON
+            u.id = s.user_id
+        WHERE
+            s.topic_id = #{topicId,jdbcType=INTEGER}
+        AND
+            u.status = '00'
+        <if test="name != null">
+            AND u.name LIKE CONCAT('%',#{title},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[ AND u.create_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[ AND u.create_time <= #{endTime} ]]>
+        </if>
+        ORDER BY consulted_num DESC
+    </select>
+
+    <select id="findSpecialistByLabel" resultMap="user">
+        SELECT
+            u.id,
+            u.name,
+            u.job_number,
+            u.business_unit
+        FROM
+            azbrain_user u
+        INNER JOIN
+            azbrain_user_specialist_label s
+        ON
+            u.id = s.user_id
+        WHERE
+            u.status = '00'
+        AND
+            s.label_code IN
+        <foreach item="item" index="index" collection="labels" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

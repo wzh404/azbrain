@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.service.impl;
 
+import com.blueocean.azbrain.common.status.ArticleStatus;
 import com.blueocean.azbrain.dao.ArticleEvaluateMapper;
 import com.blueocean.azbrain.dao.ArticleMapper;
 import com.blueocean.azbrain.model.Article;
@@ -80,5 +81,55 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public int deleteArticleEvaluate(Integer userId, Integer articleId) {
         return articleEvaluateMapper.delete(userId, articleId);
+    }
+
+    @Override
+    public Page<Article> draftList(Integer page, Integer pageSize, Map<String, Object> conditionMap) {
+        conditionMap.put("status", ArticleStatus.DRAFT.getCode());
+
+        PageHelper.startPage(page, pageSize);
+        return articleMapper.pageList(conditionMap);
+    }
+
+    @Override
+    public Page<Article> list(Integer page, Integer pageSize, Map<String, Object> conditionMap) {
+        conditionMap.put("status", ArticleStatus.NORMAL.getCode());
+
+        PageHelper.startPage(page, pageSize);
+        return articleMapper.pageList(conditionMap);
+    }
+
+    @Override
+    public Page<Article> topList(Integer page, Integer pageSize, Map<String, Object> conditionMap) {
+        conditionMap.put("status", ArticleStatus.NORMAL.getCode());
+        conditionMap.put("top", 1);
+
+        PageHelper.startPage(page, pageSize);
+        return articleMapper.pageList(conditionMap);
+    }
+
+    @Override
+    public int publish(Integer articleId) {
+        return articleMapper.changeStatus(articleId, "00");
+    }
+
+    @Override
+    public int top(Integer articleId) {
+        return articleMapper.top(articleId);
+    }
+
+    @Override
+    public int untop(Integer articleId) {
+        return articleMapper.untop(articleId);
+    }
+
+    @Override
+    public int edit(Article record) {
+        return articleMapper.edit(record);
+    }
+
+    @Override
+    public int insert(Article record) {
+        return articleMapper.insert(record);
     }
 }

@@ -1,10 +1,14 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.ConsultationLog;
+import com.blueocean.azbrain.model.UserEvaluate;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ConsultationLogMapper {
@@ -69,4 +73,11 @@ public interface ConsultationLogMapper {
      * @return
      */
     int edit(ConsultationLogVo consultationLogVo);
+
+    /**
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<ConsultationLog> listConsultation(Map<String, Object> conditionMap);
 }

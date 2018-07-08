@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service("consultationService")
 public class ConsultationServiceImpl implements ConsultationService {
@@ -123,4 +125,24 @@ public class ConsultationServiceImpl implements ConsultationService {
         PageHelper.startPage(page, pageSize);
         return consultationLogMapper.consultMe(userId);
     }
+
+    @Override
+    public Page<ConsultationLog> listConsultation(int page, int pageSize, Map<String, Object> conditionMap) {
+        PageHelper.startPage(page, pageSize);
+        return consultationLogMapper.listConsultation(conditionMap);
+    }
+
+    @Override
+    public Map<String, Object> getEvaluationByLog(Integer logId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        ConsultationLog log = consultationLogMapper.get(logId);
+        if (log == null){
+            return resultMap;
+        }
+        resultMap.put("user", userEvaluateMapper.getEvaluationByLog(logId, log.getUserId()));
+        resultMap.put("byUser", userEvaluateMapper.getEvaluationByLog(logId, log.getByUserId()));
+        return resultMap;
+    }
+
+
 }

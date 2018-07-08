@@ -39,9 +39,11 @@ public class ConsultationLog {
     private String code;
 
     // 预约开始时间
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime startTime;
 
     // 预约结束时间
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime endTime;
 
     // 创建时间
@@ -60,6 +62,10 @@ public class ConsultationLog {
     private String meetingPwd;
 
     private String status;
+
+    private String userName;
+
+    private String byUserName;
 
     @JsonProperty("duration")
     public Long duration(){

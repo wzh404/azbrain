@@ -56,4 +56,35 @@ public class TopicServiceImpl implements TopicService {
     public boolean isFollowed(Integer userId, Integer topicId) {
         return topicMapper.followNum(userId, topicId) > 0 ? true : false;
     }
+
+    @Override
+    public Page<Topic> pageTopics(int page, int pageSize, Map<String, Object> conditionMap) {
+        PageHelper.startPage(page, pageSize);
+        return topicMapper.pageTopics(conditionMap);
+    }
+
+    @Override
+    public int newTopic(Topic topic) {
+        return topicMapper.insert(topic);
+    }
+
+    @Override
+    public int editTopic(Topic topic) {
+        return topicMapper.edit(topic);
+    }
+
+    @Override
+    public Topic viewTopic(Integer topicId) {
+        return topicMapper.get(topicId);
+    }
+
+    @Override
+    public int newTopicSpecialist(Integer topicId, Integer userId) {
+        return topicMapper.insertTopicSpecialist(topicId, userId);
+    }
+
+    @Override
+    public int deleteTopicSpecialist(Integer topicId, Integer userId) {
+        return topicMapper.deleteTopicSpecialist(topicId, userId);
+    }
 }

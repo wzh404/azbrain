@@ -42,20 +42,50 @@
 
     <select id="myConsult" resultMap="BaseResultMap">
         SELECT
-            <include refid="Base_Column_List"/>
+            l.id,
+            l.topic_id,
+            l.way,
+            l.cdate,
+            l.week,
+            l.code,
+            l.start_time,
+            l.end_time,
+            l.create_time,
+            l.mobile,
+            l.meeting_pwd,
+            u.name AS by_user_name
         FROM
-            azbrain_user_consultation_log
+            azbrain_user_consultation_log l
+        INNER JOIN
+            azbrain_user u
+        ON
+            l.by_user_id = u.id
         WHERE
-            user_id = #{userId}
+            l.user_id = #{userId}
     </select>
 
     <select id="consultMe" resultMap="BaseResultMap">
         SELECT
-            <include refid="Base_Column_List"/>
+            l.id,
+            l.topic_id,
+            l.way,
+            l.cdate,
+            l.week,
+            l.code,
+            l.start_time,
+            l.end_time,
+            l.create_time,
+            l.mobile,
+            l.meeting_pwd,
+            u.name AS user_name
         FROM
-            azbrain_user_consultation_log
+            azbrain_user_consultation_log l
+        INNER JOIN
+            azbrain_user u
+        ON
+            l.user_id = u.id
         WHERE
-            by_user_id = #{userId}
+            l.by_user_id = #{userId}
     </select>
 
     <insert id="insert" parameterType="com.blueocean.azbrain.model.ConsultationLog">
@@ -187,9 +217,9 @@
             AND
                 (l.user_evaluated = 0 OR l.by_user_evaluated = 0)
             AND
-                l.status != '98'
+                l.status != ${@com.blueocean.azbrain.common.status.ConsultationStatus@REJECTED}
             AND
-                l.status != '99'
+                l.status != ${@com.blueocean.azbrain.common.status.ConsultationStatus@CANCELED}
             ]]>
         </if>
         <if test="userName != null">

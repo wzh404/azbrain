@@ -80,7 +80,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public int insertUserEvaluate(UserEvaluateVo record) {
-        if (record.getFlag()){
+        if (record.getByUserFlag() == 0){
             consultationLogMapper.byUserEvaluated(record.getLogId());
         } else {
             consultationLogMapper.userEvaluated(record.getLogId());

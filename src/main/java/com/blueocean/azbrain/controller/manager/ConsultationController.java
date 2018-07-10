@@ -20,6 +20,7 @@ public class ConsultationController {
     private ConsultationService consultationService;
 
     /**
+     * 咨询列表
      *
      * @param page
      * @param cc

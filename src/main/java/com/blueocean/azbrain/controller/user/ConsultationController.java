@@ -377,9 +377,10 @@ public class ConsultationController {
 
             userEvaluateVo.setUserId(userId);
             userEvaluateVo.setByUserId(consultationLog.getUserId());
-            userEvaluateVo.setFlag(true);
+            // 被评论人为发起人
+            userEvaluateVo.setByUserFlag(0);
         }
-        // 当前用户是咨询人
+        // 当前用户是发起人
         else if (consultationLog.user(userId)){
             // 已评论
             if (consultationLog.userEvaluated()){
@@ -389,7 +390,8 @@ public class ConsultationController {
 
             userEvaluateVo.setUserId(userId);
             userEvaluateVo.setByUserId(consultationLog.getByUserId());
-            userEvaluateVo.setFlag(false);
+            // 被评论人为专家
+            userEvaluateVo.setByUserFlag(1);
         }
         else {
             return ResultObject.fail(ResultCode.BAD_REQUEST);

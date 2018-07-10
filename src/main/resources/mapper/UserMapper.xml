@@ -17,6 +17,7 @@
         <result column="likes_num" jdbcType="INTEGER" property="likesNum"/>
         <result column="favorite_num" jdbcType="INTEGER" property="favoriteNum"/>
         <result column="bad_num" jdbcType="INTEGER" property="badNum"/>
+        <result column="neutral_num" jdbcType="INTEGER" property="neutralNum"/>
         <result column="good_num" jdbcType="INTEGER" property="goodNum"/>
         <result column="break_contract_num" jdbcType="INTEGER" property="breakContractNum"/>
         <result column="consulted_num" jdbcType="INTEGER" property="consultedNum"/>
@@ -38,7 +39,7 @@
 
     <sql id="Base_Column_List">
         id, name, pinyin, gender, password, job_number, user_type, photo, email, mobile, business_unit, remarks,
-        likes_num, favorite_num, bad_num, good_num, break_contract_num, consulted_num, consult_num,
+        likes_num, favorite_num, bad_num, good_num, neutral_num, break_contract_num, consulted_num, consult_num,
         consult_duration, consulted_duration, once_consultation_duration, consult_star, consulted_star,
         label, create_by, create_time, status
     </sql>
@@ -268,17 +269,21 @@
         UPDATE
             azbrain_user
         <trim prefix="SET" suffixOverrides=",">
-        <if test="contract">
-            break_contract_num = break_contract_num + 1,
-        </if>
+            <if test="contract">
+                break_contract_num = break_contract_num + 1,
+            </if>
 
-        <if test="level == 1">
-            good_num = good_num + 1,
-        </if>
+            <if test="level == 1">
+                good_num = good_num + 1,
+            </if>
 
-        <if test="level == -1">
-            bad_num = bad_num + 1
-        </if>
+            <if test="level == -1">
+                bad_num = bad_num + 1,
+            </if>
+
+            <if test="level == 0">
+                neutral_num = neutral_num + 1,
+            </if>
         </trim>
         WHERE
             id = #{userId,jdbcType=INTEGER}
@@ -447,7 +452,7 @@
         FROM
             azbrain_user
         WHERE
-            status = '00'
+            status = ${@com.blueocean.azbrain.common.status.UserStatus@NORMAL}
         AND
             user_type = '10'
         AND (

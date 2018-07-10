@@ -12,6 +12,7 @@ public class UserEvaluate {
     private Integer id;
     private Integer userId;
     private Integer byUserId;
+    private Integer byUserFlag;
     private Integer logId;
     private String code;
     private String name;

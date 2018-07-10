@@ -154,8 +154,4 @@ public class UserServiceImpl implements UserService {
     public int insertUserFeedback(UserFeedback feedback) {
         return userFeedbackMapper.insert(feedback);
     }
-
-
-
-
 }

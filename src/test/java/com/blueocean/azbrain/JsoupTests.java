@@ -2,25 +2,125 @@ package com.blueocean.azbrain;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class JsoupTests {
 
-    @Test
-    public void testSimple(){
-        String htmlString = "<p><strong><em>Click on the Image Below to resize!</em></strong></p><p><br></p><p><img src=\"/vue-quill-editor/static/images/surmon-6.jpg\" width=\"500\"></p><p><br></p><p><strong><em>Or drag/paste an image here.</em></strong></p>";
-        Document doc = Jsoup.parse(htmlString);
-        System.out.println("["+ doc.body().text() + "]");
-        System.out.println("["+ doc.selectFirst("img").attr("src")+ "]");
-        Assert.assertTrue(1==1);
+    public Document getDocument(String url) {
+        try {
+            return Jsoup.connect(url).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
+    public String escapeHtml(String html){
+        html = html.replaceAll("<[^>]*>", "");
+        html = html.replaceAll("&nbsp;", "");
+
+        return html;
+    }
+
+    @Test
+    public void testSimple() {
+        Document doc = getDocument("http://www.yanglao.com.cn/resthome/228005.html");
+        System.out.println("电话:" + doc.getElementsByClass("inst-info")
+                .select(".cont")
+                .select("span.phone")
+                .text()
+                .replace("&nbsp", ""));
+
+        String[] names = {
+                "所在地区",
+                "机构类型",
+                "机构性质",
+                "成立时间",
+                "占地面积",
+                "建筑面积",
+                "床位数",
+                "收住对象",
+                "收费区间",
+                "特色服务",
+                "地 址",
+                "联 系 人"
+        };
+
+        Map<String, Object> map = new HashMap<>();
+        Arrays.stream(names).forEach(s -> map.put(s, "a"));
+
+        Elements els = doc.getElementsByClass("base-info").select(".cont").select("li");
+
+        for (int i = 0; i < els.size(); i++) {
+            Element el = els.get(i);
+            String[] a = el.text().split("：");
+            if (map.get(a[0]) != null) {
+                System.out.print("*");
+            } else {
+                continue;
+            }
+
+            if (a.length > 1)
+                System.out.println(a[0] + " [" + a[1] + "]\n");
+            else
+                System.out.println(a[0] + "[" + "]\n");
+        }
+
+        els = doc.getElementsByClass("contact-info").select(".cont").select("li");
+        for (int i = 0; i < els.size(); i++) {
+            Element el = els.get(i);
+            String[] a = el.text().split("：");
+            if (map.get(a[0]) != null) {
+                System.out.print("*");
+            } else if (i == els.size() - 1) {
+                System.out.println(el.text());
+                continue;
+            } else {
+                continue;
+            }
+
+            if (a.length > 1)
+                System.out.println(a[0] + "[" + a[1] + "]\n");
+            else
+                System.out.println(a[0] + "[" + a[0] + "]\n");
+        }
+        System.out.println("--------------------------------------------------");
+
+        String html = escapeHtml((doc.getElementsByClass("inst-intro").select(".cont").html()));
+        System.out.println(html);
+        System.out.println("--------------------------------------------------");
+
+        html = escapeHtml(doc.getElementsByClass("inst-charge").select(".cont").html());
+        System.out.println(html);
+        System.out.println("--------------------------------------------------");
+
+        html = escapeHtml(doc.getElementsByClass("facilities").select(".cont").html());
+        System.out.println(html);
+        System.out.println("--------------------------------------------------");
+
+        html = escapeHtml(doc.getElementsByClass("service-content").select(".cont").select("p").html());
+        System.out.println(html);
+        System.out.println("--------------------------------------------------");
+
+        html = escapeHtml(doc.getElementsByClass("inst-notes").select(".cont").html());
+        System.out.println(html);
+
+        Assert.assertTrue(1 == 1);
+    }
+
+    /*
     @Test
     public void testDate(){
         LocalDate ld = LocalDate.now();
@@ -39,5 +139,5 @@ public class JsoupTests {
         System.out.println(s);
         System.out.println(e);
         Assert.assertTrue(1==1);
-    }
+    }*/
 }

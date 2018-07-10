@@ -45,6 +45,9 @@ public class User {
     /** 差评数 */
     private Integer badNum;
 
+    /** 中评数 */
+    private Integer neutralNum;
+
     /** 好评数 */
     private Integer goodNum;
 
@@ -66,6 +69,7 @@ public class User {
     /** 一次最大可预约咨询时长 */
     private Integer onceConsultationDuration;
 
+    /** 专家标签 */
     private String label;
 
     /** 咨询总评价 */

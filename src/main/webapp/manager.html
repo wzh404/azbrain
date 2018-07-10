@@ -52,6 +52,12 @@
 <a href="#" onclick="javascript:b('/manager/log/evaluation?log_id=3', {})">查看咨询评价</a>
 
 </br></br>
+<a href="#" onclick="javascript:a1('/theme/thumbs-up')">点赞</a>
+<a href="#" onclick="javascript:a1('/theme/share')">分享</a>
+<a href="#" onclick="javascript:a3('/nearby/hospital')">附近医院</a>
+<a href="#" onclick="javascript:a4('/nearby/transit')">附近地铁</a>
+
+</br></br>
 【</br>
 <span id="msg_id" >off</span>
 </br>
@@ -62,6 +68,7 @@
     //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
     var g_uri = "http://localhost:8889";
+    //var g_uri = "http://192.168.1.88:8010";
 
     function b(url, data) {
         $.ajax({
@@ -75,6 +82,34 @@
                 $('#msg_id').html(JSON.stringify(result));
             }
         });
+    }
+
+    function a1(url){
+         data = {
+        　　"dynamicId":35,
+        　　"userId": 2
+         }
+
+         ajax_post(url, data);
+    }
+
+    function a2(url){
+         data = {
+        　　"dynamicId":35,
+        　　"userId": 2
+         }
+
+         ajax_post(url, data);
+    }
+
+    function a3(url){
+         data = {"orgId":1}
+         ajax_post(url, data);
+    }
+
+    function a4(url){
+         data = {"orgId":1}
+         ajax_post(url, data);
     }
 
     function listC(url){

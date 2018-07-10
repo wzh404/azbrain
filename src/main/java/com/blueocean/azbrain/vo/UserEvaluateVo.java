@@ -18,8 +18,8 @@ public class UserEvaluateVo {
     private Integer byUserId;
     private Integer logId;
 
-    // true: 被咨询人评价  false: 咨询人评价
-    private Boolean flag;
+    // 1: 被评价人为专家  0: 被评价人为发起人
+    private Integer byUserFlag;
 
     List<EvaluateVo> evaluates;
 
@@ -33,6 +33,7 @@ public class UserEvaluateVo {
         u.setName(v.getName());
         u.setValue(v.getValue());
         u.setValueType(v.getType());
+        u.setByUserFlag(this.byUserFlag);
 
         return u;
     };

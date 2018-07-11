@@ -98,6 +98,7 @@ public interface UserMapper {
      */
     List<Map<String, Object>> specialistLabels(@Param("userId")Integer userId);
 
+    List<Map<String, Object>> selectpecialistLabels(@Param("userId")Integer userId);
     /**
      * 用户积分列表
      *
@@ -238,4 +239,13 @@ public interface UserMapper {
     String getUserStatus(@Param("userId")Integer userId);
 
     Page<User> findSpecialistByLabel(@Param("labels")List<String> labels);
+
+    int updateLogin(@Param("userId")Integer userId);
+
+    int changeSpecialistLabel(@Param("userId")Integer userId, @Param("labels")List<Map<String, Object>> labels,
+                              @Param("label")String label);
+
+    int notify(@Param("userId")Integer userId);
+
+    int unNotify(@Param("userId")Integer userId);
 }

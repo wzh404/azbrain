@@ -81,7 +81,6 @@
       status = '00'
   </select>
 
-
   <insert id="insertLabel" parameterType="com.blueocean.azbrain.model.Label">
     insert into azbrain_evaluate_label (
       id,

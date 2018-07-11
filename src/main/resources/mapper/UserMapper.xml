@@ -33,6 +33,8 @@
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="login_flag" jdbcType="INTEGER" property="loginFlag"/>
+        <result column="message_flag" jdbcType="INTEGER" property="messageFlag"/>
 
         <result column="business_unit" jdbcType="VARCHAR" property="businessUnit" />
         <result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
@@ -136,6 +138,8 @@
             id,
             name,
             user_type,
+            login_flag,
+            message_flag,
             mobile
         FROM
             azbrain_user
@@ -158,8 +162,12 @@
         LEFT JOIN azbrain_user_consultation_way c ON u.id = c.user_id
         WHERE
             u.status = '00'
+        AND
+            u.user_type = '10'
         <if test="label != null">
-            <![CDATA[ AND s.label_code = #{label} ]]>
+            <![CDATA[
+                AND s.label_code IN (${label})
+            ]]>
         </if>
         <if test="way != null">
             <![CDATA[ AND c.way = #{way} ]]>
@@ -232,6 +240,19 @@
             azbrain_user_specialist_label
         WHERE
             user_id = #{userId}
+    </select>
+
+    <select id="selectpecialistLabels" resultType="java.util.Map">
+        SELECT
+            l.CODE AS CODE,
+            l.NAME AS NAME,
+            CASE WHEN ul.label_code IS NULL THEN 0 ELSE 1 END AS selected
+        FROM
+            azbrain_evaluate_label l
+        LEFT JOIN azbrain_user_specialist_label ul ON l.CODE = ul.label_code
+            AND ul.user_id = #{userId}
+        WHERE
+            l.classify = 'specialist'
     </select>
 
     <select id="listUserPoints" resultType="com.blueocean.azbrain.model.UserPoints">
@@ -568,4 +589,56 @@
             #{item}
         </foreach>
     </select>
+
+    <update id="updateLogin">
+        UPDATE
+            azbrain_user
+        SET
+            login_flag = 1
+        WHERE
+            id = #{userId}
+    </update>
+
+    <insert id="changeSpecialistLabel">
+        DELETE FROM
+            azbrain_user_specialist_label
+        WHERE
+            user_id = #{userId}
+        ;
+        INSERT INTO azbrain_user_specialist_label(
+            user_id,
+            label_code,
+            label_name)
+        VALUES
+        <foreach collection ="labels" item="l" separator =",">
+            (
+                #{userId},
+                #{l.code},
+                #{l.name}
+            )
+        </foreach>
+        ;
+        UPDATE azbrain_user
+        SET
+            label = #{label}
+        WHERE
+            id = #{userId}
+        ;
+    </insert>
+
+    <update id="notify">
+        UPDATE azbrain_user
+        SET
+            message_flag = 1
+        WHERE
+            id = #{userId}
+    </update>
+
+    <update id="unNotify">
+        UPDATE azbrain_user
+        SET
+            message_flag = 0
+        WHERE
+            id = #{userId}
+    </update>
 </mapper>

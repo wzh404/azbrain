@@ -84,4 +84,7 @@ public class User {
     private LocalDateTime createTime;
 
     private String status;
+
+    private Integer loginFlag;
+    private Integer messageFlag;
 }

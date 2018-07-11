@@ -72,6 +72,7 @@ public class ConsultationServiceImpl implements ConsultationService {
 
     @Override
     public int edit(ConsultationLogVo consultationLogVo) {
+
         return consultationLogMapper.edit(consultationLogVo);
     }
 

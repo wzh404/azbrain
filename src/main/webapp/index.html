@@ -11,8 +11,10 @@
 
 <br/><br/><br/>
 
-<a href="#" onclick="javascript:a('specialist')">专家登陆</a> |
-<a href="#" onclick="javascript:a('student')">普通职员登陆</a> |
+<a href="#" onclick="javascript:a('a2hqbDk3Ng==')">专家登陆</a> |
+<a href="#" onclick="javascript:b('/user/specialist/labels',{})">专家首次登陆</a>
+<a href="#" onclick="javascript:a('100002')">普通职员登陆</a> |
+<a href="#" onclick="javascript:editSpecialist('/user/specialist/change/labels')">修改专家标签!</a>|
 <a href="#" onclick="javascript:b('/search/article?key=医药代表&page=1', {})">搜索文章!</a>|
 <a href="#" onclick="javascript:b('/user/article?article_id=1', {})">文章详情!</a>|
 <br/>
@@ -72,7 +74,7 @@
     var icon = "";
     //var g_uri = "http://52.80.177.33/azbrain";
     //var g_uri = "http://2.49:8889";
-    var g_uri = "http://localhost:8889/azbrain";
+    var g_uri = "http://localhost:8889";
     var host = "";
     var pwd = "";
 /*
@@ -143,7 +145,7 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "label":"040001",
+                "label":["040001", "040002"],
                 "bad":"0",
                 "contract":"0",
                 "way": "mobile"
@@ -286,16 +288,9 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "userId":1,
-                "duration":50,
                 "labels":[
-                    {"code":"0100", "name":"糖尿病专家1"},
-                    {"code":"0101", "name":"糖尿病专家2"}
-                ],
-                "ways":[{"way":"mobile"}],
-                "times":[
-                    {"week":2, "code": "10001029"},
-                    {"week":5, "code": "15001530"}
+                    {"code":"040001", "name":"糖尿病专家1"},
+                    {"code":"040003", "name":"糖尿病专家3"}
                 ]
             }),
             contentType: "application/json; charset=utf-8",

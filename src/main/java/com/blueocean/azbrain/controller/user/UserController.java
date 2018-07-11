@@ -12,6 +12,7 @@ import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.TokenUtil;
 import com.blueocean.azbrain.util.WxUtils;
+import com.blueocean.azbrain.vo.SpecialistEditVo;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 import com.google.common.base.Preconditions;
@@ -61,6 +62,8 @@ public class UserController {
         resultMap.put("user_type", user.getUserType());
         resultMap.put("name", user.getName());
         resultMap.put("mobile", user.getMobile());
+        resultMap.put("login_flag", user.getLoginFlag());
+        resultMap.put("message_flag", user.getMessageFlag());
         return ResultObject.ok(resultMap);
     }
 
@@ -206,5 +209,65 @@ public class UserController {
 
         int rows = userService.insertUserFeedback(userFeedback);
         return ResultObject.cond(rows > 0, ResultCode.USER_ILLEGAL_STATUS);
+    }
+
+    /**
+     * 获取专家标签
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="/specialist/labels", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject specialistLabels(HttpServletRequest request){
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please log in");
+        return ResultObject.ok(userService.getSpecialistLabels(userId));
+    }
+
+    /**
+     * 修改用户为非首次登陆
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="/specialist/logged", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject specialistLogged(HttpServletRequest request){
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please log in");
+
+        userService.updateLogin(userId);
+        return ResultObject.ok();
+    }
+
+    /**
+     * 专家修改标签
+     *
+     * @param request
+     * @param vo
+     * @return
+     */
+    @RequestMapping(value="/specialist/change/labels", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject specialistChangeLabels(HttpServletRequest request, @RequestBody SpecialistEditVo vo){
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please log in");
+
+        vo.setUserId(userId);
+        userService.changeSpecialistLabel(vo);
+        return ResultObject.ok();
+    }
+
+    /**
+     * 取消通知
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="/cancel/notify", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject cancelNotify(HttpServletRequest request){
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please log in");
+
+        userService.cancelNotify(userId);
+        return ResultObject.ok();
     }
 }

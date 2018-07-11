@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.Topic;
 import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.service.ConsultationService;
 import com.blueocean.azbrain.service.TopicService;
+import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.MeetingUtil;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
@@ -38,6 +39,9 @@ public class ConsultationController {
 
     @Autowired
     private TopicService topicService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 用户咨询
@@ -109,6 +113,7 @@ public class ConsultationController {
         consultationLog.setLastUpdated(LocalDateTime.now());
         consultationLog.setStatus(ConsultationStatus.UNCONFIRMED.getCode());
 
+        userService.notify(consultationLog.getByUserId());
         int rows = consultationService.insert(consultationLog);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CREATE_FAILED);
     }
@@ -148,6 +153,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
+        userService.notify(consultationLog.getByUserId());
         int rows = consultationService.changeStatus(id, ConsultationStatus.CANCELED.getCode());
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
@@ -195,6 +201,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
+        userService.notify(consultationLog.getUserId());
         int rows = consultationService.confirm(consultationLog);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
@@ -253,6 +260,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
+        userService.notify(consultationLog.getUserId());
         int rows = consultationService.changeStatus(id, ConsultationStatus.REJECTED.getCode());
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
@@ -309,6 +317,8 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
+        userService.notify(consultationLog.getUserId());
+
         // 变为已编辑状态
         int rows = consultationService.edit(consultationLogVo);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
@@ -358,6 +368,8 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
+        userService.notify(consultationLog.getByUserId());
+
         // 变为已编辑状态
         int rows = consultationService.edit(consultationLogVo);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
@@ -403,6 +415,8 @@ public class ConsultationController {
                 !setMeetingHostAndPwd(consultationLog)) {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
+
+        userService.notify(consultationLog.getByUserId());
 
         // 变为确认状态
         int rows = consultationService.confirm(consultationLog);

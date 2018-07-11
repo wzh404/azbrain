@@ -172,4 +172,29 @@ public class UserServiceImpl implements UserService {
     public int insertUserFeedback(UserFeedback feedback) {
         return userFeedbackMapper.insert(feedback);
     }
+
+    @Override
+    public List<Map<String, Object>> getSpecialistLabels(Integer uid) {
+        return userMapper.selectpecialistLabels(uid);
+    }
+
+    @Override
+    public int updateLogin(Integer userId) {
+        return userMapper.updateLogin(userId);
+    }
+
+    @Override
+    public int changeSpecialistLabel(SpecialistEditVo vo) {
+        return userMapper.changeSpecialistLabel(vo.getUserId(), vo.getLabels(), vo.userLabel());
+    }
+
+    @Override
+    public int cancelNotify(Integer userId) {
+        return userMapper.unNotify(userId);
+    }
+
+    @Override
+    public int notify(Integer userId) {
+        return userMapper.notify(userId);
+    }
 }

@@ -98,5 +98,14 @@ public interface UserService {
      */
     int insertUserFeedback(UserFeedback feedback);
 
+    List<Map<String, Object>> getSpecialistLabels(Integer uid);
+
+    int updateLogin(Integer userId);
+
+    int changeSpecialistLabel(SpecialistEditVo vo);
+
+    int cancelNotify(Integer userId);
+
+    int notify(Integer userId);
 }
 

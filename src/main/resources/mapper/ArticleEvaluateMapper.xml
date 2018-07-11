@@ -103,6 +103,8 @@
         ar.id = ae.article_id
       WHERE
         ae.status != '99'
+      AND
+        e.status = '00'
       GROUP BY
         title, ae.article_id, evaluate_name
     ) a

@@ -96,9 +96,11 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/specialist/profile", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject specialistProfile(HttpServletRequest request){
-        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+    public ResultObject specialistProfile(HttpServletRequest request, @RequestParam(value="user_id", required = false) Integer userId){
+        if (userId == null) {
+            userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+            Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+        }
 
         Map<String, Object> map = userService.specialistProfile(userId);
         return ResultObject.ok(map);
@@ -112,9 +114,12 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/specialist/articles", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject articles(HttpServletRequest request, @RequestParam("page") Integer page) {
-        Integer userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+    public ResultObject articles(HttpServletRequest request, @RequestParam("page") Integer page,
+                                 @RequestParam(value="user_id", required = false) Integer userId) {
+        if (userId == null) {
+            userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+            Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+        }
 
         Page<Article> articlePage = articleService.specialistArticles(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok("articles", articlePage.getResult());
@@ -128,9 +133,11 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/consultation/conditions", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject conditions(HttpServletRequest request){
-        Integer userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+    public ResultObject conditions(HttpServletRequest request, @RequestParam(value="user_id", required = false) Integer userId){
+        if (userId == null) {
+            userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+            Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+        }
 
         Map<String, Object> map = userService.consultationConditions(userId);
         return ResultObject.ok(map);

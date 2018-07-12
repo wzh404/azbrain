@@ -17,6 +17,7 @@ import java.util.Map;
 
 
 public class JsoupTests {
+    /*
     public Document getDocument(String url) {
         try {
             return Jsoup.connect(url).get();
@@ -118,7 +119,7 @@ public class JsoupTests {
 
         Assert.assertTrue(1 == 1);
     }
-
+*/
     /*
     @Test
     public void testDate(){
@@ -139,4 +140,16 @@ public class JsoupTests {
         System.out.println(e);
         Assert.assertTrue(1==1);
     }*/
+
+    @Test
+    public void testOrder(){
+        SnowFlakeWorker s = new SnowFlakeWorker(1);
+        int uid = 3948849 % 100;
+        long t = System.currentTimeMillis();
+        System.out.println("t = " + t);
+        long s1 = 365*24*60*60;
+        System.out.println((1<<30)/s1);
+        System.out.println(s.nextId());
+        Assert.assertTrue(1==1);
+    }
 }

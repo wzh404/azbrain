@@ -65,7 +65,7 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    List<Map<String, Object>> appointmentTime(@Param("userId")Integer userId);
+    //List<Map<String, Object>> appointmentTime(@Param("userId")Integer userId);
 
     /**
      * 可咨询方式
@@ -90,6 +90,14 @@ public interface UserMapper {
      * @return
      */
     Page<UserPoints> listUserPoints(@Param("userId")Integer userId);
+
+    /**
+     * 获取用户总积分
+     *
+     * @param userId
+     * @return
+     */
+    Integer myPoint(@Param("userId")Integer userId);
 
     /**
      * 列表主题专家
@@ -160,7 +168,7 @@ public interface UserMapper {
      * @param times
      * @return
      */
-    int insertUserAppointmentTime(@Param("userId")Integer userId, @Param("times")List<Map<String, Object>> times);
+    //int insertUserAppointmentTime(@Param("userId")Integer userId, @Param("times")List<Map<String, Object>> times);
 
     /**
      *

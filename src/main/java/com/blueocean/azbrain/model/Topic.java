@@ -28,4 +28,5 @@ public class Topic {
 
     private String status;
 
+    private Integer updatedArticleNum;
 }

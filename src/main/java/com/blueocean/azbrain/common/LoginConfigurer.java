@@ -19,7 +19,6 @@ public class LoginConfigurer implements WebMvcConfigurer {
         registry.addInterceptor(logInterceptor());
     }
 
-    @Profile("dev")
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

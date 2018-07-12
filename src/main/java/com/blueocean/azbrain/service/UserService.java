@@ -71,6 +71,14 @@ public interface UserService {
     Page<UserPoints> listUserPoints(int page, int pageSize, Integer userId);
 
     /**
+     * 获取用户总积分
+     *
+     * @param userId
+     * @return
+     */
+    Integer myPoint(Integer userId);
+
+    /**
      * 列表主题专家
      *
      * @param page

@@ -65,6 +65,31 @@ public interface TopicMapper {
     int followNum(@Param("userId")Integer userId, @Param("topicId")Integer topicId);
 
     /**
+     * 重置用户主题更新文章数量
+     *
+     * @param userId
+     * @param topicId
+     * @return
+     */
+    int resetUpdatedArticleNum(@Param("userId")Integer userId, @Param("topicId")Integer topicId);
+
+    /**
+     * 所有关注主题的用户，文章更新数加一
+     *
+     * @param topicId
+     * @return
+     */
+    int increaseUpdatedArticleNum(@Param("topicId")Integer topicId);
+
+    /**
+     * 主题的文章数量
+     *
+     * @param topicId
+     * @return
+     */
+    int topicArticleNum(@Param("topicId")Integer topicId);
+
+    /**
      * 增加topic被咨询次数
      *
      * @param topicId

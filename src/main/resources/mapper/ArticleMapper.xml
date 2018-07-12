@@ -13,12 +13,14 @@
         <result column="source_site" jdbcType="VARCHAR" property="sourceSite"/>
         <result column="author" jdbcType="VARCHAR" property="author"/>
         <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
+        <result column="top_flag" jdbcType="INTEGER" property="topFlag"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="status" jdbcType="CHAR" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, title, content, icon, like_num, favorite_num, source, source_url, source_site, author, topic_id, create_time, create_by, status
+        id, title, content, icon, like_num, favorite_num, source, source_url, source_site,
+        author, topic_id, top_flag, create_time, create_by, status
     </sql>
 
     <select id="get" parameterType="java.lang.Integer" resultMap="article">
@@ -30,6 +32,7 @@
             source,
             author,
             topic_id,
+            top_flag,
             t.title AS topicTitle,
             like_num,
             favorite_num,
@@ -102,7 +105,9 @@
             azbrain_article
         WHERE
             status = '00'
-        ORDER BY create_time DESC
+        ORDER BY
+            top_flag DESC,
+            create_time DESC
     </select>
 
     <select id="listByTopic" resultMap="article">

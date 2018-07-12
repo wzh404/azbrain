@@ -56,6 +56,7 @@
 <a href="#" onclick="javascript:a1('/theme/share')">分享</a>
 <a href="#" onclick="javascript:a3('/nearby/hospital')">附近医院</a>
 <a href="#" onclick="javascript:a4('/nearby/transit')">附近地铁</a>
+<a href="#" onclick="javascript:a5('/beadhouse/query/pagelist')">养老院列表</a>
 
 </br></br>
 【</br>
@@ -67,8 +68,25 @@
     var icon = "";
     //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    var g_uri = "http://localhost:8889";
-    //var g_uri = "http://192.168.1.88:8010";
+    //var g_uri = "http://localhost:8889";
+    var g_uri = "http://192.168.1.88:8010";
+
+    function upload() {
+        var formData = new FormData($( "#frm" )[0]);
+        $.ajax({
+            type : "POST",
+            url : g_uri + "/manager/upload",
+            data : formData,
+            cache : false,
+            processData:false,
+            contentType:false,
+            success : function(result) {
+                icon = result.result.file;
+                $('icon').attr('src', icon);
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
 
     function b(url, data) {
         $.ajax({
@@ -77,6 +95,10 @@
             headers: {
                 "access_token": access_token
             },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             data : data,
             success : function(result) {
                 $('#msg_id').html(JSON.stringify(result));
@@ -109,6 +131,18 @@
 
     function a4(url){
          data = {"orgId":1}
+         ajax_post(url, data);
+    }
+
+    function a5(url){
+         data = {
+            "uid":"123",
+            "page":1,
+            "pageSize":10,
+            "city":"北京市",
+            "longitude":122.31,
+            "latitude":30.76
+            }
          ajax_post(url, data);
     }
 
@@ -208,6 +242,10 @@
             headers: {
                 "access_token": access_token
             },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             data : JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

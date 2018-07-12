@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequestMapping("/user")
@@ -48,9 +49,13 @@ public class ConsultationController {
         if (consultationLog.getWay() == null ||
             consultationLog.getCdate() == null ||
             consultationLog.getStartTime() == null ||
-            consultationLog.getEndTime() == null){
+            consultationLog.getCode() == null){
             logger.error("invalid request parameters");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+
+        if (consultationLog.getTopicId() == null){
+            consultationLog.setTopicId(0);
         }
 
         // 检查主题是否存在
@@ -76,6 +81,8 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
+        int duration = Integer.parseInt(consultationLog.getCode());
+        consultationLog.setEndTime(consultationLog.getStartTime().plus(duration, ChronoUnit.MINUTES));
         consultationLog.setUserId(userId);
         consultationLog.setWeek(consultationLog.getCdate().getDayOfWeek().getValue());
         consultationLog.setCreateTime(LocalDateTime.now());

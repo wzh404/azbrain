@@ -154,7 +154,7 @@ public class UserController {
     }
 
     /**
-     * 查看用户
+     * 查看专家
      *
      * @param userId
      * @return

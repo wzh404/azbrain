@@ -1,12 +1,10 @@
 package com.blueocean.azbrain.service.impl;
 
 import com.blueocean.azbrain.common.status.UserStatus;
+import com.blueocean.azbrain.dao.DictMapper;
 import com.blueocean.azbrain.dao.UserFeedbackMapper;
 import com.blueocean.azbrain.dao.UserMapper;
-import com.blueocean.azbrain.model.Article;
-import com.blueocean.azbrain.model.User;
-import com.blueocean.azbrain.model.UserFeedback;
-import com.blueocean.azbrain.model.UserPoints;
+import com.blueocean.azbrain.model.*;
 import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
@@ -35,6 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserFeedbackMapper userFeedbackMapper;
 
+    @Autowired
+    private DictMapper dictMapper;
+
     @Override
     public User get(Integer id) {
         return userMapper.get(id);
@@ -51,6 +52,20 @@ public class UserServiceImpl implements UserService {
         return userMapper.searchSpecialist(vo);
     }
 
+    private List<Map<String, Object>> getDefaultLabels(String classify){
+        List<Label> labels = dictMapper.listLabel(classify);
+        return labels.stream()
+                .filter(l->l.getValueType().equalsIgnoreCase("star"))
+                .map(l ->{
+            Map<String, Object> m = new HashMap();
+            m.put("code", l.getCode());
+            m.put("name", l.getName());
+            m.put("value", new BigDecimal(0));
+
+            return m;
+        }).collect(Collectors.toList());
+    }
+
     @Override
     public Map<String, Object> profile(Integer userId) {
         Map<String, Object> map = new HashMap<>();
@@ -60,24 +75,14 @@ public class UserServiceImpl implements UserService {
         }
 
         List<Map<String, Object>> scores = userMapper.userAvgScore(userId);
-        if (scores == null) {
-            scores = new ArrayList<>();
+        if (scores == null || scores.isEmpty()) {
+            scores = getDefaultLabels("user");
         }
-
-        Map<String, Object> score = scores.stream()
-                .map(m -> {
-                    Map<String, Object> m1 = new HashMap();
-                    m1.put(m.get("code").toString(), m.get("value"));
-                    return m1;
-                })
-                .flatMap(m -> m.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
         double d = scores.stream().mapToDouble(s ->((BigDecimal)s.get("value")).doubleValue())
                 .average()
                 .orElse(0);
         map.put("profile", user);
-        map.put("score", score);
+        map.put("score", scores);
         map.put("star", new BigDecimal(d).setScale(1, BigDecimal.ROUND_HALF_UP));
         return map;
     }
@@ -91,10 +96,10 @@ public class UserServiceImpl implements UserService {
         }
 
         List<Map<String, Object>> scores = userMapper.byUserAvgScore(userId);
-        if (scores == null) {
-            scores = new ArrayList<>();
+        if (scores == null || scores.isEmpty()) {
+            scores = getDefaultLabels("byuser");
         }
-
+/*
         Map<String, Object> score = scores.stream()
                 .map(m -> {
                     Map<String, Object> m1 = new HashMap();
@@ -103,15 +108,15 @@ public class UserServiceImpl implements UserService {
                 })
                 .flatMap(m -> m.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
+*/
         double d = scores.stream().mapToDouble(s ->((BigDecimal)s.get("value")).doubleValue())
                 .average()
                 .orElse(0);
 
-        Page<Article> articlePage = articleService.specialistArticles(1, 4, userId);
+        Page<Article> articlePage = articleService.specialistArticles(1, 3, userId);
         map.put("articles", articlePage.getResult());
         map.put("profile", user);
-        map.put("score", score);
+        map.put("score", scores);
         map.put("star", new BigDecimal(d).setScale(1, BigDecimal.ROUND_HALF_UP));
         return map;
     }
@@ -122,14 +127,14 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.get(userId);
         map.put("duration", user.getOnceConsultationDuration());
 
-        List<Map<String, Object>> times = userMapper.appointmentTime(userId);
+        /*List<Map<String, Object>> times = userMapper.appointmentTime(userId);
         Map<String, Set<String>> m2 = times.stream()
                 .collect(groupingBy(m -> m.get("week").toString(),
                         Collectors.mapping(
                                 m -> m.get("code").toString(),
                                 Collectors.toSet())));
         map.put("week", m2);
-
+        */
         List<Map<String, Object>> ways = userMapper.consultWay(userId);
         List<String> m3 = ways.stream()
                 .map(m -> m.get("way").toString())
@@ -142,6 +147,11 @@ public class UserServiceImpl implements UserService {
     public Page<UserPoints> listUserPoints(int page, int pageSize, Integer userId) {
         PageHelper.startPage(page, pageSize);
         return userMapper.listUserPoints(userId);
+    }
+
+    @Override
+    public Integer myPoint(Integer userId) {
+        return userMapper.myPoint(userId);
     }
 
     @Override

@@ -14,13 +14,13 @@ public class SpecialistVo {
     private String contract;
 
     // 周
-    private Integer week;
+    //private Integer week;
 
     // 时间段代码
-    private String timeline;
+    //private String timeline;
 
     // 可咨询时长
-    private Integer duration;
+    //private Integer duration;
 
     // 咨询方式
     private String way;

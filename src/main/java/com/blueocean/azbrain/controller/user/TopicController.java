@@ -55,12 +55,19 @@ public class TopicController {
      * @return
      */
     @RequestMapping(value="/user/topic/details", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject details(@RequestParam("topic_id") Integer topicId){
+    public ResultObject details(HttpServletRequest request, @RequestParam("topic_id") Integer topicId){
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please log in");
+
+        topicService.resetUpdatedArticleNum(userId, topicId);
+
         Topic topic = topicService.get(topicId);
         Page<Article> articlePage = topicService.listArticlesByTopic(1, AZBrainConstants.PAGE_SIZE, topicId);
 
         Map<String, Object> map = new HashMap<>();
         map.put("topic", topic);
+        map.put("topicArticleNum", articlePage.getTotal());
+        map.put("isfollowed", topicService.isFollowed(userId, topicId));
         map.put("articles", articlePage.getResult());
 
         return ResultObject.ok(map);

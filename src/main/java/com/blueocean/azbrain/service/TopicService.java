@@ -4,6 +4,7 @@ import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.model.Topic;
 import com.blueocean.azbrain.model.UserFollowTopic;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -97,4 +98,13 @@ public interface TopicService {
      * @return
      */
     int deleteTopicSpecialist(Integer topicId, Integer userId);
+
+    /**
+     * 重置用户主题更新文章数量
+     *
+     * @param userId
+     * @param topicId
+     * @return
+     */
+    int resetUpdatedArticleNum(Integer userId, Integer topicId);
 }

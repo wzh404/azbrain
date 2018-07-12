@@ -217,9 +217,9 @@
             AND
                 (l.user_evaluated = 0 OR l.by_user_evaluated = 0)
             AND
-                l.status != ${@com.blueocean.azbrain.common.status.ConsultationStatus@REJECTED}
+                l.status != '98'
             AND
-                l.status != ${@com.blueocean.azbrain.common.status.ConsultationStatus@CANCELED}
+                l.status != '99'
             ]]>
         </if>
         <if test="userName != null">

@@ -87,4 +87,9 @@ public class TopicServiceImpl implements TopicService {
     public int deleteTopicSpecialist(Integer topicId, Integer userId) {
         return topicMapper.deleteTopicSpecialist(topicId, userId);
     }
+
+    @Override
+    public int resetUpdatedArticleNum(Integer userId, Integer topicId) {
+        return topicMapper.resetUpdatedArticleNum(userId, topicId);
+    }
 }

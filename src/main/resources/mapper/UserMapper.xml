@@ -113,18 +113,11 @@
         FROM
             azbrain_user u
         LEFT JOIN azbrain_user_specialist_label s ON u.id = s.user_id
-        LEFT JOIN azbrain_user_appointment_time t ON u.id = t.user_id
         LEFT JOIN azbrain_user_consultation_way c ON u.id = c.user_id
         WHERE
             u.status = '00'
         <if test="label != null">
             <![CDATA[ AND s.label_code = #{label} ]]>
-        </if>
-        <if test="week != null">
-            <![CDATA[ AND t.week = #{week} ]]>
-        </if>
-        <if test="timeline != null">
-            <![CDATA[ AND t.code = #{timeline} ]]>
         </if>
         <if test="way != null">
             <![CDATA[ AND c.way = #{way} ]]>
@@ -135,28 +128,13 @@
         <if test="contract != null">
             <![CDATA[ AND u.break_contract_num = 0 ]]>
         </if>
-        <if test="duration != null">
-            <![CDATA[ AND u.once_consultation_duration >= #{duration} ]]>
-        </if>
         ORDER BY u.create_time DESC
     </select>
 
     <select id="userAvgScore" resultType="java.util.Map">
         select
             evaluate_code as code,
-            round(avg(CAST(evaluate_value as SIGNED )), 1) as value
-        from
-            azbrain_user_evaluate
-        where
-            user_id = #{userId}
-        and
-            evaluate_value_type = "star"
-        group by evaluate_code
-    </select>
-
-    <select id="byUserAvgScore" resultType="java.util.Map">
-        select
-            evaluate_code as code,
+            evaluate_name as name,
             round(avg(CAST(evaluate_value as SIGNED )), 1) as value
         from
             azbrain_user_evaluate
@@ -164,9 +142,28 @@
             by_user_id = #{userId}
         and
             evaluate_value_type = "star"
+        and
+            by_user_flag = 0
         group by evaluate_code
     </select>
 
+    <select id="byUserAvgScore" resultType="java.util.Map">
+        select
+            evaluate_code as code,
+            evaluate_name as name,
+            round(avg(CAST(evaluate_value as SIGNED )), 1) as value
+        from
+            azbrain_user_evaluate
+        where
+            by_user_id = #{userId}
+        and
+            evaluate_value_type = "star"
+        and
+            by_user_flag = 1
+        group by evaluate_code
+    </select>
+
+    <!--
     <select id="appointmentTime" resultType="java.util.Map">
         SELECT
             week,
@@ -176,7 +173,7 @@
         WHERE
             user_id = #{userId}
     </select>
-
+-->
     <select id="consultWay" resultType="java.util.Map">
         SELECT
             way
@@ -204,6 +201,15 @@
             point,
             create_time as createTime,
             remark
+        FROM
+            azbrain_user_points
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="myPoint" resultType="java.lang.Integer">
+        SELECT
+            SUM(point)
         FROM
             azbrain_user_points
         WHERE
@@ -379,6 +385,7 @@
         ORDER BY id DESC
     </select>
 
+<!--
     <insert id="insertUserAppointmentTime">
         DELETE FROM azbrain_user_appointment_time
         WHERE
@@ -397,7 +404,7 @@
         </foreach>
         ;
     </insert>
-
+-->
     <insert id="insertUserConsultationWay">
         DELETE FROM azbrain_user_consultation_way
         WHERE
@@ -452,7 +459,7 @@
         FROM
             azbrain_user
         WHERE
-            status = ${@com.blueocean.azbrain.common.status.UserStatus@NORMAL}
+            status = '00'
         AND
             user_type = '10'
         AND (

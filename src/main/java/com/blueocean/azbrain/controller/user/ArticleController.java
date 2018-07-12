@@ -5,8 +5,10 @@ import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.model.ArticleEvaluate;
+import com.blueocean.azbrain.model.UserEvaluate;
 import com.blueocean.azbrain.model.UserLikeArticle;
 import com.blueocean.azbrain.service.ArticleService;
+import com.blueocean.azbrain.service.DictService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.vo.ArticleEvaluateVo;
 import com.github.pagehelper.Page;
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class ArticleController {
@@ -28,6 +32,9 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private DictService dictService;
+
     /**
      * 文章详情
      *
@@ -35,9 +42,29 @@ public class ArticleController {
      * @return
      */
     @RequestMapping(value="/user/article", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject article(@RequestParam("article_id") Integer articleId){
+    public ResultObject article(HttpServletRequest request, @RequestParam("article_id") Integer articleId){
+        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, "please log in");
+
+        Map<String, Object> map = new HashMap<>();
         Article article = articleService.get(articleId);
-        return ResultObject.ok(article);
+        List<ArticleEvaluate> evaluates = articleService.getArticleEvaluate(userId,articleId);
+        if (evaluates == null || evaluates.isEmpty()){
+            evaluates = dictService.listLabel(1, 30, "article").stream()
+                    .map(d -> {
+                        ArticleEvaluate ae = new ArticleEvaluate();
+                        ae.setCode(d.getCode());
+                        ae.setName(d.getName());
+                        ae.setValue("0");
+
+                        return ae;
+                    }).collect(Collectors.toList());
+        }
+
+        map.put("article", article);
+        map.put("evaluates", evaluates);
+        map.put("isliked", articleService.isLiked(articleId, userId));
+        return ResultObject.ok(map);
     }
 
     /**
@@ -49,8 +76,7 @@ public class ArticleController {
     @RequestMapping(value="/user/watch/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject watch(@RequestParam("page") Integer page){
         Page<Article> pageArticle = articleService.watch(page, AZBrainConstants.PAGE_SIZE, new HashMap<>());
-
-        return ResultObject.ok("article", pageArticle.getResult());
+        return ResultObject.ok("articles", pageArticle.getResult());
     }
 
     /**

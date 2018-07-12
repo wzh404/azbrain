@@ -17,7 +17,6 @@ import java.util.Map;
 
 
 public class JsoupTests {
-
     public Document getDocument(String url) {
         try {
             return Jsoup.connect(url).get();

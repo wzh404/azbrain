@@ -3,6 +3,7 @@ package com.blueocean.azbrain.service.impl;
 import com.blueocean.azbrain.common.status.ArticleStatus;
 import com.blueocean.azbrain.dao.ArticleEvaluateMapper;
 import com.blueocean.azbrain.dao.ArticleMapper;
+import com.blueocean.azbrain.dao.TopicMapper;
 import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.model.ArticleEvaluate;
 import com.blueocean.azbrain.model.UserLikeArticle;
@@ -26,6 +27,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleEvaluateMapper articleEvaluateMapper;
+
+    @Autowired
+    private TopicMapper topicMapper;
 
     @Override
     public Article get(Integer id) {
@@ -130,6 +134,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public int insert(Article record) {
+        topicMapper.increaseUpdatedArticleNum(record.getTopicId());
         return articleMapper.insert(record);
     }
 }

@@ -17,7 +17,9 @@
 
   <select id="get" resultMap="article_evaluate">
     select 
-      <include refid="Base_Column_List" />
+      evaluate_code,
+      evaluate_name,
+      evaluate_value
     from
       azbrain_article_evaluate
     WHERE

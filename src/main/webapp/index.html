@@ -17,7 +17,7 @@
 <a href="#" onclick="javascript:b('/user/article?article_id=1', {})">文章详情!</a>|
 <br/>
 
-<a href="#" onclick="javascript:b('/user/profile', {})">用户咨询详情</a>|
+<a href="#" onclick="javascript:b('/user/profile', {})">用户详情</a>|
 <a href="#" onclick="javascript:b('/user/specialist/profile', {})">专家详情</a>|
 <a href="#" onclick="javascript:b('/user/specialist/articles?page=1', {})">专家文章列表</a>|
 <a href="#" onclick="javascript:b('/user/my/consult?page=1', {})">我咨询的</a>|
@@ -63,9 +63,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    //var g_uri = "http://119.254.84.20:8889";
-    //var g_uri = "http://10.13.202.49:8889";
-    var g_uri = "http://localhost:8889";
+    var g_uri = "http://119.254.84.20:8889";
+    //var g_uri = "http://2.49:8889";
+    //var g_uri = "http://localhost:8889";
 /*
 let promise = new Promise(function(resolve, reject) {
   console.log('Promise');
@@ -117,12 +117,9 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "label":"1001",
+                "label":"040001",
                 "bad":"0",
                 "contract":"0",
-                "week": 2,
-                "timeline": "10001030",
-                "duration": 30,
                 "way": "mobile"
             }),
             contentType: "application/json; charset=utf-8",
@@ -143,10 +140,8 @@ console.log('Hi!');
             data : JSON.stringify({
                 "byUserId":1,
                 "cdate":"2018-07-04",
-                "topicId": 1,
-                "code":"10001030",
                 "startTime": "10:10",
-                "endTime": "10:20",
+                "code": "30",
                 "way": "mobile",
                 "mobile": "13911709225"
             }),
@@ -168,11 +163,11 @@ console.log('Hi!');
             data : JSON.stringify({
                 "logId":3,
                 "evaluates":[
-                    {"code":"breakContract", "name": "爽约", "value": "0","type":"other"},
-                    {"code":"attitude", "name": "态度", "value": "4", "type":"star"},
-                    {"code":"polite", "name": "礼貌", "value": "5", "type":"star"},
-                    {"code":"punctuality", "name": "准时", "value": "4", "type":"star"},
-                    {"code":"other", "name": "其它", "value": "hello", "type":"other"}
+                    {"code":"020001", "name": "爽约", "value": "0","type":"other"},
+                    {"code":"020002", "name": "态度", "value": "4", "type":"star"},
+                    {"code":"020003", "name": "礼貌", "value": "5", "type":"star"},
+                    {"code":"020004", "name": "准时", "value": "4", "type":"star"},
+                    {"code":"029999", "name": "其它", "value": "hello", "type":"other"}
                 ]
             }),
             contentType: "application/json; charset=utf-8",
@@ -193,14 +188,14 @@ console.log('Hi!');
             data : JSON.stringify({
                 "logId":3,
                 "evaluates":[
-                    {"code":"breakContract", "name": "爽约", "value": "1", "type":"other"},
-                    {"code":"attitude", "name": "态度", "value": "3", "type":"star"},
-                    {"code":"specialization", "name": "专业程度", "value": "4", "type":"star"},
-                    {"code":"patience", "name": "耐心程度", "value": "5", "type":"star"},
-                    {"code":"articulation", "name": "发音清晰", "value": "4", "type":"star"},
-                    {"code":"logicalClarity", "name": "逻辑性", "value": "2", "type":"star"},
-                    {"code":"punctuality", "name": "准时", "value": "4", "type":"star"},
-                    {"code":"other", "name": "其它", "value": "specialist", "type":"other"}
+                    {"code":"010001", "name": "爽约", "value": "1", "type":"other"},
+                    {"code":"010002", "name": "态度", "value": "3", "type":"star"},
+                    {"code":"010003", "name": "专业程度", "value": "4", "type":"star"},
+                    {"code":"010004", "name": "耐心程度", "value": "5", "type":"star"},
+                    {"code":"010005", "name": "发音清晰", "value": "4", "type":"star"},
+                    {"code":"010006", "name": "逻辑性", "value": "2", "type":"star"},
+                    {"code":"010007", "name": "准时", "value": "4", "type":"star"},
+                    {"code":"019999", "name": "其它", "value": "specialist", "type":"other"}
                 ]
             }),
             contentType: "application/json; charset=utf-8",

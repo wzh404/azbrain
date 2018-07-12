@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -147,8 +148,12 @@ public class UserController {
         Integer userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
+        Integer total = userService.myPoint(userId);
         Page<UserPoints> mapPage = userService.listUserPoints(page,AZBrainConstants.PAGE_SIZE, userId);
-        return ResultObject.ok(mapPage.getResult());
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", total);
+        map.put("points",mapPage.getResult());
+        return ResultObject.ok(map);
     }
 
     /**

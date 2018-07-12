@@ -23,6 +23,8 @@ public class Article {
 
     private Integer topicId;
 
+    private Integer topFlag;
+
     // 平台， 专家， 转载
     private String source;
 

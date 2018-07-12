@@ -60,7 +60,7 @@ public class UserManagerServiceImpl implements UserManagerService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public int editSpecialist(SpecialistEditVo vo) {
-        userMapper.insertUserAppointmentTime(vo.getUserId(), vo.getTimes());
+        //userMapper.insertUserAppointmentTime(vo.getUserId(), vo.getTimes());
         userMapper.insertUserConsultationWay(vo.getUserId(), vo.getWays());
         return userMapper.insertSpecialistLabel(vo.getUserId(), vo.getLabels(), vo.userLabel(), vo.getDuration());
     }
@@ -141,7 +141,7 @@ public class UserManagerServiceImpl implements UserManagerService {
         User user = userMapper.viewSpecialist(userId);
         if (user == null) return map;
         map.put("user", user);
-        map.put("times", userMapper.appointmentTime(userId));
+        //map.put("times", userMapper.appointmentTime(userId));
         map.put("ways", userMapper.consultWay(userId));
         map.put("labels", userMapper.specialistLabels(userId));
         return map;

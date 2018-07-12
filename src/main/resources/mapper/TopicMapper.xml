@@ -12,6 +12,8 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="status" jdbcType="CHAR" property="status" />
+
+    <result column="updated_article_num" jdbcType="INTEGER" property="updatedArticleNum" />
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -61,6 +63,7 @@
       follower_num,
       consulted_num,
       specialist_num,
+      uft.updated_article_num,
       create_time,
       create_by,
       status
@@ -130,6 +133,26 @@
       id = #{topicId}
   </update>
 
+  <update id="resetUpdatedArticleNum">
+    UPDATE
+      azbrain_user_follow_topic
+    SET
+      updated_article_num = 0
+    WHERE
+      user_id = #{userId}
+    AND
+      topic_id = #{topicId}
+  </update>
+
+  <update id="increaseUpdatedArticleNum">
+    UPDATE
+      azbrain_user_follow_topic
+    SET
+      updated_article_num = updated_article_num + 1
+    WHERE
+      topic_id = #{topicId}
+  </update>
+
   <!-- manager -->
 
   <select id="pageTopics" resultMap="topic">
@@ -171,6 +194,4 @@
     AND
       user_id = #{userId}
   </delete>
-
-
 </mapper>

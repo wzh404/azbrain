@@ -1,5 +1,8 @@
 package com.blueocean.azbrain;
 
+import com.blueocean.azbrain.common.Meeting;
+import com.blueocean.azbrain.model.ConsultationLog;
+import com.blueocean.azbrain.util.MeetingUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,9 +14,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+
+import static java.time.LocalDate.*;
 
 
 public class JsoupTests {
@@ -143,13 +147,58 @@ public class JsoupTests {
 
     @Test
     public void testOrder(){
-        SnowFlakeWorker s = new SnowFlakeWorker(1);
+        Set<String> s = new HashSet<>(100000);
+
         int uid = 3948849 % 100;
-        long t = System.currentTimeMillis();
-        System.out.println("t = " + t);
-        long s1 = 365*24*60*60;
-        System.out.println((1<<30)/s1);
-        System.out.println(s.nextId());
+        //for (int i =0; i < 10000; i++) {
+            long l = ChronoUnit.DAYS.between(of(2015, 10, 1), now());
+            int secs = LocalTime.now().toSecondOfDay();
+
+            int rd = (int) ((Math.random() * 9 + 1) * 1000);
+            String orderId = String.format("%d%d%d%d", l, secs, uid, rd);
+
+            if (!s.add(orderId)){
+                System.out.println("orderId is " + orderId);
+            }
+
+        //}
+
         Assert.assertTrue(1==1);
+    }
+
+    @Test
+    public void testMeeting(){
+        List<ConsultationLog> logs = new ArrayList<>();
+        ConsultationLog log = new ConsultationLog();
+        log.setMeetingHost("host1");
+        log.setMeetingPwd("pwd1");
+        log.setCdate(LocalDate.of(2018, 7, 14));
+        log.setStartTime(LocalTime.of(10,0));
+        log.setEndTime(LocalTime.of(10,30));
+        logs.add(log);
+
+        ConsultationLog log2 = new ConsultationLog();
+        log2.setMeetingHost("host2");
+        log2.setMeetingPwd("pwd2");
+        log2.setCdate(LocalDate.of(2018, 7, 14));
+        log2.setStartTime(LocalTime.of(10,31));
+        log2.setEndTime(LocalTime.of(11,01));
+        logs.add(log2);
+
+        MeetingUtil.init(logs);
+        //Meeting m = new Meeting("host1", "pwd1");
+        //boolean b = m.add(LocalDateTime.of(2018, 7, 14, 10, 0),
+        //        LocalDateTime.of(2018, 7, 14, 10, 30));
+        //boolean c= m.add(LocalDateTime.of(2018, 7, 14, 10, 10),
+        //        LocalDateTime.of(2018, 7, 14, 11, 30));
+        LocalDateTime s = LocalDateTime.of(2018, 7, 14, 11, 32);
+        LocalDateTime e = LocalDateTime.of(2018, 7, 14, 12, 30);
+        Optional<Meeting> om = MeetingUtil.get(s, e);
+        om.ifPresent(m->{
+            boolean b = MeetingUtil.set(m.getHost(), m.getPwd(),s, e);
+            System.out.println(m.getHost() + "-" + b);
+        });
+        Assert.assertTrue(om.isPresent());
+        //Assert.assertTrue(c);
     }
 }

@@ -17,6 +17,7 @@
         <result column="by_user_evaluated" jdbcType="INTEGER" property="byUserEvaluated"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="meeting_pwd" jdbcType="VARCHAR" property="meetingPwd"/>
+        <result column="meeting_host" jdbcType="VARCHAR" property="meetingHost"/>
 
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="by_user_name" jdbcType="VARCHAR" property="byUserName"/>
@@ -28,7 +29,7 @@
 
     <sql id="Base_Column_List">
         id, user_id, by_user_id, topic_id, way, cdate, week, code, start_time, end_time, create_time, last_updated,
-        mobile, meeting_pwd, user_evaluated, by_user_evaluated, status
+        mobile, meeting_pwd, meeting_host, user_evaluated, by_user_evaluated, status
     </sql>
 
     <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -53,6 +54,7 @@
             l.create_time,
             l.mobile,
             l.meeting_pwd,
+            l.meeting_host,
             u.name AS by_user_name
         FROM
             azbrain_user_consultation_log l
@@ -77,6 +79,7 @@
             l.create_time,
             l.mobile,
             l.meeting_pwd,
+            l.meeting_host,
             u.name AS user_name
         FROM
             azbrain_user_consultation_log l
@@ -103,6 +106,7 @@
             last_updated,
             mobile,
             meeting_pwd,
+            meeting_host,
             user_evaluated,
             by_user_evaluated,
             status)
@@ -120,6 +124,7 @@
             #{lastUpdated,jdbcType=TIMESTAMP},
             #{mobile,jdbcType=VARCHAR},
             #{meetingPwd,jdbcType=VARCHAR},
+            #{meetingHost,jdbcType=VARCHAR},
             0,
             0,
             #{status,jdbcType=CHAR})
@@ -160,6 +165,7 @@
             way = #{way, jdbcType=VARCHAR},
             status = #{status, jdbcType=VARCHAR},
             mobile = #{mobile, jdbcType=VARCHAR},
+            meeting_host = #{meetingHost, jdbcType=VARCHAR},
             meeting_pwd = #{meetingPwd, jdbcType=VARCHAR},
             last_updated = #{lastUpdated, jdbcType=TIMESTAMP}
         WHERE
@@ -177,6 +183,7 @@
             l.way,
             l.mobile,
             l.meeting_pwd,
+            l.meeting_host,
             l.cdate,
             l.start_time,
             l.end_time,
@@ -231,5 +238,32 @@
         ORDER BY create_time DESC
     </select>
 
+    <select id="selectHostAndPwd" resultMap="BaseResultMap">
+        SELECT
+            meeting_host,
+            meeting_pwd,
+            cdate,
+            start_time,
+            end_time
+        FROM
+            azbrain_user_consultation_log
+        WHERE
+            way='400'
+        AND
+            status='02'
+        AND
+            cdate >= curdate()
+        AND
+            end_time > curtime()
+    </select>
 
+    <select id="listMeeting" resultType="java.util.Map">
+        SELECT
+            host,
+            pwd
+        FROM
+            azbrain_meeting
+        WHERE
+            status = 1
+    </select>
 </mapper>

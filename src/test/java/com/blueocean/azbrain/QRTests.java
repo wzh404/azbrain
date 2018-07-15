@@ -28,21 +28,22 @@ import java.util.Map;
  *
  */
 public class QRTests {
-    public static void main(String[] args){
+    public static void main(String[] args)throws Exception{
         //openid();
-        String appid = "wx86faae0cc74bbf0e";
-        String secret = "5e5829e1b0b13484baf6a48c4783178a";
-        String jscode = "00178tqj2f6vuG0SO0qj2T9Cqj278tqu";
-        WxUtils.getOpenId(appid, secret, jscode);
+        //String appid = "wx86faae0cc74bbf0e";
+        //String secret = "5e5829e1b0b13484baf6a48c4783178a";
+        //String jscode = "00178tqj2f6vuG0SO0qj2T9Cqj278tqu";
+        //WxUtils.getOpenId(appid, secret, jscode);
+        qr();
     }
 
-    public static void main2(String[] args) throws Exception {
-        String access_token = "11_7NYEjfsFqiNde99La5hkUsIipLvZC2yKYn0t_2GclqPY9HTHpV5DeEEpI_kq8nKjVmrB18Pf5D12_RBzk4LZYNOblwRz_HCpuHqB9ytQKw6dFEjfXYJeJeOZpNIfvynSaDU4aB_QPJxDEOcfOSUfAGAFJL";
+    public static void qr() throws Exception {
+        String access_token = "11_ZHujq-pY_NJLo8QEsiOG5IIcB3HH6ohT-hjiTBRc9-2j-7RU7IN_-KV0f0L88y5x22Zdxb6-E3Gq904Qw4M8pqaDzP-vWmtHwDNbarM23JzXyC8AuNGnWILuEFvVp_6WBaNxqXr72LyVYi1vGXTfAHAJAW";
         {
             System.out.println(access_token);
             Map<String, Object> params = new HashMap<>();
             params.put("scene", "test");
-            params.put("path", "pages/index/index");
+            params.put("path", "pages/pensionAgency/main?id=1&km=10");
             params.put("width", 430);
 
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();

@@ -80,4 +80,16 @@ public interface ConsultationLogMapper {
      * @return
      */
     Page<ConsultationLog> listConsultation(Map<String, Object> conditionMap);
+
+    /**
+     *
+     * @return
+     */
+    List<ConsultationLog> selectHostAndPwd();
+
+    /**
+     *
+     * @return
+     */
+    List<Map<String, String>>listMeeting();
 }

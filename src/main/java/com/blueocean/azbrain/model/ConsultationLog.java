@@ -61,6 +61,8 @@ public class ConsultationLog {
 
     private String meetingPwd;
 
+    private String meetingHost;
+
     private String status;
 
     private String userName;

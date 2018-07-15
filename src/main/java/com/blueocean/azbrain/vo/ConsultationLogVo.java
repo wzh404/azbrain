@@ -31,6 +31,11 @@ public class ConsultationLogVo {
     // 会议密码
     private String meetingPwd;
 
+    // 会议主持人ID
+    private String meetingHost;
+
+    private Integer duration;
+
     private LocalDateTime lastUpdated;
 
     private String status;

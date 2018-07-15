@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.service.ConsultationService;
 import com.blueocean.azbrain.service.TopicService;
 import com.blueocean.azbrain.util.AZBrainConstants;
+import com.blueocean.azbrain.util.MeetingUtil;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
 import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
@@ -16,10 +17,13 @@ import com.mysql.jdbc.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 @RestController
@@ -74,9 +78,10 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        // 400咨询检查会议密码
+        /* 400咨询检查会议密码*/
         if (consultationLog.getWay().equalsIgnoreCase("400") &&
-                StringUtils.isNullOrEmpty(consultationLog.getMeetingPwd())){
+                StringUtils.isNullOrEmpty(consultationLog.getMeetingPwd()) &&
+                StringUtils.isNullOrEmpty(consultationLog.getMeetingHost())){
             logger.error("invalid consultation way 400");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
@@ -167,8 +172,32 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
+        // 设置咨询的会议主持人及会议密码
+        if (consultationLog.getWay().equalsIgnoreCase("400")) {
+            if (!setMeetingHostAndPwd(consultationLog)) {
+                return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
+            }
+        }
+
         int rows = consultationService.confirm(consultationLog);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
+    }
+
+    /**
+     * 确认电话会议咨询是否可用。
+     *
+     * @param consultationLog
+     * @return
+     */
+    private boolean setMeetingHostAndPwd(ConsultationLog consultationLog){
+        LocalDateTime s = LocalDateTime.of(consultationLog.getCdate(), consultationLog.getStartTime());
+        LocalDateTime e = LocalDateTime.of(consultationLog.getCdate(), consultationLog.getEndTime());
+        if (!MeetingUtil.set(consultationLog.getMeetingHost(), consultationLog.getMeetingPwd(), s, e)) {
+            logger.warn("Set consultation meeting host & password failed.");
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -255,6 +284,10 @@ public class ConsultationController {
 
         consultationLogVo.setStatus(ConsultationStatus.EDITED.getCode());
         consultationLogVo.setLastUpdated(LocalDateTime.now());
+
+        LocalTime e = consultationLogVo.getStartTime().plusMinutes(consultationLogVo.getDuration());
+        consultationLogVo.setEndTime(e);
+
         // 变为已编辑状态
         int rows = consultationService.edit(consultationLogVo);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
@@ -337,6 +370,13 @@ public class ConsultationController {
         // 编辑状态用户才能确认
         if (!consultationLog.edited()){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+
+        // 设置咨询的会议主持人及会议密码
+        if (consultationLog.getWay().equalsIgnoreCase("400")) {
+            if (!setMeetingHostAndPwd(consultationLog)) {
+                return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
+            }
         }
 
         // 变为确认状态
@@ -438,5 +478,29 @@ public class ConsultationController {
 
         Page<ConsultationLog> pageConsultationLog = consultationService.consultMe(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(pageConsultationLog.getResult());
+    }
+
+    /**
+     * 根据预约日期，时间及时长获取电话会议主持人码及会议密码
+     *
+     * @param cdate
+     * @param startTime
+     * @param duration
+     * @return
+     */
+    @RequestMapping(value = "/consult/meeting", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResultObject consultMeeting(@RequestParam("cdate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate cdate,
+                                       @RequestParam("start_time") @DateTimeFormat(iso=DateTimeFormat.ISO.TIME) LocalTime startTime,
+                                       @RequestParam("duration") Integer duration){
+        LocalDateTime s = LocalDateTime.of(cdate, startTime);
+        LocalDateTime e = s.plusMinutes(duration);
+        if (s.isBefore(LocalDateTime.now()) || e.isBefore(LocalDateTime.now())){
+            return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+
+        return MeetingUtil.get(s, e)
+                .map(m -> ResultObject.ok(m))
+                .orElse(ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED));
+
     }
 }

@@ -5,9 +5,12 @@ import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.model.Label;
 import com.blueocean.azbrain.service.DictService;
 import com.blueocean.azbrain.util.AZBrainConstants;
+import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/manager")
@@ -28,7 +31,8 @@ public class DictController {
         int pageSize = AZBrainConstants.MANAGER_PAGE_SIZE;
         if (page == 0) pageSize = 50;
         Page<Label> labelPage = dictService.listLabel(page, pageSize, classify);
-        return ResultObject.ok("labels", labelPage.getResult());
+        //return ResultObject.ok("labels", labelPage.getResult());
+        return ResultObject.ok(StringUtil.pageToMap("labels", labelPage));
     }
 
     /**

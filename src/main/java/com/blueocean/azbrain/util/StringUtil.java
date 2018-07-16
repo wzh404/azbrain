@@ -1,5 +1,7 @@
 package com.blueocean.azbrain.util;
 
+import com.blueocean.azbrain.common.ResultObject;
+import com.github.pagehelper.Page;
 import com.google.common.base.Splitter;
 
 import java.util.HashMap;
@@ -17,5 +19,20 @@ public class StringUtil {
                     map.put("value", m.getValue());
                     return map;
                 }).collect(Collectors.toList());
+    }
+
+    public static void evaluation(Page<Map<String, Object>> page){
+        for (Map<String, Object> m : page.getResult()) {
+            String eval = m.get("evaluation").toString();
+            m.put("labels", StringUtil.split(eval));
+            m.remove("evaluation");
+        }
+    }
+
+    public static Map<String, Object> pageToMap(String key, Page page){
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put(key, page.getResult());
+        resultMap.put("page", ResultObject.pageMap(page));
+        return resultMap;
     }
 }

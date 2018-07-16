@@ -5,6 +5,7 @@ import com.blueocean.azbrain.common.status.ConsultationStatus;
 import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.service.ConsultationService;
 import com.blueocean.azbrain.util.AZBrainConstants;
+import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.vo.ConsultationConditionVo;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ public class ConsultationController {
         toStatus(cc.getStatus(), conditionMap);
         Page<ConsultationLog> logPage = consultationService.listConsultation(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
 
-        return ResultObject.ok("logs", logPage.getResult());
+        //return ResultObject.ok("logs", logPage.getResult());
+        return ResultObject.ok(StringUtil.pageToMap("logs", logPage));
     }
 
     /**

@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.service.UserManagerService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.CryptoUtil;
+import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.vo.LoginVo;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
 import com.github.pagehelper.Page;
@@ -104,11 +105,15 @@ public class UserController {
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
-        if (endTime != null) conditionMap.put("startTime", endTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
         if (keycode != null) conditionMap.put("keycode", keycode);
 
         Page<User> userPage = userService.findByPage(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        return ResultObject.ok(userPage.getResult());
+        //return ResultObject.ok(userPage.getResult());
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("users", userPage.getResult());
+        resultMap.put("page", ResultObject.pageMap(userPage));
+        return ResultObject.ok(resultMap);
     }
 
     /**
@@ -130,11 +135,15 @@ public class UserController {
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
-        if (endTime != null) conditionMap.put("startTime", endTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
         if (keycode != null) conditionMap.put("keycode", keycode);
 
         Page<User> userPage = userService.listSpecialist(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        return ResultObject.ok(userPage.getResult());
+        //return ResultObject.ok(userPage.getResult());
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("users", userPage.getResult());
+        resultMap.put("page", ResultObject.pageMap(userPage));
+        return ResultObject.ok(resultMap);
     }
 
     /**
@@ -211,6 +220,53 @@ public class UserController {
     public ResultObject findSpecialistByLabel(@RequestParam("page") Integer page,
                                  @RequestParam("labels[]") List<String> labels){
         Page<User> userPage = userService.findSpecialistByLabel(page, AZBrainConstants.MANAGER_PAGE_SIZE, labels);
-        return ResultObject.ok("specialists", userPage.getResult());
+        //return ResultObject.ok("specialists", userPage.getResult());
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("specialists", userPage.getResult());
+        resultMap.put("page", ResultObject.pageMap(userPage));
+        return ResultObject.ok(resultMap);
+    }
+
+    /**
+     * 用户的所有用户评价
+     *
+     * @param page
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value="/user/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject evaluateOnUser(@RequestParam("page") Integer page, @RequestParam("user_id") Integer userId){
+        Page<Map<String, Object>> pages = userService.evaluateOnUser(page, AZBrainConstants.MANAGER_PAGE_SIZE, userId);
+        StringUtil.evaluation(pages);
+
+        return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
+    }
+
+    /**
+     * 评价汇总(专家评价的)
+     *
+     * @param page
+     * @return
+     */
+    @RequestMapping(value="/user/summary/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject summaryUserEvaluation(@RequestParam("page") Integer page){
+        Page<Map<String, Object>> pages = userService.summaryUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE);
+        StringUtil.evaluation(pages);
+
+        return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
+    }
+
+    /**
+     * 评价汇总(评价专家的)
+     *
+     * @param page
+     * @return
+     */
+    @RequestMapping(value="/specialist/summary/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject summaryByUserEvaluation(@RequestParam("page") Integer page){
+        Page<Map<String, Object>> pages = userService.summaryByUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE);
+        StringUtil.evaluation(pages);
+
+        return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
     }
 }

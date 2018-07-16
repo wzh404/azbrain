@@ -6,6 +6,7 @@ import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.util.AZBrainConstants;
+import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,8 @@ public class ArticleController {
         if (endTime != null) conditionMap.put("startTime", endTime);
 
         Page<Article> pageArticle = articleService.draftList(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        return ResultObject.ok("articles", pageArticle.getResult());
+        //return ResultObject.ok("articles", pageArticle.getResult());
+        return ResultObject.ok(StringUtil.pageToMap("articles", pageArticle));
     }
 
     @RequestMapping(value="/articles", method= {RequestMethod.POST,RequestMethod.GET})
@@ -46,7 +48,8 @@ public class ArticleController {
         if (endTime != null) conditionMap.put("startTime", endTime);
 
         Page<Article> pageArticle = articleService.list(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        return ResultObject.ok("articles", pageArticle.getResult());
+        //return ResultObject.ok("articles", pageArticle.getResult());
+        return ResultObject.ok(StringUtil.pageToMap("articles", pageArticle));
     }
 
     @RequestMapping(value="/top/articles", method= {RequestMethod.POST,RequestMethod.GET})
@@ -60,7 +63,8 @@ public class ArticleController {
         if (endTime != null) conditionMap.put("startTime", endTime);
 
         Page<Article> pageArticle = articleService.topList(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        return ResultObject.ok("articles", pageArticle.getResult());
+        //return ResultObject.ok("articles", pageArticle.getResult());
+        return ResultObject.ok(StringUtil.pageToMap("articles", pageArticle));
     }
 
     @RequestMapping(value="/view/article", method= {RequestMethod.POST,RequestMethod.GET})
@@ -97,5 +101,35 @@ public class ArticleController {
     public ResultObject untop(@RequestParam("article_id") Integer articleId){
         int rows = articleService.untop(articleId);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    /**
+     * 文章的所有用户评价
+     *
+     * @param page
+     * @param articleId
+     * @return
+     */
+    @RequestMapping(value="/article/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject evaluateOnArticle(@RequestParam("page") Integer page,
+                                          @RequestParam("article_id") Integer articleId){
+        Page<Map<String, Object>> pages = articleService.evaluateOnArticle(page, AZBrainConstants.MANAGER_PAGE_SIZE, articleId);
+        StringUtil.evaluation(pages);
+
+        return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
+    }
+
+    /**
+     * 文章的汇总评价
+     *
+     * @param page
+     * @return
+     */
+    @RequestMapping(value="/article/summary/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject summaryArticleEvaluation(@RequestParam("page") Integer page){
+        Page<Map<String, Object>> pages = articleService.summaryArticleEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE);
+        StringUtil.evaluation(pages);
+
+        return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
     }
 }

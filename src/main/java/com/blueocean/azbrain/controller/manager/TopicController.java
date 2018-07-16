@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.service.TopicService;
 import com.blueocean.azbrain.service.UserManagerService;
 import com.blueocean.azbrain.util.AZBrainConstants;
+import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,11 @@ public class TopicController {
         if (endTime != null) conditionMap.put("startTime", endTime);
 
         Page<Topic> topicPage = topicService.pageTopics(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        return ResultObject.ok(topicPage.getResult());
+        //return ResultObject.ok(topicPage.getResult());
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("topics", topicPage.getResult());
+        resultMap.put("page", ResultObject.pageMap(topicPage));
+        return ResultObject.ok(resultMap);
     }
 
     @RequestMapping(value="/topic/specialists", method= {RequestMethod.POST,RequestMethod.GET})
@@ -53,7 +58,8 @@ public class TopicController {
         if (endTime != null) conditionMap.put("startTime", endTime);
 
         Page<User> userPage = userManagerService.searchTopicSpecialists(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        return ResultObject.ok(userPage.getResult());
+        //return ResultObject.ok(userPage.getResult());
+        return ResultObject.ok(StringUtil.pageToMap("users", userPage));
     }
 
     @RequestMapping(value="/view/topic", method= {RequestMethod.POST,RequestMethod.GET})

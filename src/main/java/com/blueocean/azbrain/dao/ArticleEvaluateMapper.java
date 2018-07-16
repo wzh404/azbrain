@@ -1,10 +1,12 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.ArticleEvaluate;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ArticleEvaluateMapper {
@@ -32,4 +34,19 @@ public interface ArticleEvaluateMapper {
      * @return
      */
     int delete(@Param("userId")Integer userId, @Param("articleId")Integer articleId);
+
+    /**
+     *　文章用户评价列表
+     *
+     * @param articleId
+     * @return
+     */
+    Page<Map<String, Object>> evaluateOnArticle(@Param("articleId")Integer articleId);
+
+    /**
+     * 文章评价汇总
+     *
+     * @return
+     */
+    Page<Map<String, Object>> summaryArticleEvaluation();
 }

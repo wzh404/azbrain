@@ -24,16 +24,14 @@ public class MeetingRunner implements ApplicationRunner, Ordered {
     @Override
     public void run(ApplicationArguments args) {
         List<Map<String, String>> list = logMapper.listMeeting();
-        logger.info("loading meeting host and password " + list.size() + " rows");
+        logger.info(String.format("loading meeting host and password %d rows", list.size()));
         MeetingUtil.init(list);
 
         List<ConsultationLog> logs = logMapper.selectHostAndPwd();
-        if (logs != null && logs.size() > 0) {
-            logger.info("merge meeting host and password " + logs.size() + " rows");
+        if (logs != null && !logs.isEmpty()) {
+            logger.info(String.format("merge meeting host and password %d rows", logs.size()));
             MeetingUtil.merge(logs);
         }
-
-        return;
     }
 
     @Override

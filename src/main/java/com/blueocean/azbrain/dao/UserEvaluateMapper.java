@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.UserEvaluate;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,4 +34,19 @@ public interface UserEvaluateMapper {
      */
     List<UserEvaluate> getEvaluationByLog(@Param("logId") Integer logId, @Param("userId")Integer userId);
 
+    /**
+     * 评价的我所有用户
+     *
+     * @param byUserId
+     * @return
+     */
+    Page<Map<String, Object>> evaluateOnUser(@Param("byUserId")Integer byUserId);
+
+    /**
+     * 用户评价汇总
+     *
+     * @param flag
+     * @return
+     */
+    Page<Map<String, Object>> summaryUserEvaluation(@Param("flag")Integer flag);
 }

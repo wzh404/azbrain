@@ -163,4 +163,19 @@ public interface ArticleService {
      * @return
      */
     int insert(Article record);
+
+    /**
+     *　文章用户评价列表
+     *
+     * @param articleId
+     * @return
+     */
+    Page<Map<String, Object>> evaluateOnArticle(int page, int pageSize, Integer articleId);
+
+    /**
+     * 文章评价汇总
+     *
+     * @return
+     */
+    Page<Map<String, Object>> summaryArticleEvaluation(int page, int pageSize);
 }

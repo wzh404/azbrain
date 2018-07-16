@@ -117,4 +117,26 @@ public interface UserManagerService {
      * @return
      */
     Page<User> findSpecialistByLabel(int page, int pageSize, List<String> labels);
+
+    /**
+     * 评价的我所有用户
+     *
+     * @param byUserId
+     * @return
+     */
+    Page<Map<String, Object>> evaluateOnUser(int page, int pageSize, Integer byUserId);
+
+    /**
+     * 评价汇总(专家评价的)
+     *
+     * @return
+     */
+    Page<Map<String, Object>> summaryUserEvaluation(int page, int pageSize);
+
+    /**
+     * 评价汇总(评价专家的)
+     *
+     * @return
+     */
+    Page<Map<String, Object>> summaryByUserEvaluation(int page, int pageSize);
 }

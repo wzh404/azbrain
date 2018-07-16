@@ -3,6 +3,7 @@ package com.blueocean.azbrain;
 import com.blueocean.azbrain.common.Meeting;
 import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.util.MeetingUtil;
+import com.google.common.base.Splitter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDate.*;
 
@@ -185,7 +187,7 @@ public class JsoupTests {
         log2.setEndTime(LocalTime.of(11,01));
         logs.add(log2);
 
-        MeetingUtil.init(logs);
+        //MeetingUtil.init(logs);
         //Meeting m = new Meeting("host1", "pwd1");
         //boolean b = m.add(LocalDateTime.of(2018, 7, 14, 10, 0),
         //        LocalDateTime.of(2018, 7, 14, 10, 30));
@@ -200,5 +202,19 @@ public class JsoupTests {
         });
         Assert.assertTrue(om.isPresent());
         //Assert.assertTrue(c);
+    }
+
+    @Test
+    public void testSplitter(){
+        List<Map<String, String>> l = Splitter.on(",").withKeyValueSeparator(":")
+                .split("礼貌:5,态度:4,准时:4").entrySet().stream()
+                .map(m ->{
+                    Map<String, String> map = new HashMap<>();
+                    map.put("name", m.getKey());
+                    map.put("value", m.getValue());
+                    return map;
+                }).collect(Collectors.toList());
+        System.out.println(l);
+        Assert.assertTrue(1==1);
     }
 }

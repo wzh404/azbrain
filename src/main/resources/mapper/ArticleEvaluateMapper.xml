@@ -58,4 +58,39 @@
     )
     </foreach>
   </insert>
+
+  <select id="evaluateOnArticle" resultType="java.util.Map">
+    select
+      u.name,
+      ae.create_time,
+      GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation
+    from
+      azbrain_article_evaluate ae
+    inner join
+      azbrain_user u
+    on
+      ae.user_id = u.id
+    where
+      ae.article_id = #{articleId}
+    group by
+      user_id
+  </select>
+
+  <select id="summaryArticleEvaluation" resultType="java.util.Map">
+    SELECT
+      id,
+      GROUP_CONCAT(code, value) as evaluation
+    FROM (
+      SELECT
+        article_id as id,
+        evaluate_code as code,
+        AVG(evaluate_value) as value
+      FROM
+        azbrain_article_evaluate ae
+      GROUP BY
+        ae.article_id, evaluate_code
+    ) a
+    GROUP BY
+      id
+  </select>
 </mapper>

@@ -9,6 +9,10 @@ import java.util.*;
 public class MeetingUtil {
     private static SortedMap<String, Meeting> meetings = new TreeMap<>();
 
+    private MeetingUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void init(List<Map<String, String>> list){
         list.forEach(m -> {
             String host = m.get("host");
@@ -42,9 +46,9 @@ public class MeetingUtil {
      * @param e
      * @return
      */
-    public synchronized static Optional<Meeting> get(LocalDateTime s, LocalDateTime e){
+    public static synchronized Optional<Meeting> get(LocalDateTime s, LocalDateTime e){
         return meetings.entrySet().stream()
-                .map(k ->k.getValue())
+                .map(Map.Entry::getValue)
                 .filter(m -> !m.contains(s, e))
                 .findFirst();
     }
@@ -58,13 +62,13 @@ public class MeetingUtil {
      * @param e
      * @return
      */
-    public synchronized static boolean set(String host, String pwd, LocalDateTime s, LocalDateTime e){
+    public  static synchronized boolean set(String host, String pwd, LocalDateTime s, LocalDateTime e){
         return Optional.ofNullable(meetings.get(getKey(host, pwd)))
                 .map(m->m.add(s,e))
                 .isPresent();
     }
 
-    public synchronized static void remove(String host, String pwd, LocalDateTime s, LocalDateTime e){
+    public  static synchronized void remove(String host, String pwd, LocalDateTime s, LocalDateTime e){
         Optional.ofNullable(meetings.get(getKey(host, pwd)))
                 .ifPresent(m ->m.remove(s, e));
     }

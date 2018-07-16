@@ -78,4 +78,51 @@
       AND e.by_user_id = #{userId}
     </if>
   </select>
+
+  <select id="evaluateOnUser" resultType="java.util.Map">
+    select
+      u.name,
+      e.create_time,
+      GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation
+    from
+      azbrain_user_evaluate e
+    inner join
+      azbrain_user u
+    on
+      u.id = e.user_id
+    where
+      e.by_user_id = #{byUserId}
+    group by name
+  </select>
+
+  <select id="summaryUserEvaluation" resultType="java.util.Map">
+    SELECT
+      a.by_user_id,
+      u.name,
+      GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation,
+      u.good_num,
+      u.neutral_num,
+      u.bad_num,
+      u.break_contract_num
+    FROM
+      (SELECT
+        by_user_id,
+        evaluate_name,
+        AVG(evaluate_value) as evaluate_value
+      FROM
+        azbrain_user_evaluate e
+      WHERE
+        e.evaluate_value_type = "star"
+      AND
+        e.by_user_flag = #{flag}
+      GROUP BY
+        by_user_id, evaluate_name
+      ) a
+    INNER JOIN
+      azbrain_user u
+    ON
+      a.by_user_id = u.id
+    GROUP BY
+      by_user_id
+  </select>
 </mapper>

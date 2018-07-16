@@ -137,4 +137,16 @@ public class ArticleServiceImpl implements ArticleService {
         topicMapper.increaseUpdatedArticleNum(record.getTopicId());
         return articleMapper.insert(record);
     }
+
+    @Override
+    public Page<Map<String, Object>> evaluateOnArticle(int page, int pageSize, Integer articleId) {
+        PageHelper.startPage(page, pageSize);
+        return articleEvaluateMapper.evaluateOnArticle(articleId);
+    }
+
+    @Override
+    public Page<Map<String, Object>> summaryArticleEvaluation(int page, int pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return articleEvaluateMapper.summaryArticleEvaluation();
+    }
 }

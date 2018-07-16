@@ -173,10 +173,9 @@ public class ConsultationController {
         }
 
         // 设置咨询的会议主持人及会议密码
-        if (consultationLog.getWay().equalsIgnoreCase("400")) {
-            if (!setMeetingHostAndPwd(consultationLog)) {
-                return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
-            }
+        if (consultationLog.getWay().equalsIgnoreCase("400") &&
+                !setMeetingHostAndPwd(consultationLog)) {
+            return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
         int rows = consultationService.confirm(consultationLog);
@@ -373,10 +372,9 @@ public class ConsultationController {
         }
 
         // 设置咨询的会议主持人及会议密码
-        if (consultationLog.getWay().equalsIgnoreCase("400")) {
-            if (!setMeetingHostAndPwd(consultationLog)) {
-                return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
-            }
+        if (consultationLog.getWay().equalsIgnoreCase("400") &&
+                !setMeetingHostAndPwd(consultationLog)) {
+            return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
         // 变为确认状态
@@ -488,7 +486,7 @@ public class ConsultationController {
      * @param duration
      * @return
      */
-    @RequestMapping(value = "/consult/meeting", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/apply/meeting", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject consultMeeting(@RequestParam("cdate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate cdate,
                                        @RequestParam("start_time") @DateTimeFormat(iso=DateTimeFormat.ISO.TIME) LocalTime startTime,
                                        @RequestParam("duration") Integer duration){
@@ -499,8 +497,7 @@ public class ConsultationController {
         }
 
         return MeetingUtil.get(s, e)
-                .map(m -> ResultObject.ok(m))
+                .map(ResultObject::ok)
                 .orElse(ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED));
-
     }
 }

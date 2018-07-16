@@ -30,9 +30,10 @@
 <a href="#" onclick="javascript:b('/user/watch/articles?page=1', {})">大家都在看</a>|
 <a href="#" onclick="javascript:b('/user/follow/topics?page=1', {})">我关注的话题</a>|
 <br/>
+
 <a href="#" onclick="javascript:s2('/user/apply/consultation')">用户咨询</a>|
-<a href="#" onclick="javascript:b('/user/consult/meeting?cdate=2018-07-20&start_time=11:00&duration=30', {})">获取会议ID及密码!</a>|
-<a href="#" onclick="javascript:b('/user/specialist/confirm/consultation?id=8', {})">专家确认!</a>|
+<a href="#" onclick="javascript:b1('/user/apply/meeting?cdate=2018-07-20&start_time=11:00&duration=30', {})">获取会议ID及密码!</a>|
+<a href="#" onclick="javascript:b('/user/specialist/confirm/consultation?id=12', {})">专家确认!</a>|
 <a href="#" onclick="javascript:edit('/user/specialist/edit/consultation')">专家编辑!</a>|
 <a href="#" onclick="javascript:b('/user/specialist/reject/consultation?id=8', {})">专家拒绝!</a>|
 <a href="#" onclick="javascript:b('/user/cancel/consultation?id=8', {})">用户取消!</a>|
@@ -61,12 +62,18 @@
 <span id="msg_id" >off</span>
 </br>
 】
+<span id="host" >----------</span>
+</br>
+<span id="pwd" >-------------</span>
+
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
     //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://2.49:8889";
     var g_uri = "http://localhost:8889";
+    var host = "";
+    var pwd = "";
 /*
 let promise = new Promise(function(resolve, reject) {
   console.log('Promise');
@@ -110,6 +117,23 @@ console.log('Hi!');
         });
     }
 
+    function b1(url) {
+        console.log(g_uri);
+        $.ajax({
+            type : "GET",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+                host = result.result.host;
+                pwd = result.result.pwd;
+                console.log(host);
+            }
+        });
+    }
+
     function s1(url) {
         $.ajax({
             type : "POST",
@@ -140,11 +164,12 @@ console.log('Hi!');
             },
             data : JSON.stringify({
                 "byUserId":1,
-                "cdate":"2018-07-04",
-                "startTime": "10:10",
+                "cdate":"2018-07-20",
+                "startTime": "11:00",
                 "code": "30",
-                "way": "mobile",
-                "mobile": "13911709225"
+                "way": "400",
+                "meetingHost": host,
+                "meetingPwd": pwd
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

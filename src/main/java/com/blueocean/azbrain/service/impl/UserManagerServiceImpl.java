@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.service.impl;
 
 import com.blueocean.azbrain.common.status.UserStatus;
+import com.blueocean.azbrain.dao.UserEvaluateMapper;
 import com.blueocean.azbrain.dao.UserFeedbackMapper;
 import com.blueocean.azbrain.dao.UserMapper;
 import com.blueocean.azbrain.model.User;
@@ -9,6 +10,7 @@ import com.blueocean.azbrain.service.UserManagerService;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.base.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,6 +27,9 @@ public class UserManagerServiceImpl implements UserManagerService {
 
     @Autowired
     private UserFeedbackMapper userFeedbackMapper;
+
+    @Autowired
+    private UserEvaluateMapper userEvaluateMapper;
 
     /**
      * 分页列表用户
@@ -162,5 +167,23 @@ public class UserManagerServiceImpl implements UserManagerService {
     public Page<User> findSpecialistByLabel(int page, int pageSize, List<String> labels) {
         PageHelper.startPage(page, pageSize);
         return userMapper.findSpecialistByLabel(labels);
+    }
+
+    @Override
+    public Page<Map<String, Object>> evaluateOnUser(int page, int pageSize, Integer byUserId) {
+        PageHelper.startPage(page, pageSize);
+        return userEvaluateMapper.evaluateOnUser(byUserId);
+    }
+
+    @Override
+    public Page<Map<String, Object>> summaryUserEvaluation(int page, int pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return userEvaluateMapper.summaryUserEvaluation(1);
+    }
+
+    @Override
+    public Page<Map<String, Object>> summaryByUserEvaluation(int page, int pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return userEvaluateMapper.summaryUserEvaluation(0);
     }
 }

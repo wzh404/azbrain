@@ -24,7 +24,7 @@
 
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="last_updated" jdbcType="TIMESTAMP" property="lastUpdated"/>
-        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -55,6 +55,7 @@
             l.mobile,
             l.meeting_pwd,
             l.meeting_host,
+            l.status,
             u.name AS by_user_name
         FROM
             azbrain_user_consultation_log l
@@ -80,6 +81,7 @@
             l.mobile,
             l.meeting_pwd,
             l.meeting_host,
+            l.status,
             u.name AS user_name
         FROM
             azbrain_user_consultation_log l

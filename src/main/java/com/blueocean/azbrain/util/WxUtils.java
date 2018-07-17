@@ -7,7 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+//import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +93,7 @@ public class WxUtils {
         // 偏移量
         byte[] ivByte = Base64.decodeBase64(iv);
         try {
-            Security.addProvider(new BouncyCastleProvider());
+            //Security.addProvider(new BouncyCastleProvider());
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
 

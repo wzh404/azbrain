@@ -89,6 +89,7 @@ public class UserManagerServiceImpl implements UserManagerService {
      */
     @Override
     public Page<User> listSpecialist(int page, int pageSize, Map<String, Object> conditionMap) {
+        PageHelper.startPage(page, pageSize);
         return userMapper.listSpecialist(conditionMap);
     }
 

@@ -149,25 +149,37 @@ public class JsoupTests {
 
     @Test
     public void testOrder(){
-        Set<String> s = new HashSet<>(100000);
+        //Set<String> s = new HashSet<>(100000);
 
         int uid = 3948849 % 100;
-        //for (int i =0; i < 10000; i++) {
-            long l = ChronoUnit.DAYS.between(of(2015, 10, 1), now());
+        long sequence = 1000L;
+        long lastDays = 0;
+        long lastSecs = 0;
+
+        for (int i =0; i < 10000; i++) {
+            long days = ChronoUnit.DAYS.between(of(2015, 10, 1), now());
             int secs = LocalTime.now().toSecondOfDay();
 
-            int rd = (int) ((Math.random() * 9 + 1) * 1000);
-            String orderId = String.format("%d%d%d%d", l, secs, uid, rd);
-
-            if (!s.add(orderId)){
-                System.out.println("orderId is " + orderId);
+            if (lastDays == days && lastSecs == secs){
+                sequence++;
+            } else{
+                sequence = 1001;
             }
+            String orderId = String.format("%d%d%04d%d", days, secs, sequence%10000, uid);
+            lastDays = days;
+            lastSecs = secs;
 
-        //}
+            System.out.println(orderId);
+            try {
+                Thread.sleep(10L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         Assert.assertTrue(1==1);
     }
-
+/*
     @Test
     public void testMeeting(){
         List<ConsultationLog> logs = new ArrayList<>();
@@ -216,5 +228,5 @@ public class JsoupTests {
                 }).collect(Collectors.toList());
         System.out.println(l);
         Assert.assertTrue(1==1);
-    }
+    }*/
 }

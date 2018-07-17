@@ -79,11 +79,11 @@
   <select id="summaryArticleEvaluation" resultType="java.util.Map">
     SELECT
       id,
-      GROUP_CONCAT(code, value) as evaluation
+      GROUP_CONCAT(name, ':', value) as evaluation
     FROM (
       SELECT
         article_id as id,
-        evaluate_code as code,
+        evaluate_name as name,
         AVG(evaluate_value) as value
       FROM
         azbrain_article_evaluate ae

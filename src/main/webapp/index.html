@@ -33,7 +33,7 @@
 
 <a href="#" onclick="javascript:s2('/user/apply/consultation')">用户咨询</a>|
 <a href="#" onclick="javascript:b1('/user/apply/meeting?cdate=2018-07-20&start_time=11:00&duration=30', {})">获取会议ID及密码!</a>|
-<a href="#" onclick="javascript:b('/user/specialist/confirm/consultation?id=12', {})">专家确认!</a>|
+<a href="#" onclick="javascript:b('/user/specialist/confirm/consultation?id=13', {})">专家确认!</a>|
 <a href="#" onclick="javascript:edit('/user/specialist/edit/consultation')">专家编辑!</a>|
 <a href="#" onclick="javascript:b('/user/specialist/reject/consultation?id=8', {})">专家拒绝!</a>|
 <a href="#" onclick="javascript:b('/user/cancel/consultation?id=8', {})">用户取消!</a>|
@@ -69,9 +69,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    //var g_uri = "http://119.254.84.20:8889";
+    var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://2.49:8889";
-    var g_uri = "http://localhost:8889";
+    //var g_uri = "http://localhost:8889";
     var host = "";
     var pwd = "";
 /*
@@ -167,9 +167,7 @@ console.log('Hi!');
                 "cdate":"2018-07-20",
                 "startTime": "11:00",
                 "code": "30",
-                "way": "400",
-                "meetingHost": host,
-                "meetingPwd": pwd
+                "way": "400"
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -265,13 +263,11 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "id":9,
-                "cdate": "2018-07-11",
+                "id":15,
+                "cdate": "2018-07-20",
                 "startTime": "10:05",
-                "endTime": "10:30",
-                "way": "mobile",
-                "mobile":"18611330404",
-                "meetingPwd": ""
+                "duration":30,
+                "way": "400"
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

@@ -3,6 +3,8 @@ package com.blueocean.azbrain.util;
 import com.blueocean.azbrain.common.ResultObject;
 import com.github.pagehelper.Page;
 import com.google.common.base.Splitter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +12,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StringUtil {
+    private static final Logger logger = LoggerFactory.getLogger(StringUtil.class);
+
     public static List<Map<String, String>> split(String s){
+        logger.info(s);
         return Splitter.on(",").withKeyValueSeparator(":")
                 .split(s).entrySet().stream()
                 .map(m ->{

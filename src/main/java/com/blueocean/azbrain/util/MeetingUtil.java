@@ -2,6 +2,7 @@ package com.blueocean.azbrain.util;
 
 import com.blueocean.azbrain.common.Meeting;
 import com.blueocean.azbrain.model.ConsultationLog;
+import com.blueocean.azbrain.vo.ConsultationLogVo;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -13,7 +14,7 @@ public class MeetingUtil {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void init(List<Map<String, String>> list){
+    public static void init(List<Map<String, String>> list) {
         list.forEach(m -> {
             String host = m.get("host");
             String pwd = m.get("pwd");
@@ -21,16 +22,17 @@ public class MeetingUtil {
             meetings.put(getKey(host, pwd), meeting);
         });
     }
+
     /**
      * 初始化会议主持人id，会议密码、会议时间
      *
      * @param logs
      */
-    public static void merge(List<ConsultationLog> logs){
+    public static void merge(List<ConsultationLog> logs) {
         logs.forEach(l -> {
-            String key = getKey(l.getMeetingHost(),l.getMeetingPwd());
+            String key = getKey(l.getMeetingHost(), l.getMeetingPwd());
             Meeting meeting = meetings.get(key);
-            if (meeting == null){
+            if (meeting == null) {
                 return;
             }
 
@@ -46,11 +48,35 @@ public class MeetingUtil {
      * @param e
      * @return
      */
-    public static synchronized Optional<Meeting> get(LocalDateTime s, LocalDateTime e){
+    public static synchronized Optional<Meeting> get(LocalDateTime s, LocalDateTime e) {
         return meetings.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .filter(m -> !m.contains(s, e))
                 .findFirst();
+    }
+
+    public static synchronized boolean get(ConsultationLog log) {
+        Optional<Meeting> meeting = MeetingUtil.get(
+                LocalDateTime.of(log.getCdate(), log.getStartTime()),
+                LocalDateTime.of(log.getCdate(), log.getEndTime()));
+        meeting.ifPresent(m -> {
+            log.setMeetingHost(m.getHost());
+            log.setMeetingPwd(m.getPwd());
+        });
+
+        return meeting.isPresent();
+    }
+
+    public static synchronized boolean get(ConsultationLogVo log) {
+        Optional<Meeting> meeting = MeetingUtil.get(
+                LocalDateTime.of(log.getCdate(), log.getStartTime()),
+                LocalDateTime.of(log.getCdate(), log.getEndTime()));
+        meeting.ifPresent(m -> {
+            log.setMeetingHost(m.getHost());
+            log.setMeetingPwd(m.getPwd());
+        });
+
+        return meeting.isPresent();
     }
 
     /**
@@ -62,18 +88,18 @@ public class MeetingUtil {
      * @param e
      * @return
      */
-    public  static synchronized boolean set(String host, String pwd, LocalDateTime s, LocalDateTime e){
+    public static synchronized boolean set(String host, String pwd, LocalDateTime s, LocalDateTime e) {
         return Optional.ofNullable(meetings.get(getKey(host, pwd)))
-                .map(m->m.add(s,e))
+                .map(m -> m.add(s, e))
                 .isPresent();
     }
 
-    public  static synchronized void remove(String host, String pwd, LocalDateTime s, LocalDateTime e){
+    public static synchronized void remove(String host, String pwd, LocalDateTime s, LocalDateTime e) {
         Optional.ofNullable(meetings.get(getKey(host, pwd)))
-                .ifPresent(m ->m.remove(s, e));
+                .ifPresent(m -> m.remove(s, e));
     }
 
-    private static String getKey(String host, String pwd){
+    private static String getKey(String host, String pwd) {
         StringBuilder key = new StringBuilder(host);
         key.append("-");
         key.append(pwd);

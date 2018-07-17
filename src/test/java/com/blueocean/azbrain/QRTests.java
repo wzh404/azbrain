@@ -1,6 +1,7 @@
 package com.blueocean.azbrain;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.blueocean.azbrain.util.WxUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
@@ -11,6 +12,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HTTP;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -20,6 +23,7 @@ import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -28,6 +32,8 @@ import java.util.Map;
  *
  */
 public class QRTests {
+    private final static Logger logger = LoggerFactory.getLogger(QRTests.class);
+
     public static void main(String[] args)throws Exception{
         //openid();
         //String appid = "wx86faae0cc74bbf0e";
@@ -37,8 +43,49 @@ public class QRTests {
         qr();
     }
 
+
+    public static Optional<String> getAccessToken(){
+        String appid = "wxd77e96f996f72d94";
+        String secret = "414bd1a065f27bb5a96eac6d34f3f6a9";
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential" +
+                "&appid=" + appid + "&secret=" + secret;
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpClient.execute(httpGet);
+            int httpStatusScode = response.getStatusLine().getStatusCode();
+            if (httpStatusScode != 200) {
+                logger.error("http resposne status is {}", httpStatusScode);
+                return Optional.empty();
+            }
+
+            try (BufferedReader bufReader = new BufferedReader(new InputStreamReader(
+                    response.getEntity().getContent()))) {
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = bufReader.readLine()) != null) {
+                    builder.append(line);
+                    builder.append(System.lineSeparator());
+                }
+
+                logger.info(builder.toString());
+                JSONObject jsonObject = JSON.parseObject(builder.toString());
+                Integer errcode = jsonObject.getInteger("errcode");
+                if (errcode == null) {
+                    return Optional.ofNullable(jsonObject.getString("access_token"));
+                } else {
+                    logger.warn("wx errcode is {}", errcode);
+                }
+            }
+            return Optional.empty();
+        } catch (IOException e) {
+            logger.error("get openid exception", e);
+            return Optional.empty();
+        }
+    }
+
     public static void qr() throws Exception {
-        String access_token = "11_ZHujq-pY_NJLo8QEsiOG5IIcB3HH6ohT-hjiTBRc9-2j-7RU7IN_-KV0f0L88y5x22Zdxb6-E3Gq904Qw4M8pqaDzP-vWmtHwDNbarM23JzXyC8AuNGnWILuEFvVp_6WBaNxqXr72LyVYi1vGXTfAHAJAW";
+        String access_token = getAccessToken().get();
         {
             System.out.println(access_token);
             Map<String, Object> params = new HashMap<>();
@@ -51,8 +98,8 @@ public class QRTests {
             HttpPost httpPost = new HttpPost("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=" + access_token);
             httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
             String body = JSON.toJSONString(params);
-            StringEntity entity;
-            entity = new StringEntity(body);
+
+            StringEntity entity = new StringEntity(body);
             entity.setContentType("image/png");
 
             httpPost.setEntity(entity);
@@ -66,7 +113,7 @@ public class QRTests {
                 }
                 FileOutputStream out = new FileOutputStream("D:\\upload\\5.png");
                 byte[] buffer = new byte[8192];
-                int bytesRead = 0;
+                int bytesRead;
                 while ((bytesRead = inputStream.read(buffer, 0, 8192)) != -1) {
                     out.write(buffer, 0, bytesRead);
                 }

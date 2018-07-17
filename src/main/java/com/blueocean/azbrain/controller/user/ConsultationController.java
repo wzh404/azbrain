@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.controller.user;
 
+import com.blueocean.azbrain.common.Meeting;
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.common.status.ConsultationStatus;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -78,16 +80,22 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        /* 400咨询检查会议密码*/
+        /* 400咨询检查会议密码
         if (consultationLog.getWay().equalsIgnoreCase("400") &&
                 StringUtils.isNullOrEmpty(consultationLog.getMeetingPwd()) &&
                 StringUtils.isNullOrEmpty(consultationLog.getMeetingHost())){
             logger.error("invalid consultation way 400");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
+        }*/
 
         int duration = Integer.parseInt(consultationLog.getCode());
         consultationLog.setEndTime(consultationLog.getStartTime().plus(duration, ChronoUnit.MINUTES));
+
+        // 400咨询检查会议密码
+        if (consultationLog.getWay().equalsIgnoreCase("400") && !MeetingUtil.get(consultationLog)) {
+            return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
+        }
+
         consultationLog.setUserId(userId);
         consultationLog.setWeek(consultationLog.getCdate().getDayOfWeek().getValue());
         consultationLog.setCreateTime(LocalDateTime.now());
@@ -287,6 +295,11 @@ public class ConsultationController {
         LocalTime e = consultationLogVo.getStartTime().plusMinutes(consultationLogVo.getDuration());
         consultationLogVo.setEndTime(e);
 
+        // 400咨询检查会议密码
+        if (consultationLog.getWay().equalsIgnoreCase("400") && !MeetingUtil.get(consultationLogVo)) {
+            return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
+        }
+
         // 变为已编辑状态
         int rows = consultationService.edit(consultationLogVo);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
@@ -330,6 +343,11 @@ public class ConsultationController {
 
         consultationLogVo.setStatus(ConsultationStatus.UNCONFIRMED.getCode());
         consultationLogVo.setLastUpdated(LocalDateTime.now());
+
+        // 400咨询检查会议密码
+        if (consultationLog.getWay().equalsIgnoreCase("400") && !MeetingUtil.get(consultationLogVo)) {
+            return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
+        }
 
         // 变为已编辑状态
         int rows = consultationService.edit(consultationLogVo);
@@ -476,28 +494,5 @@ public class ConsultationController {
 
         Page<ConsultationLog> pageConsultationLog = consultationService.consultMe(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(pageConsultationLog.getResult());
-    }
-
-    /**
-     * 根据预约日期，时间及时长获取电话会议主持人码及会议密码
-     *
-     * @param cdate
-     * @param startTime
-     * @param duration
-     * @return
-     */
-    @RequestMapping(value = "/apply/meeting", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject consultMeeting(@RequestParam("cdate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate cdate,
-                                       @RequestParam("start_time") @DateTimeFormat(iso=DateTimeFormat.ISO.TIME) LocalTime startTime,
-                                       @RequestParam("duration") Integer duration){
-        LocalDateTime s = LocalDateTime.of(cdate, startTime);
-        LocalDateTime e = s.plusMinutes(duration);
-        if (s.isBefore(LocalDateTime.now()) || e.isBefore(LocalDateTime.now())){
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
-        return MeetingUtil.get(s, e)
-                .map(ResultObject::ok)
-                .orElse(ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED));
     }
 }

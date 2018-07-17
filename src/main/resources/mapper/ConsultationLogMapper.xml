@@ -251,10 +251,12 @@
             way='400'
         AND
             status='02'
-        AND
-            cdate >= curdate()
-        AND
-            end_time > curtime()
+        AND cdate > curdate( )
+        OR (
+                cdate = curdate()
+            AND
+                end_time > curtime( )
+        )
     </select>
 
     <select id="listMeeting" resultType="java.util.Map">

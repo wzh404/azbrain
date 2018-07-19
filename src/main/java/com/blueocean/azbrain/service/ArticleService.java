@@ -178,4 +178,12 @@ public interface ArticleService {
      * @return
      */
     Page<Map<String, Object>> summaryArticleEvaluation(int page, int pageSize);
+
+    /**
+     * 批量逻辑删除文章
+     *
+     * @param ids
+     * @return
+     */
+    int changeStatusBatch(List<Integer> ids);
 }

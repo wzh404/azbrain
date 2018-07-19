@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController("manageArticleController")
@@ -25,8 +26,8 @@ public class ArticleController {
     @RequestMapping(value="/draft/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject draftList(@RequestParam("page") Integer page,
         @RequestParam(value="name", required = false)String name,
-        @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-        @RequestParam(value="endTime", required = false)LocalDateTime endTime){
+        @RequestParam(value="start_time", required = false)LocalDateTime startTime,
+        @RequestParam(value="end_time", required = false)LocalDateTime endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
@@ -40,8 +41,8 @@ public class ArticleController {
     @RequestMapping(value="/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject list(@RequestParam("page") Integer page,
                              @RequestParam(value="name", required = false)String name,
-                             @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-                             @RequestParam(value="endTime", required = false)LocalDateTime endTime){
+                             @RequestParam(value="start_time", required = false)LocalDateTime startTime,
+                             @RequestParam(value="end_time", required = false)LocalDateTime endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
@@ -55,8 +56,8 @@ public class ArticleController {
     @RequestMapping(value="/top/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject topList(@RequestParam("page") Integer page,
                                 @RequestParam(value="name", required = false)String name,
-                                @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-                                @RequestParam(value="endTime", required = false)LocalDateTime endTime){
+                                @RequestParam(value="start_time", required = false)LocalDateTime startTime,
+                                @RequestParam(value="end_time", required = false)LocalDateTime endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
@@ -131,5 +132,21 @@ public class ArticleController {
         StringUtil.evaluation(pages);
 
         return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
+    }
+
+    /**
+     * 批量逻辑删除文章
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value="/articles/delete", method= {RequestMethod.POST})
+    public ResultObject deleteArticles(@RequestBody List<Integer> ids){
+        if (ids.isEmpty()){
+            return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+
+        int rows = articleService.changeStatusBatch(ids);
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 }

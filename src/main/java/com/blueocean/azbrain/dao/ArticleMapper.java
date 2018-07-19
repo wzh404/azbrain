@@ -6,6 +6,7 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -122,5 +123,12 @@ public interface ArticleMapper {
      * @return
      */
     int edit(Article record);
+
+    /**
+     *
+     * @param ids
+     * @return
+     */
+    int changeStatusBatch(@Param("ids")List<Integer> ids);
 }
 

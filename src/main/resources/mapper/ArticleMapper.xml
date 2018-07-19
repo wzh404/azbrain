@@ -30,6 +30,8 @@
             a.content AS content,
             a.icon AS icon,
             source,
+            source_url,
+            source_site,
             author,
             topic_id,
             top_flag,
@@ -182,6 +184,7 @@
             topic_id,
             t.title AS topicTitle,
             like_num,
+            top_flag,
             favorite_num,
             a.create_time AS create_time
         FROM
@@ -196,7 +199,7 @@
             AND top_flag = 1
         </if>
         <if test="name != null">
-            AND name LIKE CONCAT('%',#{name},'%')
+            AND a.title LIKE CONCAT('%',#{name},'%')
         </if>
         <if test="startTime != null">
             <![CDATA[ AND create_time >= #{startTime} ]]>
@@ -252,5 +255,16 @@
             topic_id = #{topicId}
         WHERE
             id = #{id}
+    </update>
+
+    <update id="changeStatusBatch">
+        <foreach collection="ids" item="_id" separator=";">
+            UPDATE
+                azbrain_article
+            SET
+                status = '99'
+            WHERE
+                id = #{_id}
+        </foreach>
     </update>
 </mapper>

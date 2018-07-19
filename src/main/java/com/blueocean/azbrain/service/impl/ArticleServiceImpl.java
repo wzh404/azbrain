@@ -149,4 +149,9 @@ public class ArticleServiceImpl implements ArticleService {
         PageHelper.startPage(page, pageSize);
         return articleEvaluateMapper.summaryArticleEvaluation();
     }
+
+    @Override
+    public int changeStatusBatch(List<Integer> ids) {
+        return articleMapper.changeStatusBatch(ids);
+    }
 }

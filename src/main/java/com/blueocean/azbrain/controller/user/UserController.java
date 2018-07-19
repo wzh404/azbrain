@@ -56,7 +56,11 @@ public class UserController {
         }
         SessionObject sessionObject = new SessionObject(user.getId(), code);
         String token = TokenUtil.createJwtToken(sessionObject.toJson()).orElse(AZBrainConstants.EMPTY_STRING);
-        return ResultObject.ok("access_token", token);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("access_token", token);
+        resultMap.put("user_type", user.getUserType());
+        resultMap.put("name", user.getName());
+        return ResultObject.ok(resultMap);
     }
 
     /**

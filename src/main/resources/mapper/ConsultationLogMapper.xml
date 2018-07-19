@@ -55,6 +55,8 @@
             l.mobile,
             l.meeting_pwd,
             l.meeting_host,
+            l.user_evaluated,
+            l.by_user_evaluated,
             l.status,
             u.name AS by_user_name
         FROM
@@ -81,6 +83,8 @@
             l.mobile,
             l.meeting_pwd,
             l.meeting_host,
+            l.user_evaluated,
+            l.by_user_evaluated,
             l.status,
             u.name AS user_name
         FROM

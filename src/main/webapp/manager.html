@@ -38,6 +38,7 @@
 <a href="#" onclick="javascript:b('/manager/untop/article?article_id=1', {})">取消置顶1</a>|
 <a href="#" onclick="javascript:newA('/manager/new/article')">new文章</a>|
 <a href="#" onclick="javascript:editA('/manager/edit/article')">编辑文章</a>|
+<a href="#" onclick="javascript:rm('/manager/articles/delete')">删除文章</a>
 </br></br></br>
 <a href="#" onclick="javascript:b('/manager/page/topics?page=1', {})">主题列表</a>|
 <a href="#" onclick="javascript:b('/manager/view/topic?topic_id=1', {})">view主题</a>|
@@ -68,9 +69,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    var g_uri = "http://119.254.84.20:8889";
+    //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    //var g_uri = "http://localhost:8889";
+    var g_uri = "http://localhost:8889";
     //var g_uri = "http://192.168.1.88:8010";
 
     function upload() {
@@ -102,6 +103,27 @@
             },
             crossDomain: true,
             data : data,
+            success : function(result) {
+                $('#msg_id').html(JSON.stringify(result));
+            }
+        });
+    }
+
+    function rm(url) {
+        var ids = [1,2,3,4];
+
+        $.ajax({
+            type : "POST",
+            url : g_uri + url,
+            headers: {
+                "access_token": access_token
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            contentType: "application/json; charset=utf-8",
+            data : JSON.stringify(ids),
             success : function(result) {
                 $('#msg_id').html(JSON.stringify(result));
             }

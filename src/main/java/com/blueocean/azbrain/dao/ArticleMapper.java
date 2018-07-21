@@ -130,5 +130,19 @@ public interface ArticleMapper {
      * @return
      */
     int changeStatusBatch(@Param("ids")List<Integer> ids);
+
+    /**
+     * 分组汇总文章数
+     *
+     * @return
+     */
+    List<Map<String, Object>> totalNum();
+
+    /**
+     * 汇总置顶文章数量
+     *
+     * @return
+     */
+    Long totalTopNum();
 }
 

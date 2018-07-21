@@ -72,6 +72,11 @@
       ae.user_id = u.id
     where
       ae.article_id = #{articleId}
+    and
+      ae.status != '99'
+    <if test="name != null">
+      AND u.name LIKE CONCAT('%',#{name},'%')
+    </if>
     group by
       user_id
   </select>
@@ -79,18 +84,44 @@
   <select id="summaryArticleEvaluation" resultType="java.util.Map">
     SELECT
       id,
+      title,
       GROUP_CONCAT(name, ':', value) as evaluation
     FROM (
       SELECT
+        title,
         article_id as id,
         evaluate_name as name,
         AVG(evaluate_value) as value
       FROM
         azbrain_article_evaluate ae
+      INNER JOIN
+        azbrain_article ar
+      ON
+        ar.id = ae.article_id
+      WHERE
+        ae.status != '99'
       GROUP BY
         ae.article_id, evaluate_code
     ) a
+    WHERE 1 = 1
+    <if test="title != null">
+      AND a.title LIKE CONCAT('%',#{title},'%')
+    </if>
     GROUP BY
       id
   </select>
+
+  <update id="deleteArticleEvaluate" >
+    UPDATE
+      azbrain_article_evaluate e
+    SET
+      status = '99'
+    WHERE 1=1
+    <if test="userId != null">
+      AND user_id = #{userId}
+    </if>
+    <if test="articleId != null">
+      AND article_id = #{articleId}
+    </if>
+  </update>
 </mapper>

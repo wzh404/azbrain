@@ -235,8 +235,20 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/user/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject evaluateOnUser(@RequestParam("page") Integer page, @RequestParam("user_id") Integer userId){
-        Page<Map<String, Object>> pages = userService.evaluateOnUser(page, AZBrainConstants.MANAGER_PAGE_SIZE, userId);
+    public ResultObject evaluateOnUser(@RequestParam("page") Integer page,
+                                       @RequestParam("user_id") Integer userId,
+                                       @RequestParam(value = "name", required = false) String name,
+                                       @RequestParam(value="startTime", required = false)LocalDateTime startTime,
+                                       @RequestParam(value="endTime", required = false)LocalDateTime endTime){
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("byUserId", userId);
+        if (name != null) {
+            conditionMap.put("title", name);
+        }
+        if (startTime != null) conditionMap.put("startTime", startTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
+
+        Page<Map<String, Object>> pages = userService.evaluateOnUser(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);
 
         return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
@@ -249,8 +261,13 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/user/summary/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject summaryUserEvaluation(@RequestParam("page") Integer page){
-        Page<Map<String, Object>> pages = userService.summaryUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE);
+    public ResultObject summaryUserEvaluation(@RequestParam("page") Integer page,
+                                              @RequestParam(value = "name", required = false) String name){
+        Map<String, Object> conditionMap = new HashMap<>();
+        if (name != null) {
+            conditionMap.put("title", name);
+        }
+        Page<Map<String, Object>> pages = userService.summaryUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);
 
         return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
@@ -263,10 +280,29 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/specialist/summary/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject summaryByUserEvaluation(@RequestParam("page") Integer page){
-        Page<Map<String, Object>> pages = userService.summaryByUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE);
+    public ResultObject summaryByUserEvaluation(@RequestParam("page") Integer page,
+                                                @RequestParam(value = "name", required = false) String name){
+        Map<String, Object> conditionMap = new HashMap<>();
+        if (name != null) {
+            conditionMap.put("title", name);
+        }
+        Page<Map<String, Object>> pages = userService.summaryByUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);
 
         return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
+    }
+
+    /**
+     * 删除用户评价
+     *
+     * @param userId
+     * @param byUserId
+     * @return
+     */
+    @RequestMapping(value="/delete/user/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject deleteUserEvaluation(@RequestParam("by_user_id") Integer byUserId,
+                                             @RequestParam(value="user_id", required = false) Integer userId){
+        int rows = userService.deleteUserEvaluate(userId, byUserId);
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 }

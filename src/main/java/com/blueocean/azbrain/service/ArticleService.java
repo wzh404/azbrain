@@ -170,14 +170,14 @@ public interface ArticleService {
      * @param articleId
      * @return
      */
-    Page<Map<String, Object>> evaluateOnArticle(int page, int pageSize, Integer articleId);
+    Page<Map<String, Object>> evaluateOnArticle(int page, int pageSize, Map<String, Object> conditionMap);
 
     /**
      * 文章评价汇总
      *
      * @return
      */
-    Page<Map<String, Object>> summaryArticleEvaluation(int page, int pageSize);
+    Page<Map<String, Object>> summaryArticleEvaluation(int page, int pageSize, Map<String, Object> conditionMap);
 
     /**
      * 批量逻辑删除文章
@@ -186,4 +186,11 @@ public interface ArticleService {
      * @return
      */
     int changeStatusBatch(List<Integer> ids);
+
+    /**
+     * 分组汇总文章数
+     *
+     * @return
+     */
+    Map<String, Long> totalNum();
 }

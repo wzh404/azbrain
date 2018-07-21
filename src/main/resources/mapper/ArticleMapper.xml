@@ -267,4 +267,27 @@
                 id = #{_id}
         </foreach>
     </update>
+
+    <select id="totalNum" resultType="java.util.Map">
+        select
+            status,
+            count(*) as num
+        from
+            azbrain_article
+        where
+            status != '99'
+        group by status;
+    </select>
+
+    <select id="totalTopNum" resultType="java.lang.Long">
+        select
+            count(*) as num
+        from
+            azbrain_article
+        where
+            status != '99'
+        and
+            top_flag = 1
+        group by status;
+    </select>
 </mapper>

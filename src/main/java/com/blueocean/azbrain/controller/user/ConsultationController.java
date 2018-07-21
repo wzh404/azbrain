@@ -130,12 +130,14 @@ public class ConsultationController {
         }
 
         // 用户才能进行取消操作
-        if (consultationLog.user(userId)){
+        if (!consultationLog.user(userId)){
+            logger.warn("must be user id {}", userId);
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
         // 待确认或者编辑状态才能取消
         if (!(consultationLog.unconfirmed() || consultationLog.edited())){
+            logger.warn("must be status unconfirmed or edited ");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -494,5 +496,21 @@ public class ConsultationController {
 
         Page<ConsultationLog> pageConsultationLog = consultationService.consultMe(page, AZBrainConstants.PAGE_SIZE, userId);
         return ResultObject.ok(pageConsultationLog.getResult());
+    }
+
+    /**
+     * 咨询详情
+     *
+     * @param request
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/view/consultation", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResultObject viewConsultation(HttpServletRequest request, @RequestParam("log_id") Integer id){
+        ConsultationLog log = consultationService.get(id);
+        if (log == null){
+            return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+        return ResultObject.ok(log);
     }
 }

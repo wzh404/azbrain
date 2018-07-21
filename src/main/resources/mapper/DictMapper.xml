@@ -50,17 +50,16 @@
       #{remark,jdbcType=VARCHAR})
   </insert>
 
-  <update id="update" parameterType="com.blueocean.azbrain.model.Dict">
+  <update id="update" parameterType="com.blueocean.azbrain.model.Label">
     update
-      azbrain_dict
-    set dtype = #{dtype,jdbcType=CHAR},
+      azbrain_evaluate_label
+    set
       code = #{code,jdbcType=VARCHAR},
-      value = #{value,jdbcType=VARCHAR},
-      remark = #{descr,jdbcType=VARCHAR}
+      name = #{name,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where
       id = #{id,jdbcType=INTEGER}
   </update>
-
 
   <select id="getLabel" parameterType="java.lang.Integer" resultMap="label">
     select
@@ -79,7 +78,8 @@
       name,
       value_type,
       remark,
-      create_time)
+      create_time,
+      status)
     values (
       #{id,jdbcType=INTEGER},
       #{classify,jdbcType=CHAR},
@@ -87,17 +87,15 @@
       #{name,jdbcType=VARCHAR},
       #{valueType,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR},
-      #{createTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP},
+      #{status,jdbcType=VARCHAR})
   </insert>
 
-  <update id="edit" parameterType="com.blueocean.azbrain.model.Label">
-    UPDATE azbrain_evaluate_label
+  <update id="changeStatus">
+    UPDATE
+      azbrain_evaluate_label
     SET
-      classify = #{classify},
-      code = #{code},
-      name = #{name},
-      value_type = #{valueType},
-      remark = #{remark}
+      status = #{status}
     WHERE
       id = #{id}
   </update>

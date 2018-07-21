@@ -23,5 +23,11 @@ public interface DictService {
      * @param label
      * @return
      */
-    int edit(Label label);
+    int update(Label label);
+
+    /**
+     *
+     * @return
+     */
+    int changeStatus(Integer id, String status);
 }

@@ -10,6 +10,7 @@ import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @RestController
@@ -43,7 +44,12 @@ public class DictController {
      */
     @RequestMapping(value="/label/edit", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject editLabel(@RequestBody Label label){
-        int rows = dictService.edit(label);
+        if (label.getCode().equalsIgnoreCase("019999") ||
+                label.getCode().equalsIgnoreCase("029999")){
+            ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+
+        int rows = dictService.update(label);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 
@@ -55,7 +61,33 @@ public class DictController {
      */
     @RequestMapping(value="/label/new", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject InsertLabel(@RequestBody Label label){
-        int rows = dictService.edit(label);
+        label.setCreateTime(LocalDateTime.now());
+        label.setValueType("star");
+        label.setStatus("00");
+        if (label.getCode().equalsIgnoreCase("019999") ||
+                label.getCode().equalsIgnoreCase("029999")){
+            ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+
+        int rows = dictService.insertLabel(label);
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    @RequestMapping(value="/label/disable", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject pause(@RequestParam("id") Integer id){
+        int rows = dictService.changeStatus(id, "09");
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    @RequestMapping(value="/label/enable", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject enable(@RequestParam("id") Integer id){
+        int rows = dictService.changeStatus(id, "00");
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    @RequestMapping(value="/label/delete", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject delete(@RequestParam("id") Integer id){
+        int rows = dictService.changeStatus(id, "99");
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 }

@@ -84,7 +84,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public int deleteArticleEvaluate(Integer userId, Integer articleId) {
-        return articleEvaluateMapper.delete(userId, articleId);
+        return articleEvaluateMapper.deleteArticleEvaluate(userId, articleId);
     }
 
     @Override
@@ -139,19 +139,42 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Map<String, Object>> evaluateOnArticle(int page, int pageSize, Integer articleId) {
+    public Page<Map<String, Object>> evaluateOnArticle(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
-        return articleEvaluateMapper.evaluateOnArticle(articleId);
+        return articleEvaluateMapper.evaluateOnArticle(conditionMap);
     }
 
     @Override
-    public Page<Map<String, Object>> summaryArticleEvaluation(int page, int pageSize) {
+    public Page<Map<String, Object>> summaryArticleEvaluation(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
-        return articleEvaluateMapper.summaryArticleEvaluation();
+        return articleEvaluateMapper.summaryArticleEvaluation(conditionMap);
     }
 
     @Override
     public int changeStatusBatch(List<Integer> ids) {
         return articleMapper.changeStatusBatch(ids);
+    }
+
+    @Override
+    public Map<String, Long> totalNum() {
+        Map<String, Long> resultMap = new HashMap<>();
+
+        resultMap.put("draft", 0L);
+
+        long total = 0;
+        List<Map<String, Object>> maps = articleMapper.totalNum();
+        for (Map<String, Object>m : maps){
+            String status = (String)m.get("status");
+            long num = (Long)m.get("num");
+            if (status.equalsIgnoreCase("09")) {
+                resultMap.put("draft", num);
+            }
+            total += num;
+        }
+        resultMap.put("total", total);
+        long topNum = articleMapper.totalTopNum();
+        resultMap.put("top", topNum);
+
+        return resultMap;
     }
 }

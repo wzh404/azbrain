@@ -31,5 +31,10 @@ public interface DictMapper {
      * @param label
      * @return
      */
-    int edit(Label label);
+    int update(Label label);
+    /**
+     *
+     * @return
+     */
+    int changeStatus(@Param("id")Integer id, @Param("status")String status);
 }

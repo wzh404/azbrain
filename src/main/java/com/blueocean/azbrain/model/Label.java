@@ -15,6 +15,7 @@ public class Label {
     private String classify;
     private String valueType;
     private String remark;
+    private String status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createTime;

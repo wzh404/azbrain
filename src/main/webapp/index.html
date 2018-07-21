@@ -31,12 +31,13 @@
 <a href="#" onclick="javascript:b('/user/follow/topics?page=1', {})">我关注的话题</a>|
 <br/>
 
+<a href="#" onclick="javascript:b('/user/view/consultation?log_id=8', {})">咨询详情</a>|
 <a href="#" onclick="javascript:s2('/user/apply/consultation')">用户咨询</a>|
 <a href="#" onclick="javascript:b1('/user/apply/meeting?cdate=2018-07-20&start_time=11:00&duration=30', {})">获取会议ID及密码!</a>|
 <a href="#" onclick="javascript:b('/user/specialist/confirm/consultation?id=13', {})">专家确认!</a>|
 <a href="#" onclick="javascript:edit('/user/specialist/edit/consultation')">专家编辑!</a>|
 <a href="#" onclick="javascript:b('/user/specialist/reject/consultation?id=8', {})">专家拒绝!</a>|
-<a href="#" onclick="javascript:b('/user/cancel/consultation?id=8', {})">用户取消!</a>|
+<a href="#" onclick="javascript:b('/user/cancel/consultation?id=17', {})">用户取消!</a>|
 <a href="#" onclick="javascript:edit('/user/edit/consultation')">用户编辑!</a>|
 <a href="#" onclick="javascript:b('/user/confirm/consultation?id=8', {})">用户确认!</a>|
 <a href="#" onclick="javascript:eval_user('/user/score')">评价咨询人</a>|
@@ -164,7 +165,7 @@ console.log('Hi!');
             },
             data : JSON.stringify({
                 "byUserId":1,
-                "cdate":"2018-07-20",
+                "cdate":"2018-07-28",
                 "startTime": "11:00",
                 "code": "30",
                 "way": "400"

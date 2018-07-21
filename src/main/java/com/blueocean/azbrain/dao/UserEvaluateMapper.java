@@ -37,16 +37,23 @@ public interface UserEvaluateMapper {
     /**
      * 评价的我所有用户
      *
-     * @param byUserId
      * @return
      */
-    Page<Map<String, Object>> evaluateOnUser(@Param("byUserId")Integer byUserId);
+    Page<Map<String, Object>> evaluateOnUser(Map<String, Object> conditionMap);
 
     /**
      * 用户评价汇总
      *
-     * @param flag
      * @return
      */
-    Page<Map<String, Object>> summaryUserEvaluation(@Param("flag")Integer flag);
+    Page<Map<String, Object>> summaryUserEvaluation(Map<String, Object> conditionMap);
+
+    /**
+     * 删除用户评价
+     *
+     * @param userId
+     * @param byUserId
+     * @return
+     */
+    int deleteUserEvaluate(@Param("userId")Integer userId, @Param("byUserId")Integer byUserId);
 }

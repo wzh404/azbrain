@@ -33,20 +33,19 @@ public interface ArticleEvaluateMapper {
      * @param articleId
      * @return
      */
-    int delete(@Param("userId")Integer userId, @Param("articleId")Integer articleId);
+    int deleteArticleEvaluate(@Param("userId")Integer userId, @Param("articleId")Integer articleId);
 
     /**
      *　文章用户评价列表
      *
-     * @param articleId
      * @return
      */
-    Page<Map<String, Object>> evaluateOnArticle(@Param("articleId")Integer articleId);
+    Page<Map<String, Object>> evaluateOnArticle(Map<String, Object> conditionMap);
 
     /**
      * 文章评价汇总
      *
      * @return
      */
-    Page<Map<String, Object>> summaryArticleEvaluation();
+    Page<Map<String, Object>> summaryArticleEvaluation(Map<String, Object> conditionMap);
 }

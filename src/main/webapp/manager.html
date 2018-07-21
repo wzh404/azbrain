@@ -30,6 +30,7 @@
 <a href="#" onclick="javascript:editSpecialist('/manager/search/specialist?key=specia')">根据手机号或名称搜索专家</a>
 <a href="#" onclick="javascript:editSpecialist('/manager/labels?classify=specialist&page=1')">专家标签</a>
 <br/><br/>
+<a href="#" onclick="javascript:b('/manager/articles/total', {})">文章汇总</a>|
 <a href="#" onclick="javascript:b('/manager/articles?page=1', {})">文章列表</a>|
 <a href="#" onclick="javascript:b('/manager/draft/articles?page=1', {})">文章列表（草稿）</a>|
 <a href="#" onclick="javascript:b('/manager/top/articles?page=1', {})">文章列表（置顶）</a>|
@@ -53,13 +54,23 @@
 <a href="#" onclick="javascript:b('/manager/log/evaluation?log_id=3', {})">查看咨询评价</a>
 
 </br></br>
-<a href="#" onclick="javascript:b('/manager/article/summary/evaluation?page=1', {})">文章评价列表</a>
+<a href="#" onclick="javascript:b('/manager/article/evaluation?page=1&article_id=3', {})">文章用户评价列表</a>
+<a href="#" onclick="javascript:b('/manager/article/summary/evaluation?page=1&name=医药', {})">文章评价列表</a>
+<a href="#" onclick="javascript:b('/manager/user/evaluation?page=1&user_id=1', {})">用户的所有用户评价</a>
+<a href="#" onclick="javascript:b('/manager/user/summary/evaluation?page=1', {})">评价汇总(评价专家的)</a>
+<a href="#" onclick="javascript:b('/manager/specialist/summary/evaluation?page=1', {})">评价汇总(专家评价的)</a>
 </br></br>
-<a href="#" onclick="javascript:a1('/theme/thumbs-up')">点赞</a>
-<a href="#" onclick="javascript:a1('/theme/share')">分享</a>
-<a href="#" onclick="javascript:a3('/nearby/hospital')">附近医院</a>
-<a href="#" onclick="javascript:a4('/nearby/transit')">附近地铁</a>
-<a href="#" onclick="javascript:a5('/beadhouse/query/pagelist')">养老院列表</a>
+<a href="#" onclick="javascript:b('/manager/delete/article/evaluation?user_id=1&article_id=3', {})">删除文章用户评价</a>
+<a href="#" onclick="javascript:b('/manager/delete/article/evaluation?article_id=3', {})">删除文章所有用户评价</a>
+<a href="#" onclick="javascript:b('/manager/delete/user/evaluation?by_user_id=1', {})">删除用户的所有评价</a>
+<a href="#" onclick="javascript:b('/manager/delete/user/evaluation?user_id=1&by_user_id=2', {})">删除用户的某个用户的评价</a>
+
+</br></br>
+<a href="#" onclick="javascript:eb('/manager/label/edit')">修改</a>
+<a href="#" onclick="javascript:nb('/manager/label/new')">新增</a>
+<a href="#" onclick="javascript:b('/manager/label/delete?id=1')">删除</a>
+<a href="#" onclick="javascript:b('/manager/label/disable?id=1')">停用</a>
+<a href="#" onclick="javascript:b('/manager/label/enable?id=1')">启用</a>
 
 </br></br>
 【</br>
@@ -69,9 +80,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    //var g_uri = "http://119.254.84.20:8889";
+    var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    var g_uri = "http://localhost:8889";
+    //var g_uri = "http://localhost:8889";
     //var g_uri = "http://192.168.1.88:8010";
 
     function upload() {
@@ -128,6 +139,28 @@
                 $('#msg_id').html(JSON.stringify(result));
             }
         });
+    }
+
+    function eb(url){
+         data = {
+        　　"id":1,
+        　　"code": "010001",
+            "name": "是否爽约",
+            "remark":"是否爽约"
+         }
+
+         ajax_post(url, data);
+    }
+
+    function nb(url){
+         data = {
+        　　"code": "010011",
+            "name": "是否爽约",
+            "remark":"是否爽约",
+            "classify": "byuser",
+         }
+
+         ajax_post(url, data);
     }
 
     function a1(url){

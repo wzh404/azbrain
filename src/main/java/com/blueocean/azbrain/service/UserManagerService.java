@@ -124,19 +124,28 @@ public interface UserManagerService {
      * @param byUserId
      * @return
      */
-    Page<Map<String, Object>> evaluateOnUser(int page, int pageSize, Integer byUserId);
+    Page<Map<String, Object>> evaluateOnUser(int page, int pageSize, Map<String, Object> conditionMap);
 
     /**
      * 评价汇总(专家评价的)
      *
      * @return
      */
-    Page<Map<String, Object>> summaryUserEvaluation(int page, int pageSize);
+    Page<Map<String, Object>> summaryUserEvaluation(int page, int pageSize, Map<String, Object> conditionMap);
 
     /**
      * 评价汇总(评价专家的)
      *
      * @return
      */
-    Page<Map<String, Object>> summaryByUserEvaluation(int page, int pageSize);
+    Page<Map<String, Object>> summaryByUserEvaluation(int page, int pageSize, Map<String, Object> conditionMap);
+
+    /**
+     * 删除用户评价
+     *
+     * @param userId
+     * @param byUserId
+     * @return
+     */
+    int deleteUserEvaluate(Integer userId, Integer byUserId);
 }

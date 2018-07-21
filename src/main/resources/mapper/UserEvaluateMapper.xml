@@ -92,6 +92,21 @@
       u.id = e.user_id
     where
       e.by_user_id = #{byUserId}
+    AND
+      e.evaluate_code != '029999'
+    AND
+      e.evaluate_code != '0219999'
+    AND
+      e.status != '99'
+    <if test="name != null">
+      AND u.name LIKE CONCAT('%',#{name},'%')
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ AND e.create_time >= #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND e.create_time <= #{endTime} ]]>
+    </if>
     group by name
   </select>
 
@@ -115,6 +130,8 @@
         e.evaluate_value_type = "star"
       AND
         e.by_user_flag = #{flag}
+      AND
+        e.status != '99'
       GROUP BY
         by_user_id, evaluate_name
       ) a
@@ -122,7 +139,25 @@
       azbrain_user u
     ON
       a.by_user_id = u.id
+    WHERE 1=1
+    <if test="name != null">
+      AND u.name LIKE CONCAT('%',#{name},'%')
+    </if>
     GROUP BY
       by_user_id
   </select>
+
+  <update id="deleteUserEvaluate" >
+    UPDATE
+      azbrain_user_evaluate e
+    SET
+      status = '99'
+    WHERE 1=1
+    <if test="userId != null">
+      AND user_id = #{userId}
+    </if>
+    <if test="byUserId != null">
+      AND by_user_id = #{byUserId}
+    </if>
+  </update>
 </mapper>

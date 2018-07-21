@@ -3,6 +3,7 @@ package com.blueocean.azbrain.controller.manager;
 import com.blueocean.azbrain.common.ManagerSessionObject;
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
+import com.blueocean.azbrain.common.status.ArticleStatus;
 import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.util.AZBrainConstants;
@@ -114,7 +115,9 @@ public class ArticleController {
     @RequestMapping(value="/article/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject evaluateOnArticle(@RequestParam("page") Integer page,
                                           @RequestParam("article_id") Integer articleId){
-        Page<Map<String, Object>> pages = articleService.evaluateOnArticle(page, AZBrainConstants.MANAGER_PAGE_SIZE, articleId);
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("articleId", articleId);
+        Page<Map<String, Object>> pages = articleService.evaluateOnArticle(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);
 
         return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
@@ -127,8 +130,13 @@ public class ArticleController {
      * @return
      */
     @RequestMapping(value="/article/summary/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject summaryArticleEvaluation(@RequestParam("page") Integer page){
-        Page<Map<String, Object>> pages = articleService.summaryArticleEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE);
+    public ResultObject summaryArticleEvaluation(@RequestParam("page") Integer page,
+                                                 @RequestParam(value = "name", required = false) String name){
+        Map<String, Object> conditionMap = new HashMap<>();
+        if (name != null) {
+            conditionMap.put("title", name);
+        }
+        Page<Map<String, Object>> pages = articleService.summaryArticleEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);
 
         return ResultObject.ok(StringUtil.pageToMap("evaluation", pages));
@@ -147,6 +155,30 @@ public class ArticleController {
         }
 
         int rows = articleService.changeStatusBatch(ids);
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    /**
+     * 分组汇总文章数量
+     *
+     * @return
+     */
+    @RequestMapping(value="/articles/total", method= {RequestMethod.POST, RequestMethod.GET})
+    public ResultObject totalArticles(){
+        return ResultObject.ok(articleService.totalNum());
+    }
+
+    /**
+     * 删除文章评价
+     *
+     * @param userId
+     * @param articleId
+     * @return
+     */
+    @RequestMapping(value="/delete/article/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject deleteEvaluation(@RequestParam(value="user_id", required = false)Integer userId,
+                                         @RequestParam("article_id")Integer articleId){
+        int rows = articleService.deleteArticleEvaluate(userId, articleId);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 }

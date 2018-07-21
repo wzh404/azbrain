@@ -12,6 +12,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -156,7 +158,7 @@ public class JsoupTests {
         long lastDays = 0;
         long lastSecs = 0;
 
-        for (int i =0; i < 10000; i++) {
+        for (int i =0; i < 1; i++) {
             long days = ChronoUnit.DAYS.between(of(2015, 10, 1), now());
             int secs = LocalTime.now().toSecondOfDay();
 
@@ -177,6 +179,11 @@ public class JsoupTests {
             }
         }
 
+        try {
+            System.out.println(URLEncoder.encode("1531997005418_泰颐春-老少同乐3.jpg","utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         Assert.assertTrue(1==1);
     }
 /*

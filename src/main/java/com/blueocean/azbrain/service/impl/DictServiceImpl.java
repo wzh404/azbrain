@@ -25,7 +25,12 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-    public int edit(Label label) {
-        return dictMapper.edit(label);
+    public int update(Label label) {
+        return dictMapper.update(label);
+    }
+
+    @Override
+    public int changeStatus(Integer id, String status) {
+        return dictMapper.changeStatus(id, status);
     }
 }

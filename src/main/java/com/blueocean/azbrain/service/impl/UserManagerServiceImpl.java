@@ -171,20 +171,27 @@ public class UserManagerServiceImpl implements UserManagerService {
     }
 
     @Override
-    public Page<Map<String, Object>> evaluateOnUser(int page, int pageSize, Integer byUserId) {
+    public Page<Map<String, Object>> evaluateOnUser(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
-        return userEvaluateMapper.evaluateOnUser(byUserId);
+        return userEvaluateMapper.evaluateOnUser(conditionMap);
     }
 
     @Override
-    public Page<Map<String, Object>> summaryUserEvaluation(int page, int pageSize) {
+    public Page<Map<String, Object>> summaryUserEvaluation(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
-        return userEvaluateMapper.summaryUserEvaluation(1);
+        conditionMap.put("flag", 1);
+        return userEvaluateMapper.summaryUserEvaluation(conditionMap); //1
     }
 
     @Override
-    public Page<Map<String, Object>> summaryByUserEvaluation(int page, int pageSize) {
+    public Page<Map<String, Object>> summaryByUserEvaluation(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
-        return userEvaluateMapper.summaryUserEvaluation(0);
+        conditionMap.put("flag", 0);
+        return userEvaluateMapper.summaryUserEvaluation(conditionMap); //0
+    }
+
+    @Override
+    public int deleteUserEvaluate(Integer userId, Integer byUserId) {
+        return userEvaluateMapper.deleteUserEvaluate(userId, byUserId);
     }
 }

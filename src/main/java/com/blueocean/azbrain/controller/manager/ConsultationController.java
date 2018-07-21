@@ -47,6 +47,7 @@ public class ConsultationController {
     public ResultObject getEvaluationByLog(@RequestParam("log_id")Integer logId){
         return ResultObject.ok(consultationService.getEvaluationByLog(logId));
     }
+
     /**
      * 根据状态查询
      *

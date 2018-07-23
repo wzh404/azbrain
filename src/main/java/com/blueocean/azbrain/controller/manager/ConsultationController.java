@@ -8,6 +8,7 @@ import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.vo.ConsultationConditionVo;
 import com.github.pagehelper.Page;
+import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,20 @@ public class ConsultationController {
     public ResultObject listConsultation(@RequestParam("page")Integer page,
                                          @RequestBody ConsultationConditionVo cc){
         Map<String, Object> conditionMap = new HashMap<>();
-        toStatus(cc.getStatus(), conditionMap);
+        if (!StringUtils.isNullOrEmpty(cc.getStatus())) {
+            toStatus(cc.getStatus(), conditionMap);
+        }
+        if (!StringUtils.isNullOrEmpty(cc.getUserName())) {
+            conditionMap.put("userName", cc.getUserName());
+        }
+
+        if (!StringUtils.isNullOrEmpty(cc.getByUserName())) {
+            conditionMap.put("byUserName", cc.getByUserName());
+        }
+
+        if (!StringUtils.isNullOrEmpty(cc.getWay())) {
+            conditionMap.put("way", cc.getWay());
+        }
         Page<ConsultationLog> logPage = consultationService.listConsultation(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
 
         //return ResultObject.ok("logs", logPage.getResult());

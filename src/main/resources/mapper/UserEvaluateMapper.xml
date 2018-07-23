@@ -81,6 +81,7 @@
 
   <select id="evaluateOnUser" resultType="java.util.Map">
     select
+      u.id as uid,
       u.name,
       e.create_time,
       GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation
@@ -92,10 +93,6 @@
       u.id = e.user_id
     where
       e.by_user_id = #{byUserId}
-    AND
-      e.evaluate_code != '029999'
-    AND
-      e.evaluate_code != '0219999'
     AND
       e.status != '99'
     <if test="name != null">

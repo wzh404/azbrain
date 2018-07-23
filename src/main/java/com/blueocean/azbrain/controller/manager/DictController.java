@@ -8,10 +8,13 @@ import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/manager")
@@ -28,10 +31,20 @@ public class DictController {
      */
     @RequestMapping(value="/labels", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject pageLabel(@RequestParam("page") Integer page,
-                             @RequestParam("classify") String classify){
+                             @RequestParam("classify") String classify,
+                             @RequestParam(value="name", required = false)String name,
+                             @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                             @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         int pageSize = AZBrainConstants.MANAGER_PAGE_SIZE;
         if (page == 0) pageSize = 50;
-        Page<Label> labelPage = dictService.listLabel(page, pageSize, classify);
+
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("classify", classify);
+        if (name != null) conditionMap.put("name", name);
+        if (startTime != null) conditionMap.put("startTime", startTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
+
+        Page<Label> labelPage = dictService.listLabel(page, pageSize, conditionMap);
         //return ResultObject.ok("labels", labelPage.getResult());
         return ResultObject.ok(StringUtil.pageToMap("labels", labelPage));
     }
@@ -64,10 +77,6 @@ public class DictController {
         label.setCreateTime(LocalDateTime.now());
         label.setValueType("star");
         label.setStatus("00");
-        if (label.getCode().equalsIgnoreCase("019999") ||
-                label.getCode().equalsIgnoreCase("029999")){
-            ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
 
         int rows = dictService.insertLabel(label);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);

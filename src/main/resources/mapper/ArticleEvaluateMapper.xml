@@ -61,6 +61,7 @@
 
   <select id="evaluateOnArticle" resultType="java.util.Map">
     select
+      u.id as uid,
       u.name,
       ae.create_time,
       GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation

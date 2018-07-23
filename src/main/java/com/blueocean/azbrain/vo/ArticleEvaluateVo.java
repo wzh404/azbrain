@@ -24,6 +24,7 @@ public class ArticleEvaluateVo {
         a.setCode(v.getCode());
         a.setName(v.getName());
         a.setValue(v.getValue());
+        a.setStatus("00");
 
         return a;
     };

@@ -53,7 +53,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<Map<String, Object>> getDefaultLabels(String classify){
-        List<Label> labels = dictMapper.listLabel(classify);
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("classify", classify);
+
+        List<Label> labels = dictMapper.listLabel(conditionMap);
         return labels.stream()
                 .filter(l->l.getValueType().equalsIgnoreCase("star"))
                 .map(l ->{

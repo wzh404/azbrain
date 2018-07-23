@@ -20,4 +20,5 @@ public class UserEvaluate {
     private String valueType;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createTime;
+    private String status;
 }

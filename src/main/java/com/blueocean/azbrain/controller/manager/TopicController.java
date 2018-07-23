@@ -11,10 +11,12 @@ import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,8 +32,8 @@ public class TopicController {
     @RequestMapping(value="/page/topics", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject pageTopics(@RequestParam("page") Integer page,
            @RequestParam(value="name", required = false)String name,
-           @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-           @RequestParam(value="endTime", required = false)LocalDateTime endTime){
+           @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+           @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
@@ -49,8 +51,8 @@ public class TopicController {
     public ResultObject topicSpecialists(@RequestParam("page") Integer page,
                                    @RequestParam("topic_id")Integer topicId,
                                    @RequestParam(value="name", required = false)String name,
-                                   @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-                                   @RequestParam(value="endTime", required = false)LocalDateTime endTime){
+                                   @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                                   @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("topicId", topicId);
         if (name != null) conditionMap.put("name", name);

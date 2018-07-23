@@ -3,11 +3,14 @@ package com.blueocean.azbrain.util;
 import com.blueocean.azbrain.common.Meeting;
 import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class MeetingUtil {
+    private static final Logger logger = LoggerFactory.getLogger(MeetingUtil.class);
     private static SortedMap<String, Meeting> meetings = new TreeMap<>();
 
     private MeetingUtil() {
@@ -30,6 +33,7 @@ public class MeetingUtil {
      */
     public static void merge(List<ConsultationLog> logs) {
         logs.forEach(l -> {
+            //logger.info(l.getMeetingHost() + "----" + l.getMeetingPwd() + "----" + l.getId());
             String key = getKey(l.getMeetingHost(), l.getMeetingPwd());
             Meeting meeting = meetings.get(key);
             if (meeting == null) {

@@ -10,10 +10,12 @@ import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +29,12 @@ public class ArticleController {
     @RequestMapping(value="/draft/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject draftList(@RequestParam("page") Integer page,
         @RequestParam(value="name", required = false)String name,
-        @RequestParam(value="start_time", required = false)LocalDateTime startTime,
-        @RequestParam(value="end_time", required = false)LocalDateTime endTime){
+        @RequestParam(value="start_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+        @RequestParam(value="end_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
-        if (endTime != null) conditionMap.put("startTime", endTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
 
         Page<Article> pageArticle = articleService.draftList(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         //return ResultObject.ok("articles", pageArticle.getResult());
@@ -42,12 +44,12 @@ public class ArticleController {
     @RequestMapping(value="/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject list(@RequestParam("page") Integer page,
                              @RequestParam(value="name", required = false)String name,
-                             @RequestParam(value="start_time", required = false)LocalDateTime startTime,
-                             @RequestParam(value="end_time", required = false)LocalDateTime endTime){
+                             @RequestParam(value="start_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                             @RequestParam(value="end_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
-        if (endTime != null) conditionMap.put("startTime", endTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
 
         Page<Article> pageArticle = articleService.list(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         //return ResultObject.ok("articles", pageArticle.getResult());
@@ -57,12 +59,12 @@ public class ArticleController {
     @RequestMapping(value="/top/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject topList(@RequestParam("page") Integer page,
                                 @RequestParam(value="name", required = false)String name,
-                                @RequestParam(value="start_time", required = false)LocalDateTime startTime,
-                                @RequestParam(value="end_time", required = false)LocalDateTime endTime){
+                                @RequestParam(value="start_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                                @RequestParam(value="end_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
-        if (endTime != null) conditionMap.put("startTime", endTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
 
         Page<Article> pageArticle = articleService.topList(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         //return ResultObject.ok("articles", pageArticle.getResult());
@@ -114,9 +116,14 @@ public class ArticleController {
      */
     @RequestMapping(value="/article/evaluation", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject evaluateOnArticle(@RequestParam("page") Integer page,
-                                          @RequestParam("article_id") Integer articleId){
+                                          @RequestParam("article_id") Integer articleId,
+                                          @RequestParam(value = "name", required = false) String name){
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("articleId", articleId);
+        if (name != null) {
+            conditionMap.put("name", name);
+        }
+
         Page<Map<String, Object>> pages = articleService.evaluateOnArticle(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);
 

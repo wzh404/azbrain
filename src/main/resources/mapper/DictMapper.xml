@@ -17,6 +17,7 @@
     <result column="value_type" jdbcType="VARCHAR" property="valueType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
 
   <sql id="Dict_Column_List">
@@ -24,7 +25,7 @@
   </sql>
 
   <sql id="Label_Column_List">
-    id, code, name, classify, value_type, remark, create_time
+    id, `code`, `name`, classify, value_type, remark, create_time,status
   </sql>
 
   <select id="get" parameterType="java.lang.Integer" resultMap="dict">
@@ -39,8 +40,8 @@
     insert into azbrain_dict (
       id,
       dtype,
-      code,
-      value,
+      `code`,
+      `value`,
       remark)
     values (
       #{id,jdbcType=INTEGER},
@@ -54,8 +55,8 @@
     update
       azbrain_evaluate_label
     set
-      code = #{code,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
+      `code` = #{code,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where
       id = #{id,jdbcType=INTEGER}
@@ -107,6 +108,30 @@
       azbrain_evaluate_label
     WHERE
       classify = #{classify}
+    AND
+      status != '99'
+    AND
+      value_type = 'star'
+    <if test="name != null">
+      AND name LIKE CONCAT('%',#{name},'%')
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ AND create_time >= #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND create_time <= #{endTime} ]]>
+    </if>
     ORDER BY create_time DESC
+  </select>
+
+  <select id="maxCode" resultType="java.lang.String">
+    SELECT
+      max( code )
+    FROM
+      azbrain_evaluate_label
+    WHERE
+      classify = #{classify}
+    AND
+      code != #{code}
   </select>
 </mapper>

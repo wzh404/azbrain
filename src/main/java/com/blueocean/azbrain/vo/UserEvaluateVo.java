@@ -34,6 +34,7 @@ public class UserEvaluateVo {
         u.setValue(v.getValue());
         u.setValueType(v.getType());
         u.setByUserFlag(this.byUserFlag);
+        u.setStatus("00");
 
         return u;
     };

@@ -67,6 +67,7 @@
             l.by_user_id = u.id
         WHERE
             l.user_id = #{userId}
+        ORDER BY l.create_time DESC
     </select>
 
     <select id="consultMe" resultMap="BaseResultMap">
@@ -95,6 +96,7 @@
             l.user_id = u.id
         WHERE
             l.by_user_id = #{userId}
+        ORDER BY l.create_time DESC
     </select>
 
     <insert id="insert" parameterType="com.blueocean.azbrain.model.ConsultationLog">
@@ -257,12 +259,16 @@
             way='400'
         AND
             status='02'
-        AND cdate > curdate( )
-        OR (
-                cdate = curdate()
-            AND
-                end_time > curtime( )
-        )
+        AND
+            (
+                cdate > curdate()
+            OR
+                (
+                    cdate = curdate()
+                AND
+                    end_time > curtime()
+                )
+            )
     </select>
 
     <select id="listMeeting" resultType="java.util.Map">

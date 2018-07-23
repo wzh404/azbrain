@@ -478,7 +478,7 @@ public class ConsultationController {
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
-        Page<ConsultationLog> pageConsultationLog = consultationService.myConsult(page, AZBrainConstants.PAGE_SIZE, userId);
+        Page<ConsultationLog> pageConsultationLog = consultationService.myConsult(page, 100, userId);
         return ResultObject.ok(pageConsultationLog.getResult());
     }
 
@@ -494,7 +494,7 @@ public class ConsultationController {
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
-        Page<ConsultationLog> pageConsultationLog = consultationService.consultMe(page, AZBrainConstants.PAGE_SIZE, userId);
+        Page<ConsultationLog> pageConsultationLog = consultationService.consultMe(page, 100, userId);
         return ResultObject.ok(pageConsultationLog.getResult());
     }
 

@@ -15,4 +15,5 @@ public class ArticleEvaluate {
     private String name;
     private String value;
     private LocalDateTime createTime;
+    private String status;
 }

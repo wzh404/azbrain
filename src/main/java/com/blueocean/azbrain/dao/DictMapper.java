@@ -6,6 +6,8 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 @Mapper
 public interface DictMapper {
     int insert(Dict record);
@@ -14,10 +16,10 @@ public interface DictMapper {
 
     /**
      *
-     * @param classify
+     * @param conditionMap
      * @return
      */
-    Page<Label> listLabel(@Param("classify")String classify);
+    Page<Label> listLabel(Map<String, Object> conditionMap);
 
     /**
      *
@@ -37,4 +39,12 @@ public interface DictMapper {
      * @return
      */
     int changeStatus(@Param("id")Integer id, @Param("status")String status);
+
+    /**
+     *
+     * @param classify
+     * @param code
+     * @return
+     */
+    String maxCode(@Param("classify")String classify, @Param("code")String code);
 }

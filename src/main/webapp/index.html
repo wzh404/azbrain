@@ -70,9 +70,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    //var g_uri = "http://119.254.84.20:8889";
+    //var g_uri = "http://52.80.177.33/azbrain";
     //var g_uri = "http://2.49:8889";
-    var g_uri = "http://localhost:8889";
+    var g_uri = "http://localhost:8889/azbrain";
     var host = "";
     var pwd = "";
 /*
@@ -186,7 +186,7 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "logId":3,
+                "logId":53,
                 "evaluates":[
                     {"code":"020001", "name": "爽约", "value": "0","type":"other"},
                     {"code":"020002", "name": "态度", "value": "4", "type":"star"},
@@ -211,7 +211,7 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "logId":3,
+                "logId":53,
                 "evaluates":[
                     {"code":"010001", "name": "爽约", "value": "1", "type":"other"},
                     {"code":"010002", "name": "态度", "value": "3", "type":"star"},
@@ -240,12 +240,12 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "articleId":3,
+                "articleId":33,
                 "evaluates":[
-                    {"code":"specialization", "name": "专业程度", "value": "0"},
-                    {"code":"harvest", "name": "收获很大", "value": "4"},
-                    {"code":"interest", "name": "趣味性", "value": "5"},
-                    {"code":"fluency", "name": "流畅性", "value": "4"}
+                    {"code":"030001", "name": "专业程度", "value": "0"},
+                    {"code":"030002", "name": "收获很大", "value": "4"},
+                    {"code":"030003", "name": "趣味性", "value": "5"},
+                    {"code":"030004", "name": "流畅性", "value": "4"}
                 ]
             }),
             contentType: "application/json; charset=utf-8",

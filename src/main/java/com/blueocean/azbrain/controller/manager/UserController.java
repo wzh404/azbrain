@@ -15,11 +15,13 @@ import com.github.pagehelper.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,8 +101,8 @@ public class UserController {
     @RequestMapping(value="/users", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject listUser(@RequestParam("page") Integer page,
                                  @RequestParam(value="name", required = false)String name,
-                                 @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-                                 @RequestParam(value="endTime", required = false)LocalDateTime endTime,
+                                 @RequestParam(value="startTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                                 @RequestParam(value="endTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime,
                                  @RequestParam(value="keycode", required = false)String keycode){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
@@ -129,8 +131,8 @@ public class UserController {
     @RequestMapping(value="/specialists", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject listSpecialist(@RequestParam("page") Integer page,
                                  @RequestParam(value="name", required = false)String name,
-                                 @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-                                 @RequestParam(value="endTime", required = false)LocalDateTime endTime,
+                                 @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                                 @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime,
                                  @RequestParam(value="keycode", required = false)String keycode){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
@@ -238,12 +240,12 @@ public class UserController {
     public ResultObject evaluateOnUser(@RequestParam("page") Integer page,
                                        @RequestParam("user_id") Integer userId,
                                        @RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value="startTime", required = false)LocalDateTime startTime,
-                                       @RequestParam(value="endTime", required = false)LocalDateTime endTime){
+                                       @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                                       @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("byUserId", userId);
         if (name != null) {
-            conditionMap.put("title", name);
+            conditionMap.put("name", name);
         }
         if (startTime != null) conditionMap.put("startTime", startTime);
         if (endTime != null) conditionMap.put("endTime", endTime);
@@ -265,7 +267,7 @@ public class UserController {
                                               @RequestParam(value = "name", required = false) String name){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) {
-            conditionMap.put("title", name);
+            conditionMap.put("name", name);
         }
         Page<Map<String, Object>> pages = userService.summaryUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);
@@ -284,7 +286,7 @@ public class UserController {
                                                 @RequestParam(value = "name", required = false) String name){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) {
-            conditionMap.put("title", name);
+            conditionMap.put("name", name);
         }
         Page<Map<String, Object>> pages = userService.summaryByUserEvaluation(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
         StringUtil.evaluation(pages);

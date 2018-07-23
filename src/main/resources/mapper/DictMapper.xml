@@ -55,7 +55,6 @@
     update
       azbrain_evaluate_label
     set
-      `code` = #{code,jdbcType=VARCHAR},
       `name` = #{name,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where
@@ -76,7 +75,7 @@
       id,
       classify,
       code,
-      name,
+      `name`,
       value_type,
       remark,
       create_time,

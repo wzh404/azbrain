@@ -4,6 +4,7 @@
     <resultMap id="user" type="com.blueocean.azbrain.model.User">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
         <result column="pinyin" jdbcType="VARCHAR" property="pinyin"/>
         <result column="gender" jdbcType="VARCHAR" property="gender"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
@@ -38,7 +39,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, pinyin, gender, password, job_number, user_type, photo, email, mobile, business_unit, remarks,
+        id, `name`, pinyin, gender, password, job_number, user_type, photo, email, mobile, business_unit, remarks,
         likes_num, favorite_num, bad_num, good_num, neutral_num, break_contract_num, consulted_num, consult_num,
         consult_duration, consulted_duration, once_consultation_duration, consult_star, consulted_star,
         label, create_by, create_time, status
@@ -51,6 +52,35 @@
         WHERE
         id = #{id}
     </select>
+
+    <insert id="newUser" parameterType="com.blueocean.azbrain.model.User">
+        INSERT INTO azbrain_user(
+            `name`,
+            gender,
+            mobile,
+            photo,
+            business_unit,
+            job_number,
+            user_type,
+            consult_duration,
+            create_time,
+            create_by,
+            status
+        )
+        VALUES(
+            #{name},
+            #{gender},
+            #{mobile},
+            #{photo},
+            #{businessUnit},
+            #{jobNumber},
+            #{userType},
+            0,
+            #{createTime},
+            #{createBy},
+            '00'
+        )
+    </insert>
 
     <select id="findByPage" resultMap="user">
         SELECT id,
@@ -304,16 +334,14 @@
             id = #{userId}
     </update>
 
-    <update id="edit" parameterType="com.blueocean.azbrain.model.User">
+    <update id="edit" parameterType="com.blueocean.azbrain.vo.UserVo">
         UPDATE
             azbrain_user
         SET
-            name = #{name},
-            pinyin = #{pinyin}
+            `name` = #{name},
             gender = #{gender},
-            job_number = #{jobNum},
+            job_number = #{jobNumber},
             photo = #{photo},
-            email = #{email},
             mobile = #{mobile},
             business_unit = #{businessUnit}
         WHERE
@@ -323,7 +351,7 @@
     <select id="viewUser"  resultMap="user">
         SELECT
             id,
-            name,
+            `name`,
             pinyin,
             gender,
             job_number,

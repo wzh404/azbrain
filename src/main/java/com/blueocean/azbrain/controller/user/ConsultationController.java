@@ -55,8 +55,15 @@ public class ConsultationController {
         if (consultationLog.getWay() == null ||
             consultationLog.getCdate() == null ||
             consultationLog.getStartTime() == null ||
+                consultationLog.getByUserId() == null ||
             consultationLog.getCode() == null){
             logger.error("invalid request parameters");
+            return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+
+        // 不能自己咨询自己
+        if (userId.intValue() == consultationLog.getByUserId().intValue()){
+            logger.error("invalid by user id");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 

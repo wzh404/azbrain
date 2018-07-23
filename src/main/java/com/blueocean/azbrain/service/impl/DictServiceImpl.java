@@ -37,7 +37,9 @@ public class DictServiceImpl implements DictService {
             otherCode = "019999";
         } else if (label.getClassify().equalsIgnoreCase("user")){
             otherCode = "029999";
-        } else if (label.getClassify().equalsIgnoreCase("user")){
+        } else if (label.getClassify().equalsIgnoreCase("article")){
+            otherCode = "000000";
+        } else if (label.getClassify().equalsIgnoreCase("specialist")){
             otherCode = "000000";
         } else {
             return 0;

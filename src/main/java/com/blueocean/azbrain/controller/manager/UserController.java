@@ -11,6 +11,7 @@ import com.blueocean.azbrain.util.CryptoUtil;
 import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.vo.LoginVo;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
+import com.blueocean.azbrain.vo.UserVo;
 import com.github.pagehelper.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,28 @@ public class UserController {
         resultMap.put("name", user.getName());
 
         return ResultObject.ok("user", resultMap);
+    }
+
+    /**
+     *
+     * @param vo
+     * @return
+     */
+    @RequestMapping(value="/new/user", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject newUser(@RequestBody UserVo vo){
+        int rows = userService.newUser(vo.asUser());
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    /**
+     *
+     * @param vo
+     * @return
+     */
+    @RequestMapping(value="/edit/user", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject editUser(@RequestBody UserVo vo){
+        int rows = userService.edit(vo);
+        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 
     /**

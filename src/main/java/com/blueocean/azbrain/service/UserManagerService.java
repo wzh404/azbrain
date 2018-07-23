@@ -3,6 +3,7 @@ package com.blueocean.azbrain.service;
 import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
+import com.blueocean.azbrain.vo.UserVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
@@ -72,10 +73,17 @@ public interface UserManagerService {
     /**
      * 编辑用户
      *
+     * @param userVo
+     * @return
+     */
+    int edit(UserVo userVo);
+
+    /**
+     *
      * @param user
      * @return
      */
-    int edit(User user);
+    int newUser(User user);
 
     /**
      * 查看用户

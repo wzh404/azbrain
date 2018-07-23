@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.model.UserFeedback;
 import com.blueocean.azbrain.service.UserManagerService;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
+import com.blueocean.azbrain.vo.UserVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Splitter;
@@ -123,12 +124,17 @@ public class UserManagerServiceImpl implements UserManagerService {
     /**
      * 编辑用户
      *
-     * @param user
+     * @param userVo
      * @return
      */
     @Override
-    public int edit(User user) {
-        return userMapper.edit(user);
+    public int edit(UserVo userVo) {
+        return userMapper.edit(userVo);
+    }
+
+    @Override
+    public int newUser(User user) {
+        return userMapper.newUser(user);
     }
 
     /**

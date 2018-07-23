@@ -29,10 +29,12 @@ public class ArticleController {
     @RequestMapping(value="/draft/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject draftList(@RequestParam("page") Integer page,
         @RequestParam(value="name", required = false)String name,
-        @RequestParam(value="start_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
-        @RequestParam(value="end_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
+        @RequestParam(value="source", required = false)String source,
+        @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+        @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
+        if (source != null) conditionMap.put("source", source);
         if (startTime != null) conditionMap.put("startTime", startTime);
         if (endTime != null) conditionMap.put("endTime", endTime);
 
@@ -44,10 +46,12 @@ public class ArticleController {
     @RequestMapping(value="/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject list(@RequestParam("page") Integer page,
                              @RequestParam(value="name", required = false)String name,
-                             @RequestParam(value="start_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
-                             @RequestParam(value="end_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
+                             @RequestParam(value="source", required = false)String source,
+                             @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                             @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
+        if (source != null) conditionMap.put("source", source);
         if (startTime != null) conditionMap.put("startTime", startTime);
         if (endTime != null) conditionMap.put("endTime", endTime);
 
@@ -59,10 +63,12 @@ public class ArticleController {
     @RequestMapping(value="/top/articles", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject topList(@RequestParam("page") Integer page,
                                 @RequestParam(value="name", required = false)String name,
-                                @RequestParam(value="start_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
-                                @RequestParam(value="end_time", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
+                                @RequestParam(value="source", required = false)String source,
+                                @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                                @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         if (name != null) conditionMap.put("name", name);
+        if (source != null) conditionMap.put("source", source);
         if (startTime != null) conditionMap.put("startTime", startTime);
         if (endTime != null) conditionMap.put("endTime", endTime);
 

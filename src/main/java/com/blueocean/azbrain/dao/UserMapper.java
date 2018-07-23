@@ -3,6 +3,7 @@ package com.blueocean.azbrain.dao;
 import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.model.UserPoints;
 import com.blueocean.azbrain.vo.SpecialistVo;
+import com.blueocean.azbrain.vo.UserVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,6 +20,13 @@ public interface UserMapper {
      * @return
      */
     User get(Integer id);
+
+    /**
+     *
+     * @param user
+     * @return
+     */
+    int newUser(User user);
 
     /**
      * get user by login name.
@@ -183,7 +191,9 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    int edit(User user);
+    int edit(UserVo userVo);
+
+
 
     /**
      *

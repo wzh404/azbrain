@@ -20,6 +20,8 @@
 <br/>
 <a href="#" onclick="javascript:b('/manager/users?page=1&startTime=2018-05-19', {})">用户列表</a>|
 <a href="#" onclick="javascript:b('/manager/view/user?user_id=1', {})">查看用户</a>|
+<a href="#" onclick="javascript:newUser('/manager/new/user', {})">新增用户</a>|
+<a href="#" onclick="javascript:editUser('/manager/edit/user', {})">编辑用户</a>|
 <a href="#" onclick="javascript:b('/manager/user/disable?user_id=1', {})">停用用户</a>|
 <a href="#" onclick="javascript:b('/manager/user/enable?user_id=1', {})">启用用户</a>|
 <a href="#" onclick="javascript:b('/manager/user/delete?user_id=1', {})">删除用户</a>|
@@ -31,9 +33,9 @@
 <a href="#" onclick="javascript:editSpecialist('/manager/labels?classify=specialist&page=1')">专家标签</a>
 <br/><br/>
 <a href="#" onclick="javascript:b('/manager/articles/total', {})">文章汇总</a>|
-<a href="#" onclick="javascript:b('/manager/articles?page=1', {})">文章列表</a>|
-<a href="#" onclick="javascript:b('/manager/draft/articles?page=1', {})">文章列表（草稿）</a>|
-<a href="#" onclick="javascript:b('/manager/top/articles?page=1', {})">文章列表（置顶）</a>|
+<a href="#" onclick="javascript:b('/manager/articles?page=1&source=00', {})">文章列表</a>|
+<a href="#" onclick="javascript:b('/manager/draft/articles?page=1&source=00', {})">文章列表（草稿）</a>|
+<a href="#" onclick="javascript:b('/manager/top/articles?page=1&source=00', {})">文章列表（置顶）</a>|
 <a href="#" onclick="javascript:b('/manager/view/article?article_id=1', {})">view文章</a>|
 <a href="#" onclick="javascript:b('/manager/top/article?article_id=1', {})">置顶1</a>|
 <a href="#" onclick="javascript:b('/manager/untop/article?article_id=1', {})">取消置顶1</a>|
@@ -81,9 +83,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    //var g_uri = "http://119.254.84.20:8889";
+    var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    var g_uri = "http://localhost:8889";
+    //var g_uri = "http://localhost:8889";
     //var g_uri = "http://192.168.1.88:8010";
 
     function upload() {
@@ -146,12 +148,39 @@
         });
     }
 
+    function editUser(url){
+        data = {
+            "id":1,
+            "name": "specialist",
+            "gender": "F",
+            "mobile":"13911709225",
+            "photo":"/static/azbrain_logo.png",
+            "businessUnit":"1234",
+            "jobNumber":"55555",
+        }
+
+        ajax_post(url, data);
+    }
+
+    function newUser(url){
+        data = {
+            "name": "specialist",
+            "gender": "F",
+            "mobile":"13911709225",
+            "photo":"/static/azbrain_logo.png",
+            "businessUnit":"1234",
+            "jobNumber":"55555",
+        }
+
+        ajax_post(url, data);
+    }
+
+
     function eb(url){
          data = {
         　　"id":1,
-        　　"code": "010001",
-            "name": "是否爽约",
-            "remark":"是否爽约"
+        　　 "name": "是否爽约222",
+            "remark":"是否爽约222"
          }
 
          ajax_post(url, data);
@@ -161,7 +190,7 @@
          data = {
             "name": "是否爽约",
             "remark":"是否爽约",
-            "classify": "byuser",
+            "classify": "specialist",
          }
 
          ajax_post(url, data);
@@ -273,6 +302,8 @@
             "source":"01",
             "author":"author1",
             "icon":"icon1",
+            "sourceUrl":" url ",
+            "sourceSit": "site",
             "status":"00"
         };
         ajax_post(url, data);

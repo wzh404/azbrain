@@ -201,11 +201,14 @@
         <if test="name != null">
             AND a.title LIKE CONCAT('%',#{name},'%')
         </if>
+        <if test="source != null">
+            AND a.source = #{name}
+        </if>
         <if test="startTime != null">
-            <![CDATA[ AND create_time >= #{startTime} ]]>
+            <![CDATA[ AND a.create_time >= #{startTime} ]]>
         </if>
         <if test="endTime != null">
-            <![CDATA[ AND create_time <= #{endTime} ]]>
+            <![CDATA[ AND a.create_time <= #{endTime} ]]>
         </if>
         ORDER BY create_time DESC
     </select>
@@ -252,7 +255,8 @@
             source_url = #{sourceUrl},
             source_site = #{sourceSite},
             author = #{author},
-            topic_id = #{topicId}
+            topic_id = #{topicId},
+            status = #{status}
         WHERE
             id = #{id}
     </update>

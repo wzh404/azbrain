@@ -57,11 +57,6 @@ public class DictController {
      */
     @RequestMapping(value="/label/edit", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject editLabel(@RequestBody Label label){
-        if (label.getCode().equalsIgnoreCase("019999") ||
-                label.getCode().equalsIgnoreCase("029999")){
-            ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
-
         int rows = dictService.update(label);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }

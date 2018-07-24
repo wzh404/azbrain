@@ -11,6 +11,7 @@ import com.blueocean.azbrain.util.CryptoUtil;
 import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.vo.LoginVo;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
+import com.blueocean.azbrain.vo.SpecialistLabelVo;
 import com.blueocean.azbrain.vo.UserVo;
 import com.github.pagehelper.Page;
 import org.slf4j.Logger;
@@ -96,7 +97,7 @@ public class UserController {
     @RequestMapping(value="/edit/specialist", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject editSpecialist(@RequestBody SpecialistEditVo vo){
         int rows = userService.editSpecialist(vo);
-        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+        return ResultObject.cond(rows >= 0, ResultCode.BAD_REQUEST);
     }
 
     /**
@@ -237,15 +238,13 @@ public class UserController {
     /**
      * 根据标签查找专家
      *
-     * @param page
-     * @param labels
+     * @param vo
      * @return
      */
     @RequestMapping(value="/search/label/specialist", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject findSpecialistByLabel(@RequestParam("page") Integer page,
-                                 @RequestParam("labels[]") List<String> labels){
-        Page<User> userPage = userService.findSpecialistByLabel(page, AZBrainConstants.MANAGER_PAGE_SIZE, labels);
-        //return ResultObject.ok("specialists", userPage.getResult());
+    public ResultObject findSpecialistByLabel(@RequestBody SpecialistLabelVo vo){
+        Page<User> userPage = userService.findSpecialistByLabel(vo.getPage(), AZBrainConstants.MANAGER_PAGE_SIZE, vo.getLabels());
+
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("specialists", userPage.getResult());
         resultMap.put("page", ResultObject.pageMap(userPage));

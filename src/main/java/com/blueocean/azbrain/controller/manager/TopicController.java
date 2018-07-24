@@ -38,7 +38,7 @@ public class TopicController {
         Map<String, Object> conditionMap = new HashMap<>();
         if (!StringUtils.isEmpty(name)) conditionMap.put("title", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
-        if (endTime != null) conditionMap.put("startTime", endTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
 
         Page<Topic> topicPage = topicService.pageTopics(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
 
@@ -67,7 +67,14 @@ public class TopicController {
     @RequestMapping(value="/view/topic", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject viewTopic(@RequestParam("topic_id") Integer topicId){
         Topic topic = topicService.viewTopic(topicId);
-        return ResultObject.ok("topic", topic);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("topicId", topicId);
+        Page<User> userPage = userManagerService.searchTopicSpecialists(1, 50, conditionMap);
+        resultMap.put("topic", topic);
+        resultMap.put("specialists", userPage.getResult());
+        return ResultObject.ok(resultMap);
     }
 
     @RequestMapping(value="/new/topic", method= {RequestMethod.POST,RequestMethod.GET})

@@ -500,7 +500,7 @@
         WHERE
             status = '00'
         AND
-            user_type = '10'
+            user_type = '01'
         AND (
             name LIKE CONCAT('%',#{key},'%')
         OR

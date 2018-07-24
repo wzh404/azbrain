@@ -50,7 +50,7 @@
 <a href="#" onclick="javascript:b('/manager/topic/specialists?page=1&topic_id=1', {})">主题专家列表</a>|
 <a href="#" onclick="javascript:newT('/manager/new/topic')">new主题</a>|
 <a href="#" onclick="javascript:editT('/manager/edit/topic')">edit主题</a>|
-<a href="#" onclick="javascript:specialistByLabel('/manager/search/label/specialist?page=1')">标签找专家</a>|
+<a href="#" onclick="javascript:specialistByLabel('/manager/search/label/specialist')">标签找专家</a>|
 <a href="#" onclick="javascript:b('/manager/new/topic/specialist?topic_id=1&user_id=2')">新增主题专家</a>
 <a href="#" onclick="javascript:b('/manager/delete/topic/specialist?topic_id=1&user_id=2')">删除主题专家</a>
 </br>
@@ -87,7 +87,7 @@
     var icon = "";
     //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    //var g_uri = "http://localhost:8889";
+    var g_uri = "http://localhost:8889";
     //var g_uri = "http://192.168.1.88:8010";
 
     function upload() {
@@ -250,9 +250,10 @@
 
     function specialistByLabel(url){
         data = {
+            "page": 1,
             "labels":["040001","040002"]
         };
-        b(url, data);
+        ajax_post(url, data);
     }
 
     function newT(url){

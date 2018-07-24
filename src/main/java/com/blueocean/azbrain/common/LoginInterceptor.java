@@ -18,6 +18,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Value(value = "${azbrain.whitelist.uri}")
     private String[] uris;
 
+
+    @Value(value = "${server.servlet.context-path}")
+    private String contextPath;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (request.getMethod().equalsIgnoreCase("OPTIONS")){
@@ -29,8 +33,13 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
+        String managerUri = "/manager";
+        if (contextPath != null && !contextPath.trim().equalsIgnoreCase("/")){
+            managerUri = contextPath + managerUri;
+        }
 
-        if (request.getRequestURI().startsWith("/manager")){
+        logger.info(managerUri);
+        if (request.getRequestURI().startsWith(managerUri)){
             return managerHandle(request);
         } else {
             return userHandle(request);

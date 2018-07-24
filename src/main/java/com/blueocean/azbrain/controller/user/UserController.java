@@ -49,7 +49,7 @@ public class UserController {
      */
     @RequestMapping(value = "/apply/access-token", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject accessToken(@RequestParam("code") String code) {
-        User user = userService.getUserByName(code);
+        User user = userService.getUserByKCode(code);
         if (user == null) {
             logger.warn("The user does not exist ");
             return ResultObject.fail(ResultCode.USER_ACCESS_TOKEN);
@@ -206,27 +206,4 @@ public class UserController {
         int rows = userService.insertUserFeedback(userFeedback);
         return ResultObject.cond(rows > 0, ResultCode.USER_ILLEGAL_STATUS);
     }
-
-
-
-
-/*
-    @RequestMapping(value="/wx/openid", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject openid(@RequestParam("code") String jscode){
-        String appid = "wx86faae0cc74bbf0e";
-        String secret = "5e5829e1b0b13484baf6a48c4783178a";
-
-        Optional<String> openid = WxUtils.getOpenId(appid, secret, jscode);
-
-        return ResultObject.ok(openid.orElse("error"));
-    }
-
-    @RequestMapping(value="/wx/userinfo", method= {RequestMethod.POST,RequestMethod.GET})
-    public ResultObject userinfo(@RequestParam("code") String jscode,
-                                 @RequestParam("iv") String iv,
-                                 @RequestParam("data") String data){
-        WxUtils.getUserInfo(data, WxUtils.SESSION_KEY, iv);
-        return ResultObject.ok("unknow");
-    }
-*/
 }

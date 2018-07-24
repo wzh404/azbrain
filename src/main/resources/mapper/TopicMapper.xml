@@ -167,7 +167,7 @@
     WHERE
       status = '00'
     <if test="title != null">
-      AND name LIKE CONCAT('%',#{title},'%')
+      AND title LIKE CONCAT('%',#{title},'%')
     </if>
     <if test="startTime != null">
       <![CDATA[ AND create_time >= #{startTime} ]]>
@@ -176,6 +176,15 @@
       <![CDATA[ AND create_time <= #{endTime} ]]>
     </if>
   </select>
+
+  <update id="delete">
+    UPDATE
+      azbrain_topic
+    SET
+      status = '99'
+    WHERE
+      id = #{topicId}
+  </update>
 
   <insert id="insertTopicSpecialist">
     INSERT INTO azbrain_topic_specialist(

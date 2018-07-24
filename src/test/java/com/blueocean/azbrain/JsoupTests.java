@@ -186,6 +186,14 @@ public class JsoupTests {
         }
         Assert.assertTrue(1==1);
     }
+
+    @Test
+    public void testBase64(){
+        String b = "a2hqbDk3Ng==";
+        String c = new String(Base64.getDecoder().decode(b));
+        System.out.println(c);
+        Assert.assertTrue("khjl976".equalsIgnoreCase(c));
+    }
 /*
     @Test
     public void testMeeting(){

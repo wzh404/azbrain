@@ -12,6 +12,7 @@ import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,12 +36,12 @@ public class TopicController {
            @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
            @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
-        if (name != null) conditionMap.put("name", name);
+        if (!StringUtils.isEmpty(name)) conditionMap.put("title", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
         if (endTime != null) conditionMap.put("startTime", endTime);
 
         Page<Topic> topicPage = topicService.pageTopics(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        //return ResultObject.ok(topicPage.getResult());
+
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("topics", topicPage.getResult());
         resultMap.put("page", ResultObject.pageMap(topicPage));
@@ -55,12 +56,11 @@ public class TopicController {
                                    @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("topicId", topicId);
-        if (name != null) conditionMap.put("name", name);
+        if (!StringUtils.isEmpty(name)) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
         if (endTime != null) conditionMap.put("startTime", endTime);
 
         Page<User> userPage = userManagerService.searchTopicSpecialists(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
-        //return ResultObject.ok(userPage.getResult());
         return ResultObject.ok(StringUtil.pageToMap("users", userPage));
     }
 
@@ -86,6 +86,12 @@ public class TopicController {
     @RequestMapping(value="/edit/topic", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject editTopic(@RequestBody Topic topic){
         int rows = topicService.editTopic(topic);
+        return ResultObject.cond(rows >= 0, ResultCode.BAD_REQUEST);
+    }
+
+    @RequestMapping(value="/delete/topic", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject editTopic(@RequestParam("topic_id") Integer topicId){
+        int rows = topicService.deleteTopic(topicId);
         return ResultObject.cond(rows >= 0, ResultCode.BAD_REQUEST);
     }
 

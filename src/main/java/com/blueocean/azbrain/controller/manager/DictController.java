@@ -9,6 +9,7 @@ import com.blueocean.azbrain.util.StringUtil;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -40,7 +41,7 @@ public class DictController {
 
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("classify", classify);
-        if (name != null) conditionMap.put("name", name);
+        if (!StringUtils.isEmpty(name)) conditionMap.put("name", name);
         if (startTime != null) conditionMap.put("startTime", startTime);
         if (endTime != null) conditionMap.put("endTime", endTime);
 

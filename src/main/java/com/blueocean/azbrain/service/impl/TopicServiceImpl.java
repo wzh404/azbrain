@@ -89,6 +89,11 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public int deleteTopic(Integer topicId) {
+        return topicMapper.delete(topicId);
+    }
+
+    @Override
     public Topic viewTopic(Integer topicId) {
         return topicMapper.get(topicId);
     }

@@ -131,6 +131,17 @@
             name = #{name}
     </select>
 
+    <select id="getUserByKCode" resultMap="user" parameterType="java.lang.String">
+        SELECT
+            id,
+            name,
+            user_type
+        FROM
+            azbrain_user
+        WHERE
+            job_number = #{kcode}
+    </select>
+
     <select id="searchSpecialist" resultMap="user" parameterType="com.blueocean.azbrain.vo.SpecialistVo">
         SELECT
             u.id,
@@ -162,35 +173,35 @@
     </select>
 
     <select id="userAvgScore" resultType="java.util.Map">
-        select
-            evaluate_code as `code`,
-            evaluate_name as `name`,
-            round(avg(CAST(evaluate_value as SIGNED )), 1) as `value`
-        from
+        SELECT
+            evaluate_code AS `code`,
+            evaluate_name AS `name`,
+            ROUND( AVG( CAST( evaluate_value AS SIGNED ) ), 1 ) AS `value`
+        FROM
             azbrain_user_evaluate
-        where
+        WHERE
             by_user_id = #{userId}
-        and
-            evaluate_value_type = "star"
-        and
-            by_user_flag = 0
-        group by evaluate_code
+        AND evaluate_value_type = "star"
+        AND by_user_flag = 0
+        GROUP BY
+            evaluate_code,
+            evaluate_name
     </select>
 
     <select id="byUserAvgScore" resultType="java.util.Map">
-        select
-            evaluate_code as `code`,
-            evaluate_name as `name`,
-            round(avg(CAST(evaluate_value as SIGNED )), 1) as `value`
-        from
+        SELECT
+            evaluate_code AS `code`,
+            evaluate_name AS `name`,
+            ROUND( AVG( CAST( evaluate_value AS SIGNED ) ), 1 ) AS `value`
+        FROM
             azbrain_user_evaluate
-        where
+        WHERE
             by_user_id = #{userId}
-        and
-            evaluate_value_type = "star"
-        and
-            by_user_flag = 1
-        group by evaluate_code
+        AND evaluate_value_type = "star"
+        AND by_user_flag = 1
+        GROUP BY
+            evaluate_code,
+            evaluate_name
     </select>
 
     <!--

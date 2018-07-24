@@ -29,6 +29,8 @@ public interface UserService {
      */
     User getUserByName(String login);
 
+    User getUserByKCode(String kcode);
+
 
     /**
      * 查找专家

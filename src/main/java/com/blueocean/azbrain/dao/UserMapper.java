@@ -37,6 +37,13 @@ public interface UserMapper {
     User getUserByName(@Param("name")String login);
 
     /**
+     *
+     * @param kcode
+     * @return
+     */
+    User getUserByKCode(@Param("kcode")String kcode);
+
+    /**
      * paging query user.
      *
      * @return

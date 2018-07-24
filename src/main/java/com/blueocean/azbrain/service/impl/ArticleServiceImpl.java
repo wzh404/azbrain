@@ -168,8 +168,9 @@ public class ArticleServiceImpl implements ArticleService {
             long num = (Long)m.get("num");
             if (status.equalsIgnoreCase("09")) {
                 resultMap.put("draft", num);
+            } else {
+                total += num;
             }
-            total += num;
         }
         resultMap.put("total", total);
         long topNum = articleMapper.totalTopNum();

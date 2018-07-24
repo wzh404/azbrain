@@ -47,6 +47,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByKCode(String kcode) {
+        return userMapper.getUserByKCode(kcode);
+    }
+
+    @Override
     public Page<User> searchSpecialist(int page, int pageSize, SpecialistVo vo) {
         PageHelper.startPage(page, pageSize);
         return userMapper.searchSpecialist(vo);

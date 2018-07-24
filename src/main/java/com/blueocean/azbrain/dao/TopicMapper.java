@@ -33,6 +33,13 @@ public interface TopicMapper {
 
     /**
      *
+     * @param topicId
+     * @return
+     */
+    int delete(@Param("topicId")Integer topicId);
+
+    /**
+     *
      * @param conditionMap
      * @return
      */

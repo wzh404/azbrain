@@ -79,6 +79,13 @@ public interface TopicService {
 
     /**
      *
+     * @param topicId
+     * @return
+     */
+    int deleteTopic(Integer topicId);
+
+    /**
+     *
      * @param topic
      * @return
      */

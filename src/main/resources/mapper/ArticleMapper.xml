@@ -202,7 +202,7 @@
             AND a.title LIKE CONCAT('%',#{name},'%')
         </if>
         <if test="source != null">
-            AND a.source = #{name}
+            AND a.source = #{source}
         </if>
         <if test="startTime != null">
             <![CDATA[ AND a.create_time >= #{startTime} ]]>

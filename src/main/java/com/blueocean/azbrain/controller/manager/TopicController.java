@@ -77,6 +77,8 @@ public class TopicController {
         topic.setCreateTime(LocalDateTime.now());
         topic.setCreateBy(userId);
         topic.setStatus("00");
+        topic.setFollowerNum(0);
+        topic.setConsultedNum(0);
         int rows = topicService.newTopic(topic);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
@@ -84,7 +86,7 @@ public class TopicController {
     @RequestMapping(value="/edit/topic", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject editTopic(@RequestBody Topic topic){
         int rows = topicService.editTopic(topic);
-        return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+        return ResultObject.cond(rows >= 0, ResultCode.BAD_REQUEST);
     }
 
     @RequestMapping(value="/new/topic/specialist", method= {RequestMethod.POST,RequestMethod.GET})

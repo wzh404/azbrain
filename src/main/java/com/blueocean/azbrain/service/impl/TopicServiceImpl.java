@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service("topicService")
@@ -64,12 +65,26 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public int newTopic(Topic topic) {
-        return topicMapper.insert(topic);
+        int rows = topicMapper.insert(topic);
+        if (topic.getUids() != null) {
+            for (Integer uid : topic.getUids()) {
+                topicMapper.insertTopicSpecialist(topic.getId(), uid);
+            }
+        }
+        return rows;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public int editTopic(Topic topic) {
+        topicMapper.deleteTopicSpecialist(topic.getId(), null);
+        if (topic.getUids() != null) {
+            for (Integer uid : topic.getUids()) {
+                topicMapper.insertTopicSpecialist(topic.getId(), uid);
+            }
+        }
         return topicMapper.edit(topic);
     }
 

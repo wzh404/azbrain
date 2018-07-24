@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class Topic {
@@ -29,4 +30,6 @@ public class Topic {
     private String status;
 
     private Integer updatedArticleNum;
+
+    private List<Integer> uids;
 }

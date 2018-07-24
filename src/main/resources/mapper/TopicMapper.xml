@@ -27,11 +27,13 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <insert id="insert" parameterType="com.blueocean.azbrain.model.Topic">
+  <insert id="insert" parameterType="com.blueocean.azbrain.model.Topic" useGeneratedKeys="true" keyProperty="id">
     insert into azbrain_topic (
       title,
       content,
       icon,
+      follower_num,
+      consulted_num,
       create_time,
       create_by,
       status)
@@ -39,6 +41,8 @@
       #{title,jdbcType=VARCHAR},
       #{content,jdbcType=VARCHAR},
       #{icon,jdbcType=VARCHAR},
+      #{followerNum,jdbcType=INTEGER},
+      #{consultedNum,jdbcType=INTEGER},
       #{createTime,jdbcType=TIMESTAMP},
       #{createBy,jdbcType=INTEGER},
       #{status,jdbcType=CHAR})
@@ -191,7 +195,8 @@
       azbrain_topic_specialist
     WHERE
       topic_id = #{topicId}
-    AND
-      user_id = #{userId}
+    <if test="userId != null">
+      AND user_id = #{userId}
+    </if>
   </delete>
 </mapper>

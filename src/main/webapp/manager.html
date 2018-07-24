@@ -83,9 +83,9 @@
 <script type="text/javascript">
     var access_token = "";
     var icon = "";
-    var g_uri = "http://119.254.84.20:8889";
+    //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    //var g_uri = "http://localhost:8889";
+    var g_uri = "http://localhost:8889";
     //var g_uri = "http://192.168.1.88:8010";
 
     function upload() {
@@ -264,10 +264,11 @@
 
     function editT(url){
         data = {
-            "id":2,
-            "title":"Topic Title Edit",
-            "content":"content test Edit",
-            "icon":"icon edit"
+            "id":4,
+            "title":"Topic Title Edit3",
+            "content":"content test 3Edit",
+            "icon":"icon edit",
+            "uids":[1,3,5]
         };
         ajax_post(url, data);
     }

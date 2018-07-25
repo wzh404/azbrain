@@ -104,7 +104,7 @@
     <if test="endTime != null">
       <![CDATA[ AND e.create_time <= #{endTime} ]]>
     </if>
-    group by name
+    group by u.id, u.name, e.create_time
   </select>
 
   <select id="summaryUserEvaluation" resultType="java.util.Map">
@@ -117,7 +117,8 @@
       u.bad_num,
       u.break_contract_num
     FROM
-      (SELECT
+      (
+      SELECT
         by_user_id,
         evaluate_name,
         AVG(evaluate_value) as evaluate_value
@@ -141,7 +142,7 @@
       AND u.name LIKE CONCAT('%',#{name},'%')
     </if>
     GROUP BY
-      by_user_id
+      by_user_id, u.name, u.good_num, u.neutral_num, u.bad_num, u.break_contract_num
   </select>
 
   <update id="deleteUserEvaluate" >

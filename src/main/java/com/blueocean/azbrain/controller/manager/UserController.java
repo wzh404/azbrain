@@ -21,6 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -57,8 +58,9 @@ public class UserController {
             logger.warn("{} incorrect password", loginVo.getName());
             return ResultObject.fail(ResultCode.USER_LOGIN_FAILED);
         }
-
-        ManagerSessionObject.toSession(request.getSession(true), user);
+        HttpSession session = request.getSession(true);
+        session.setMaxInactiveInterval(60 * 60 * 4);
+        ManagerSessionObject.toSession(session, user);
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("id", user.getId());
         resultMap.put("name", user.getName());
@@ -74,6 +76,9 @@ public class UserController {
     @RequestMapping(value="/new/user", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject newUser(@RequestBody UserVo vo){
         int rows = userService.newUser(vo.asUser());
+        if (rows == -1){
+            return ResultObject.fail(ResultCode.USER_KCODE_EXIST);
+        }
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 

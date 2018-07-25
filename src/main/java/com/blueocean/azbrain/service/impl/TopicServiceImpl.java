@@ -98,11 +98,13 @@ public class TopicServiceImpl implements TopicService {
         return topicMapper.get(topicId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public int newTopicSpecialist(Integer topicId, Integer userId) {
         return topicMapper.insertTopicSpecialist(topicId, userId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public int deleteTopicSpecialist(Integer topicId, Integer userId) {
         return topicMapper.deleteTopicSpecialist(topicId, userId);

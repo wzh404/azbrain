@@ -47,4 +47,6 @@ public interface DictMapper {
      * @return
      */
     String maxCode(@Param("classify")String classify, @Param("code")String code);
+
+    Label getLabelByName(@Param("name")String name);
 }

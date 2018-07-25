@@ -70,6 +70,18 @@
       id = #{id,jdbcType=INTEGER}
   </select>
 
+  <select id="getLabelByName" resultMap="label">
+    select
+    <include refid="Label_Column_List" />
+    from
+      azbrain_evaluate_label
+    where
+      `name` = #{name}
+    AND
+      status = '00'
+  </select>
+
+
   <insert id="insertLabel" parameterType="com.blueocean.azbrain.model.Label">
     insert into azbrain_evaluate_label (
       id,

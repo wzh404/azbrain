@@ -32,20 +32,35 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public int insertLabel(Label label) {
-        String otherCode;
-        if (label.getClassify().equalsIgnoreCase("byuser")){
-            otherCode = "019999";
-        } else if (label.getClassify().equalsIgnoreCase("user")){
-            otherCode = "029999";
-        } else if (label.getClassify().equalsIgnoreCase("article")){
-            otherCode = "000000";
-        } else if (label.getClassify().equalsIgnoreCase("specialist")){
-            otherCode = "000000";
-        } else {
+        Label l = dictMapper.getLabelByName(label.getName());
+        if (l != null){
             return 0;
         }
+
+        String otherCode;
+        String minCode;
+        if (label.getClassify().equalsIgnoreCase("byuser")){
+            otherCode = "019999";
+            minCode = "010001";
+        } else if (label.getClassify().equalsIgnoreCase("user")){
+            otherCode = "029999";
+            minCode = "020001";
+        } else if (label.getClassify().equalsIgnoreCase("article")){
+            otherCode = "000000";
+            minCode = "030001";
+        } else if (label.getClassify().equalsIgnoreCase("specialist")){
+            otherCode = "000000";
+            minCode = "040001";
+        } else {
+            return -1;
+        }
+
         String maxcode = dictMapper.maxCode(label.getClassify(), otherCode);
-        label.setCode(String.valueOf(Integer.valueOf(maxcode) + 1));
+        if (maxcode != null) {
+            label.setCode("0" + String.valueOf(Integer.valueOf(maxcode) + 1));
+        } else {
+            label.setCode(minCode);
+        }
         return dictMapper.insertLabel(label);
     }
 

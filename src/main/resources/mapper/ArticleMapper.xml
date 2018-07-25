@@ -292,6 +292,5 @@
             status != '99'
         and
             top_flag = 1
-        group by status;
     </select>
 </mapper>

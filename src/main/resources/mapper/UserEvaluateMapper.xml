@@ -37,7 +37,8 @@
       evaluate_name,
       evaluate_value,
       evaluate_value_type,
-      create_time
+      create_time,
+      status
     )
     values
     <foreach collection ="list" item="eval" separator =",">
@@ -50,7 +51,8 @@
       #{eval.name,jdbcType=VARCHAR},
       #{eval.value,jdbcType=VARCHAR},
       #{eval.valueType,jdbcType=VARCHAR},
-      #{eval.createTime,jdbcType=TIMESTAMP}
+      #{eval.createTime,jdbcType=TIMESTAMP},
+      '00'
     )
     </foreach>
   </insert>

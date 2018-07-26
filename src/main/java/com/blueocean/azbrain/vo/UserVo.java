@@ -2,6 +2,7 @@ package com.blueocean.azbrain.vo;
 
 import com.blueocean.azbrain.model.User;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,6 +35,14 @@ public class UserVo {
         user.setStatus("00");
         user.setCreateBy(0);
         user.setCreateTime(LocalDateTime.now());
+        if (StringUtils.isEmpty(user.getPhoto())) {
+            if ("F".equalsIgnoreCase(user.getGender())) {
+                user.setPhoto("http://community.blueocean-health.com/static/user_logo_f.jpg");
+            } else {
+                user.setPhoto("http://community.blueocean-health.com/static/user_logo_m.jpg");
+            }
+        }
+
         return user;
     }
 }

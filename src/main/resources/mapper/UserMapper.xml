@@ -135,7 +135,8 @@
         SELECT
             id,
             name,
-            user_type
+            user_type,
+            mobile
         FROM
             azbrain_user
         WHERE
@@ -144,7 +145,7 @@
 
     <select id="searchSpecialist" resultMap="user" parameterType="com.blueocean.azbrain.vo.SpecialistVo">
         SELECT
-            u.id,
+            distinct u.id,
             u.photo,
             u.name,
             u.label,

@@ -33,11 +33,14 @@ public class DictController {
     @RequestMapping(value="/labels", method= {RequestMethod.POST,RequestMethod.GET})
     public ResultObject pageLabel(@RequestParam("page") Integer page,
                              @RequestParam("classify") String classify,
-                             @RequestParam(value="name", required = false)String name,
+                             @RequestParam(value="name", required = false) String name,
                              @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
                              @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
         int pageSize = AZBrainConstants.MANAGER_PAGE_SIZE;
-        if (page == 0) pageSize = 50;
+        if (page == 0){
+            page = 1;
+            pageSize = 50;
+        }
 
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("classify", classify);

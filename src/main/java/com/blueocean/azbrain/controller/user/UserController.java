@@ -60,6 +60,7 @@ public class UserController {
         resultMap.put("access_token", token);
         resultMap.put("user_type", user.getUserType());
         resultMap.put("name", user.getName());
+        resultMap.put("mobile", user.getMobile());
         return ResultObject.ok(resultMap);
     }
 

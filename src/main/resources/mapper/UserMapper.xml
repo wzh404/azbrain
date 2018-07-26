@@ -170,7 +170,6 @@
         <if test="contract != null">
             <![CDATA[ AND u.break_contract_num = 0 ]]>
         </if>
-        ORDER BY u.create_time DESC
     </select>
 
     <select id="userAvgScore" resultType="java.util.Map">

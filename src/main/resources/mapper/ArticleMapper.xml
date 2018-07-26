@@ -39,6 +39,7 @@
             like_num,
             favorite_num,
             a.create_time,
+            a.create_by,
             a.status
         FROM
             azbrain_article a
@@ -256,7 +257,8 @@
             source_site = #{sourceSite},
             author = #{author},
             topic_id = #{topicId},
-            status = #{status}
+            status = #{status},
+            create_by = #{createBy}
         WHERE
             id = #{id}
     </update>

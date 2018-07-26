@@ -101,7 +101,7 @@
         WHERE
             status != '99'
         AND
-            user_type = '01'
+            1 = 1
         <if test="name != null">
             AND name LIKE CONCAT('%',#{name},'%')
         </if>

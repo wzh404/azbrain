@@ -90,7 +90,9 @@ public class ArticleController {
     public ResultObject newArticle(HttpServletRequest request, @RequestBody Article article){
         Integer userId = ManagerSessionObject.fromSession(request.getSession()).getId();
         article.setCreateTime(LocalDateTime.now());
-        article.setCreateBy(userId);
+        if (article.getCreateBy() == null || article.getCreateBy().intValue() == 0){
+            article.setCreateBy(userId);
+        }
         int rows = articleService.insert(article);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }

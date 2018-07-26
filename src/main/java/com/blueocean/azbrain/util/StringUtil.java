@@ -6,6 +6,7 @@ import com.google.common.base.Splitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class StringUtil {
     private static final Logger logger = LoggerFactory.getLogger(StringUtil.class);
 
     public static List<Map<String, String>> split(String s){
-        logger.info(s);
+        //logger.info(s);
         return Splitter.on(",").withKeyValueSeparator(":")
                 .split(s).entrySet().stream()
                 .map(m ->{
@@ -23,7 +24,9 @@ public class StringUtil {
                     map.put("name", m.getKey());
                     map.put("value", m.getValue());
                     return map;
-                }).collect(Collectors.toList());
+                })
+                .sorted(Comparator.comparing(o -> o.get("name")))
+                .collect(Collectors.toList());
     }
 
     public static void evaluation(Page<Map<String, Object>> page){

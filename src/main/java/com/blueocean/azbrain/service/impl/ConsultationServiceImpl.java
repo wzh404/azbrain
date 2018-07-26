@@ -98,7 +98,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         //评级 好评>=4 差评 < 3
         BigDecimal star = record.avgStar();
         int level = 0;
-        if (star.compareTo(new BigDecimal(4)) >= 0){
+        if (star.compareTo(new BigDecimal(3)) > 0){
             level = 1; // 好评
         }
         else if (star.compareTo(new BigDecimal(3)) == -1){

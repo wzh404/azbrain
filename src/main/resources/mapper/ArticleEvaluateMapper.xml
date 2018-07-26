@@ -81,7 +81,7 @@
       AND u.name LIKE CONCAT('%',#{name},'%')
     </if>
     group by
-      user_id
+      u.id, u.name,ae.create_time
   </select>
 
   <select id="summaryArticleEvaluation" resultType="java.util.Map">
@@ -104,7 +104,7 @@
       WHERE
         ae.status != '99'
       GROUP BY
-        ae.article_id, evaluate_code
+        title, ae.article_id, evaluate_name
     ) a
     WHERE 1 = 1
     <if test="title != null">

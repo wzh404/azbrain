@@ -39,11 +39,11 @@ public class StatisticsServiceImpl implements StatisticsService {
                 LocalDateTime.of(today, LocalTime.of(23, 59, 59)));
         map.put("consultationCnt", consultationCnt);
 
-        Integer likesCnt = statisticsMapper.statConsultation(LocalDateTime.of(today, LocalTime.of(0,0,0)),
+        Integer likesCnt = statisticsMapper.statLikes(LocalDateTime.of(today, LocalTime.of(0,0,0)),
                 LocalDateTime.of(today, LocalTime.of(23, 59, 59)));
         map.put("likesCnt", likesCnt);
 
-        Integer followsCnt = statisticsMapper.statConsultation(LocalDateTime.of(today, LocalTime.of(0,0,0)),
+        Integer followsCnt = statisticsMapper.statFollows(LocalDateTime.of(today, LocalTime.of(0,0,0)),
                 LocalDateTime.of(today, LocalTime.of(23, 59, 59)));
         map.put("followsCnt", followsCnt);
 

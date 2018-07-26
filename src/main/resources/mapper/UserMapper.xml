@@ -551,7 +551,7 @@
 
     <select id="findSpecialistByLabel" resultMap="user">
         SELECT
-            u.id,
+            distinct u.id,
             u.name,
             u.job_number,
             u.business_unit

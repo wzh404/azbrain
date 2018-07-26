@@ -134,6 +134,10 @@ public class UserManagerServiceImpl implements UserManagerService {
 
     @Override
     public int newUser(User user) {
+        User u = userMapper.getUserByKCode(user.getJobNumber());
+        if (u != null){
+            return -1;
+        }
         return userMapper.newUser(user);
     }
 

@@ -78,6 +78,9 @@ public class DictController {
         label.setStatus("00");
 
         int rows = dictService.insertLabel(label);
+        if (rows == 0){
+            return ResultObject.fail(ResultCode.LABEL_NAME_EXISTS);
+        }
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
     }
 

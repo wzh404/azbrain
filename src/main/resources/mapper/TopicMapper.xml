@@ -197,6 +197,9 @@
       #{userId},
       now()
     )
+    ;
+    UPDATE azbrain_topic SET specialist_num = specialist_num + 1
+    ;
   </insert>
 
   <delete id="deleteTopicSpecialist">
@@ -206,6 +209,14 @@
       topic_id = #{topicId}
     <if test="userId != null">
       AND user_id = #{userId}
+      ;
+      UPDATE azbrain_topic SET specialist_num = specialist_num - 1 WHERE specialist_num > 0
+      ;
+    </if>
+    <if test="userId == null">
+      ;
+      UPDATE azbrain_topic SET specialist_num = 0
+      ;
     </if>
   </delete>
 </mapper>

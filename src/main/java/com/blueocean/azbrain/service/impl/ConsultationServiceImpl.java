@@ -106,6 +106,14 @@ public class ConsultationServiceImpl implements ConsultationService {
             level = -1; // 差评
         }
 
+        if (record.getByUserFlag() == 0){
+            // 咨询人评级
+            userMapper.chageConsultStar(record.getUserId(), star);
+        } else {
+            // 专家评级
+            userMapper.chageConsultedStar(record.getByUserId(), star);
+        }
+
         logger.info("***** average star is {} - {}", star, level);
         //是否爽约
         boolean contract = record.breakContract();

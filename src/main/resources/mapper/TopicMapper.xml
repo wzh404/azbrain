@@ -198,7 +198,11 @@
       now()
     )
     ;
-    UPDATE azbrain_topic SET specialist_num = specialist_num + 1
+    UPDATE azbrain_topic
+    SET
+      specialist_num = specialist_num + 1
+    WHERE
+      id = #{topicId}
     ;
   </insert>
 
@@ -210,7 +214,11 @@
     <if test="userId != null">
       AND user_id = #{userId}
       ;
-      UPDATE azbrain_topic SET specialist_num = specialist_num - 1 WHERE specialist_num > 0
+      UPDATE azbrain_topic
+      SET
+        specialist_num = specialist_num - 1
+      WHERE
+        specialist_num > 0
       ;
     </if>
     <if test="userId == null">

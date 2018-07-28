@@ -131,5 +131,17 @@ public class TopicController {
         int rows = topicService.unfollow(userId, topicId);
         return ResultObject.cond(rows > 0, ResultCode.USER_FOLLOW_TOPIC_FAILED);
     }
+
+    /**
+     * 查看所有话题
+     *
+     * @return
+     */
+    @RequestMapping(value="/user/topics", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject topics(@RequestParam("page") Integer page){
+        Map<String, Object> conditionMap = new HashMap<>();
+        Page<Topic> topicPage = topicService.pageTopics(page, AZBrainConstants.PAGE_SIZE, conditionMap);
+        return ResultObject.ok(topicPage.getResult());
+    }
 }
 

@@ -18,7 +18,7 @@ public class UserEvaluateVo {
     private Integer byUserId;
     private Integer logId;
 
-    // 1: 被评价人为专家  0: 被评价人为发起人
+    // 1: 被评价人为专家  0: 被评价人为咨询人
     private Integer byUserFlag;
 
     List<EvaluateVo> evaluates;

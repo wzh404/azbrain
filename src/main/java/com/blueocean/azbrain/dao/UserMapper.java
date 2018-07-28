@@ -8,6 +8,7 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -248,4 +249,8 @@ public interface UserMapper {
     int notify(@Param("userId")Integer userId);
 
     int unNotify(@Param("userId")Integer userId);
+
+    int chageConsultedStar(@Param("userId")Integer userId, @Param("star")BigDecimal star);
+
+    int chageConsultStar(@Param("userId")Integer userId, @Param("star")BigDecimal star);
 }

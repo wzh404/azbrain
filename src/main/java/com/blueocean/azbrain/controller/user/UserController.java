@@ -64,6 +64,9 @@ public class UserController {
         resultMap.put("mobile", user.getMobile());
         resultMap.put("login_flag", user.getLoginFlag());
         resultMap.put("message_flag", user.getMessageFlag());
+        if ("10".equalsIgnoreCase(user.getUserType())){
+            userService.updateLogin(user.getId());
+        }
         return ResultObject.ok(resultMap);
     }
 

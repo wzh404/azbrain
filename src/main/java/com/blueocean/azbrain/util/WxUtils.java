@@ -3,11 +3,18 @@ package com.blueocean.azbrain.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 //import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +26,58 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.AlgorithmParameters;
 import java.security.Security;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class WxUtils {
     private final static Logger logger = LoggerFactory.getLogger(WxUtils.class);
     private final static String WxUrl = "https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code";
     public  static String SESSION_KEY = "";
+    private static String uri = "http://eaopen.astrazeneca.com/api/sendmessage";
+    private static String key = "azbrain";
+    private static String secret = "azbrain";
+
+    public static boolean wxMessage(String kcode, String content){
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            HttpPost httpPost = new HttpPost(uri);
+            List<NameValuePair> pair = new ArrayList<>();
+            pair.add(new BasicNameValuePair("key", key));
+            String date = LocalDateTime.now().format(df);
+            pair.add(new BasicNameValuePair("date", date));
+            pair.add(new BasicNameValuePair("sign", CryptoUtil.md5(key, date, secret)));
+            pair.add(new BasicNameValuePair("userid", kcode));
+            pair.add(new BasicNameValuePair("content", content));
+
+            httpPost.setEntity(new UrlEncodedFormEntity(pair, "UTF-8"));
+            httpPost.setHeader("Content-type", "application/x-www-form-urlencoded");
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    String body = EntityUtils.toString(entity);
+                    JSONObject jsonObject = JSON.parseObject(body);
+                    int status = jsonObject.getInteger("status");
+                    EntityUtils.consume(entity);
+                    logger.info("status is {} - {}", status, jsonObject.getString("errmsg"));
+                    return status == 1;
+                } else {
+                    logger.warn("response empty body");
+                }
+            } else {
+                logger.error("send message to wx failed");
+            }
+        } catch (IOException e) {
+            logger.error("get openid exception", e);
+        }
+
+        return false;
+    }
+
     /**
      * 根据小程序临时code，获取登录者的openid
      *

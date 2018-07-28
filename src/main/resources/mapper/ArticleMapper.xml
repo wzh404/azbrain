@@ -97,8 +97,12 @@
         FROM
             azbrain_article
         WHERE
-        <!-- MATCH(title) AGAINST(#{key,jdbcType=VARCHAR}) -->
+            status = '00'
+        AND
             title LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+        ORDER BY
+            top_flag DESC,
+            create_time DESC
     </select>
 
     <select id="listByOrder" parameterType="java.util.Map" resultMap="article">

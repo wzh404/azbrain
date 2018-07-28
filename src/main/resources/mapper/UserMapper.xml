@@ -97,6 +97,7 @@
             likes_num,
             favorite_num,
             status,
+            user_type,
             create_time
         FROM
             azbrain_user
@@ -640,5 +641,39 @@
             message_flag = 0
         WHERE
             id = #{userId}
+    </update>
+
+    <update id="chageConsultedStar">
+        UPDATE azbrain_user
+        SET consulted_star = (consulted_star + #{star} ) / 2
+        WHERE
+            id = #{userId}
+        AND
+            consulted_star > 0
+        ;
+        UPDATE azbrain_user
+        SET consulted_star = #{star}
+        WHERE
+            id = #{userId}
+        AND
+            consulted_star = 0
+        ;
+    </update>
+
+    <update id="chageConsultStar">
+        UPDATE azbrain_user
+        SET consult_star = (consult_star + #{star} ) / 2
+        WHERE
+            id = #{userId}
+        AND
+            consult_star > 0
+        ;
+        UPDATE azbrain_user
+        SET consult_star = #{star}
+        WHERE
+            id = #{userId}
+        AND
+            consult_star = 0
+        ;
     </update>
 </mapper>

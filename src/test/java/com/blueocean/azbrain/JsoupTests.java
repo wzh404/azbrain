@@ -3,6 +3,7 @@ package com.blueocean.azbrain;
 import com.blueocean.azbrain.common.Meeting;
 import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.util.MeetingUtil;
+import com.blueocean.azbrain.util.WxUtils;
 import com.google.common.base.Splitter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -187,12 +189,22 @@ public class JsoupTests {
         Assert.assertTrue(1==1);
     }
 
+    public static String delHtmlTag(String str){
+        String newstr = "";
+        newstr = str.replaceAll("<[.[^>]]*>","");
+        newstr = newstr.replaceAll(" ", "");
+        return newstr;
+    }
+
     @Test
     public void testBase64(){
-        String b = "a2hqbDk3Ng==";
-        String c = new String(Base64.getDecoder().decode(b));
-        System.out.println(c);
-        Assert.assertTrue("khjl976".equalsIgnoreCase(c));
+        String s = "王wangzunhui";
+        char[] a = s.toCharArray();
+        for (int i = 1; i < a.length; i++){
+            a[i] = '*';
+        }
+        System.out.println(String.valueOf(a));
+        Assert.assertTrue(WxUtils.wxMessage("KHJL976", "hello"));
     }
 /*
     @Test

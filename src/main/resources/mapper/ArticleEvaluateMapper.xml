@@ -66,9 +66,10 @@
       u.id as uid,
       u.name,
       ae.create_time,
-      GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation
+      GROUP_CONCAT(l.name,':', evaluate_value) as evaluation
     from
       azbrain_article_evaluate ae
+    INNER JOIN azbrain_evaluate_label l ON ae.evaluate_code = l.CODE
     inner join
       azbrain_user u
     on
@@ -93,10 +94,11 @@
       SELECT
         title,
         article_id as id,
-        evaluate_name as name,
-        AVG(evaluate_value) as value
+        l.name as name,
+        ROUND(AVG(evaluate_value), 1) as value
       FROM
         azbrain_article_evaluate ae
+      INNER JOIN azbrain_evaluate_label l ON ae.evaluate_code = l.CODE
       INNER JOIN
         azbrain_article ar
       ON
@@ -104,9 +106,9 @@
       WHERE
         ae.status != '99'
       AND
-        e.status = '00'
+        ar.status = '00'
       GROUP BY
-        title, ae.article_id, evaluate_name
+        title, ae.article_id, l.name
     ) a
     WHERE 1 = 1
     <if test="title != null">

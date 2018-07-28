@@ -54,6 +54,7 @@
 <br/>
 <a href="#" onclick="javascript:b('/user/topic/specialists?topic_id=1&page=1', {})">主题专家列表</a>|
 <a href="#" onclick="javascript:b('/user/follow/topic?topic_id=1', {})">关注主题</a>|
+<a href="#" onclick="javascript:b('/user/topics?page=1', {})">全部主题</a>|
 <a href="#" onclick="javascript:b('/user/unfollow/topic?topic_id=1', {})">取消关注主题</a>|
 <a href="#" onclick="javascript:b('/user/like/article?article_id=1', {})">点赞文章</a>|
 <a href="#" onclick="javascript:b('/user/unlike/article?article_id=1', {})">取消点赞</a>|
@@ -213,7 +214,7 @@ console.log('Hi!');
                 "access_token": access_token
             },
             data : JSON.stringify({
-                "logId":53,
+                "logId":3,
                 "evaluates":[
                     {"code":"010001", "name": "爽约", "value": "1", "type":"other"},
                     {"code":"010002", "name": "态度", "value": "3", "type":"star"},

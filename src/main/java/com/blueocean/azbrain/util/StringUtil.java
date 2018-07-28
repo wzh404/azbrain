@@ -43,4 +43,13 @@ public class StringUtil {
         resultMap.put("page", ResultObject.pageMap(page));
         return resultMap;
     }
+
+    public static String toStar(String s){
+        char[] a = s.toCharArray();
+        for (int i = 1; i < a.length; i++){
+            a[i] = '*';
+        }
+
+        return String.valueOf(a);
+    }
 }

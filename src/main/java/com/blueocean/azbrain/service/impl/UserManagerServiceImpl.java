@@ -138,6 +138,7 @@ public class UserManagerServiceImpl implements UserManagerService {
         if (u != null){
             return -1;
         }
+        user.setUseRealName(true);
         return userMapper.newUser(user);
     }
 

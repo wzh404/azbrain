@@ -59,13 +59,14 @@
 
   <select id="getEvaluationByLog" resultMap="user_evaluate">
     SELECT
-      e.evaluate_name,
+      l.name,
       e.evaluate_value,
       e.create_time,
       u1.name as userName,
       u2.name as byUserName
     FROM
       azbrain_user_evaluate e
+    INNER JOIN azbrain_evaluate_label l ON e.evaluate_code = l.CODE
     INNER JOIN
       azbrain_user u1
     ON
@@ -86,9 +87,10 @@
       u.id as uid,
       u.name,
       e.create_time,
-      GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation
+      GROUP_CONCAT(l.name,':', evaluate_value) as evaluation
     from
       azbrain_user_evaluate e
+    INNER JOIN azbrain_evaluate_label l ON e.evaluate_code = l.CODE
     inner join
       azbrain_user u
     on
@@ -113,7 +115,7 @@
     SELECT
       a.by_user_id,
       u.name,
-      GROUP_CONCAT(evaluate_name,':', evaluate_value) as evaluation,
+      GROUP_CONCAT(a.name,':', evaluate_value) as evaluation,
       u.good_num,
       u.neutral_num,
       u.bad_num,
@@ -122,10 +124,11 @@
       (
       SELECT
         by_user_id,
-        evaluate_name,
-        AVG(evaluate_value) as evaluate_value
+        l.name,
+        ROUND(AVG(evaluate_value), 1) as evaluate_value
       FROM
         azbrain_user_evaluate e
+      INNER JOIN azbrain_evaluate_label l ON e.evaluate_code = l.CODE
       WHERE
         e.evaluate_value_type = "star"
       AND
@@ -133,7 +136,7 @@
       AND
         e.status != '99'
       GROUP BY
-        by_user_id, evaluate_name
+        by_user_id, l.name
       ) a
     INNER JOIN
       azbrain_user u

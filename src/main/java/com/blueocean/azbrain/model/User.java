@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.model;
 
+import com.blueocean.azbrain.util.StringUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -87,4 +88,14 @@ public class User {
 
     private Integer loginFlag;
     private Integer messageFlag;
+
+    public String getName(){
+        if (this.name == null || useRealName) {
+            return this.name;
+        }
+        return StringUtil.toStar(this.name);
+    }
+
+    @JsonIgnore
+    public boolean useRealName = false;
 }

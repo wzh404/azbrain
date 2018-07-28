@@ -122,4 +122,21 @@ public class CryptoUtil {
 
         return hasher.hash().toString();
     }
+
+    /**
+     * md5
+     *
+     * @param args string list
+     * @return hash value
+     */
+    public static String md5(String... args){
+        Hasher hasher = Hashing.md5().newHasher();
+        for (String arg : args){
+            if (!StringUtils.isEmpty(arg)){
+                hasher.putString(arg, Charset.forName("utf-8"));
+            }
+        }
+
+        return hasher.hash().toString();
+    }
 }

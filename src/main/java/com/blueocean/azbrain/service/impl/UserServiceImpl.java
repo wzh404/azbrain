@@ -76,11 +76,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> profile(Integer userId) {
+    public Map<String, Object> profile(Integer userId, int useRealName) {
         Map<String, Object> map = new HashMap<>();
         User user = userMapper.get(userId);
         if (user == null) {
             return map;
+        }
+
+        if (useRealName == 0){
+            user.setUseRealName(false);
         }
 
         List<Map<String, Object>> scores = userMapper.userAvgScore(userId);
@@ -97,11 +101,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> specialistProfile(Integer userId) {
+    public Map<String, Object> specialistProfile(Integer userId, int useRealName) {
         Map<String, Object> map = new HashMap<>();
         User user = userMapper.get(userId);
         if (user == null) {
             return map;
+        }
+
+        if (useRealName == 0){
+            user.setUseRealName(false);
         }
 
         List<Map<String, Object>> scores = userMapper.byUserAvgScore(userId);

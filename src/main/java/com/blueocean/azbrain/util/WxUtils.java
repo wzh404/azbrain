@@ -37,8 +37,8 @@ public class WxUtils {
     private final static String WxUrl = "https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code";
     public  static String SESSION_KEY = "";
     private static String uri = "http://eaopen.astrazeneca.com/api/sendmessage";
-    private static String key = "azbrain";
-    private static String secret = "azbrain";
+    private static String key = "792e1f2f428e6bb9";
+    private static String secret = "8C33EF4E69FA9AC7720E486047241420";
 
     public static boolean wxMessage(String kcode, String content){
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {

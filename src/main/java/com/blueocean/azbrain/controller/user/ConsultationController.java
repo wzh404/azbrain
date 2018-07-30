@@ -11,6 +11,7 @@ import com.blueocean.azbrain.service.TopicService;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.MeetingUtil;
+import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.vo.ConsultationLogVo;
 import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
@@ -138,7 +139,7 @@ public class ConsultationController {
         // 咨询时间已过期
         if (consultationLog.expired()){
             logger.warn("consultation expired");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
+            return ResultObject.fail(ResultCode.CONSULTATION_EXPIRED);
         }
 
         // 用户才能进行取消操作
@@ -180,7 +181,7 @@ public class ConsultationController {
         // 咨询时间已过期
         if (consultationLog.expired()){
             logger.warn("consultation expired");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
+            return ResultObject.fail(ResultCode.CONSULTATION_EXPIRED);
         }
 
         // 被咨询人员才能进行确认操作
@@ -245,7 +246,7 @@ public class ConsultationController {
         // 咨询时间已过期
         if (consultationLog.expired()){
             logger.warn("consultation expired");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
+            return ResultObject.fail(ResultCode.CONSULTATION_EXPIRED);
         }
 
         // 被咨询人员(专家)才能进行确认操作
@@ -287,7 +288,7 @@ public class ConsultationController {
         // 咨询时间已过期
         if (consultationLog.expired()){
             logger.warn("consultation expired");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
+            return ResultObject.fail(ResultCode.CONSULTATION_EXPIRED);
         }
 
         // 原来的周保持一致
@@ -347,7 +348,7 @@ public class ConsultationController {
         // 咨询时间已过期
         if (consultationLog.expired()){
             logger.warn("consultation expired");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
+            return ResultObject.fail(ResultCode.CONSULTATION_EXPIRED);
         }
 
         // 是否用户
@@ -397,7 +398,7 @@ public class ConsultationController {
         // 咨询时间已过期
         if (consultationLog.expired()){
             logger.warn("consultation expired");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
+            return ResultObject.fail(ResultCode.CONSULTATION_EXPIRED);
         }
 
         // 是否用户
@@ -500,6 +501,7 @@ public class ConsultationController {
         Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         Page<ConsultationLog> pageConsultationLog = consultationService.myConsult(page, 100, userId);
+        StringUtil.notLogRealName(pageConsultationLog.getResult());
         return ResultObject.ok(pageConsultationLog.getResult());
     }
 
@@ -516,6 +518,7 @@ public class ConsultationController {
         Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
         Page<ConsultationLog> pageConsultationLog = consultationService.consultMe(page, 100, userId);
+        StringUtil.notLogRealName(pageConsultationLog.getResult());
         return ResultObject.ok(pageConsultationLog.getResult());
     }
 

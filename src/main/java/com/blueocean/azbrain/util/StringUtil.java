@@ -1,6 +1,8 @@
 package com.blueocean.azbrain.util;
 
 import com.blueocean.azbrain.common.ResultObject;
+import com.blueocean.azbrain.model.ConsultationLog;
+import com.blueocean.azbrain.model.User;
 import com.github.pagehelper.Page;
 import com.google.common.base.Splitter;
 import org.slf4j.Logger;
@@ -51,5 +53,17 @@ public class StringUtil {
         }
 
         return String.valueOf(a);
+    }
+
+    public static void notUserRealName(List<User> user){
+        for (User u : user){
+            u.setUseRealName(false);
+        }
+    }
+
+    public static void notLogRealName(List<ConsultationLog> logs){
+        for (ConsultationLog log : logs){
+            log.setUseRealName(false);
+        }
     }
 }

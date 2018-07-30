@@ -97,5 +97,5 @@ public class User {
     }
 
     @JsonIgnore
-    public boolean useRealName = false;
+    public boolean useRealName = true;
 }

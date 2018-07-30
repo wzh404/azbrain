@@ -10,6 +10,7 @@ import com.blueocean.azbrain.model.UserPoints;
 import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
+import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.util.TokenUtil;
 import com.blueocean.azbrain.util.WxUtils;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
@@ -93,6 +94,7 @@ public class UserController {
                                          @RequestParam("page") Integer page,
                                          @RequestBody SpecialistVo specialistVo){
         Page<User> pageMap = userService.searchSpecialist(page, AZBrainConstants.PAGE_SIZE, specialistVo);
+        StringUtil.notUserRealName(pageMap.getResult());
         return ResultObject.ok("specialist", pageMap.getResult());
     }
 
@@ -103,11 +105,12 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/profile", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject profile(HttpServletRequest request){
+    public ResultObject profile(HttpServletRequest request,
+                                @RequestParam(value="useRealName", required = false)Integer useRealName){
         Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
         Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
 
-        Map<String, Object> map = userService.profile(userId);
+        Map<String, Object> map = userService.profile(userId, useRealName==null ? 0 : 1);
         return ResultObject.ok(map);
     }
 
@@ -118,13 +121,14 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/specialist/profile", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject specialistProfile(HttpServletRequest request, @RequestParam(value="user_id", required = false) Integer userId){
+    public ResultObject specialistProfile(HttpServletRequest request, @RequestParam(value="user_id", required = false) Integer userId,
+                                          @RequestParam(value="useRealName", required = false)Integer useRealName){
         if (userId == null) {
             userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
             Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
         }
 
-        Map<String, Object> map = userService.specialistProfile(userId);
+        Map<String, Object> map = userService.specialistProfile(userId, useRealName==null ? 0 : 1);
         return ResultObject.ok(map);
     }
 

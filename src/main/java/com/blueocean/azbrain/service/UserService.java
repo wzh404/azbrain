@@ -46,7 +46,7 @@ public interface UserService {
      * @param userId
      * @return
      */
-    Map<String, Object> profile(Integer userId);
+    Map<String, Object> profile(Integer userId, int useRealName);
 
     /**
      * 专家详情
@@ -54,7 +54,7 @@ public interface UserService {
      * @param userId
      * @return
      */
-    Map<String, Object> specialistProfile(Integer userId);
+    Map<String, Object> specialistProfile(Integer userId, int useRealName);
 
     /**
      * 可咨询条件

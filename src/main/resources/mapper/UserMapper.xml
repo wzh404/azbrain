@@ -67,6 +67,7 @@
             consult_duration,
             create_time,
             create_by,
+            login_flag,
             status
         )
         VALUES(
@@ -80,6 +81,7 @@
             0,
             #{createTime},
             #{createBy},
+            1,
             '00'
         )
     </insert>
@@ -146,6 +148,8 @@
             azbrain_user
         WHERE
             job_number = #{kcode}
+        AND
+            status = '00'
     </select>
 
     <select id="searchSpecialist" resultMap="user" parameterType="com.blueocean.azbrain.vo.SpecialistVo">

@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.model;
 
 import com.blueocean.azbrain.common.status.ConsultationStatus;
+import com.blueocean.azbrain.util.StringUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -68,6 +69,23 @@ public class ConsultationLog {
     private String userName;
 
     private String byUserName;
+
+    public String getUserName(){
+        if (this.userName == null || useRealName) {
+            return this.userName;
+        }
+        return StringUtil.toStar(this.userName);
+    }
+
+    public String getByUserName(){
+        if (this.byUserName == null || useRealName) {
+            return this.byUserName;
+        }
+        return StringUtil.toStar(this.byUserName);
+    }
+
+    @JsonIgnore
+    public boolean useRealName = true;
 
     @JsonProperty("duration")
     public Long duration(){

@@ -194,4 +194,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         return map;
     }
+
+    /**
+     * 文章删除后清除cache
+     */
+    public static void removeCacheArticle(){
+        cacheMap.remove("articleCnt");
+        cacheMap.remove("likesCnt");
+        cacheMap.remove("articleYesterdayCnt");
+        cacheMap.remove("likesYesterdayCnt");
+    }
 }

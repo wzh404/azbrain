@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -50,7 +52,16 @@ public class UserController {
      */
     @RequestMapping(value = "/apply/access-token", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject accessToken(@RequestParam("code") String code) {
-        User user = userService.getUserByKCode(code);
+        String kcode = null;
+        try {
+            kcode = new String(Base64.getDecoder().decode(code), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+        logger.info("{} kcode is {}", code, kcode);
+
+        User user = userService.getUserByKCode(kcode);
         if (user == null) {
             logger.warn("The user does not exist ");
             return ResultObject.fail(ResultCode.USER_ACCESS_TOKEN);
@@ -64,7 +75,7 @@ public class UserController {
         resultMap.put("mobile", user.getMobile());
         resultMap.put("login_flag", user.getLoginFlag());
         resultMap.put("message_flag", user.getMessageFlag());
-        if ("10".equalsIgnoreCase(user.getUserType())){
+        if (user.getLoginFlag().intValue() == 1){
             userService.updateLogin(user.getId());
         }
         return ResultObject.ok(resultMap);

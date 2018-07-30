@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.service.impl;
 
+import com.blueocean.azbrain.common.MeetingRunner;
 import com.blueocean.azbrain.common.status.UserStatus;
 import com.blueocean.azbrain.dao.DictMapper;
 import com.blueocean.azbrain.dao.UserFeedbackMapper;
@@ -194,7 +195,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int notify(Integer userId) {
+    public int notify(Integer userId, String content) {
+        MeetingRunner.wxNotify(userMapper.getKCode(userId), content);
         return userMapper.notify(userId);
     }
 }

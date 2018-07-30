@@ -250,6 +250,8 @@ public interface UserMapper {
 
     int unNotify(@Param("userId")Integer userId);
 
+    String getKCode(@Param("userId")Integer userId);
+
     int chageConsultedStar(@Param("userId")Integer userId, @Param("star")BigDecimal star);
 
     int chageConsultStar(@Param("userId")Integer userId, @Param("star")BigDecimal star);

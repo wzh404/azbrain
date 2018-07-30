@@ -69,6 +69,7 @@ public class UserController {
     }
 
     /**
+     * 新建用户
      *
      * @param vo
      * @return
@@ -83,6 +84,7 @@ public class UserController {
     }
 
     /**
+     * 编辑用户
      *
      * @param vo
      * @return

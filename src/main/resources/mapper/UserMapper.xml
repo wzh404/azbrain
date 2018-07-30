@@ -522,7 +522,7 @@
         WHERE
             status = '00'
         AND
-            user_type = '01'
+            user_type = '10'
         AND (
             name LIKE CONCAT('%',#{key},'%')
         OR
@@ -595,7 +595,7 @@
         UPDATE
             azbrain_user
         SET
-            login_flag = 1
+            login_flag = 0
         WHERE
             id = #{userId}
     </update>
@@ -676,4 +676,8 @@
             consult_star = 0
         ;
     </update>
+
+    <select id="getKCode" resultType="java.lang.String">
+        SELECT job_number FROM azbrain_user WHERE id=#{userId} AND status = '00'
+    </select>
 </mapper>

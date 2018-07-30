@@ -3,7 +3,6 @@ package com.blueocean.azbrain;
 import com.blueocean.azbrain.common.Meeting;
 import com.blueocean.azbrain.model.ConsultationLog;
 import com.blueocean.azbrain.util.MeetingUtil;
-import com.blueocean.azbrain.util.WxUtils;
 import com.google.common.base.Splitter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -198,13 +197,9 @@ public class JsoupTests {
 
     @Test
     public void testBase64(){
-        String s = "王wangzunhui";
-        char[] a = s.toCharArray();
-        for (int i = 1; i < a.length; i++){
-            a[i] = '*';
-        }
-        System.out.println(String.valueOf(a));
-        Assert.assertTrue(WxUtils.wxMessage("KHJL976", "hello"));
+        //String b = "<h1 class=\"ql-align-center\"><strong>这是title</strong></h1><p class=\"ql-align-center\"><br></p ><p><span style=\"color: rgb(25, 25, 25);\"> 人工智能(AI)在科技界、创投圈和媒体圈已经热得不行，众多高瞻远瞩的精英人士早就一再提醒说“AI有泡沫，投资需谨慎”。按照目前这形势，16年虽然可能有泡沫，17年一定会更大，AI会形成一条逼近90°的向上曲线。是的，就是你看过的“奇点”所在位置。</span></p ><p><br></p ><p><u>32131</u></p ><p><u style=\"color: rgb(240, 102, 102);\">3123";
+        //System.out.println(delHtmlTag(b));
+        System.out.println(Base64.getEncoder().encodeToString("kklt193".getBytes()));
     }
 /*
     @Test

@@ -113,7 +113,7 @@ public class ConsultationController {
         consultationLog.setLastUpdated(LocalDateTime.now());
         consultationLog.setStatus(ConsultationStatus.UNCONFIRMED.getCode());
 
-        userService.notify(consultationLog.getByUserId());
+        userService.notify(consultationLog.getByUserId(), "收到一条新的业务咨询");
         int rows = consultationService.insert(consultationLog);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CREATE_FAILED);
     }
@@ -153,7 +153,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        userService.notify(consultationLog.getByUserId());
+        userService.notify(consultationLog.getByUserId(), "咨询已取消");
         int rows = consultationService.changeStatus(id, ConsultationStatus.CANCELED.getCode());
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
@@ -201,7 +201,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
-        userService.notify(consultationLog.getUserId());
+        userService.notify(consultationLog.getUserId(), "咨询已被专家确认");
         int rows = consultationService.confirm(consultationLog);
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
@@ -260,7 +260,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        userService.notify(consultationLog.getUserId());
+        userService.notify(consultationLog.getUserId(), "你的咨询被专家拒绝");
         int rows = consultationService.changeStatus(id, ConsultationStatus.REJECTED.getCode());
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
@@ -317,7 +317,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
-        userService.notify(consultationLog.getUserId());
+        userService.notify(consultationLog.getUserId(), "你的咨询被专家编辑");
 
         // 变为已编辑状态
         int rows = consultationService.edit(consultationLogVo);
@@ -368,7 +368,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
-        userService.notify(consultationLog.getByUserId());
+        userService.notify(consultationLog.getByUserId(), "咨询被用户编辑");
 
         // 变为已编辑状态
         int rows = consultationService.edit(consultationLogVo);
@@ -416,7 +416,7 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.MEETING_HOST_PWD_FAILED);
         }
 
-        userService.notify(consultationLog.getByUserId());
+        userService.notify(consultationLog.getByUserId(), "用户确认了咨询");
 
         // 变为确认状态
         int rows = consultationService.confirm(consultationLog);

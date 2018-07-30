@@ -106,6 +106,6 @@ public interface UserService {
 
     int cancelNotify(Integer userId);
 
-    int notify(Integer userId);
+    int notify(Integer userId, String content);
 }
 

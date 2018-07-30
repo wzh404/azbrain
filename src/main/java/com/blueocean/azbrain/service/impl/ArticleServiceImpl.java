@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.Article;
 import com.blueocean.azbrain.model.ArticleEvaluate;
 import com.blueocean.azbrain.model.UserLikeArticle;
 import com.blueocean.azbrain.service.ArticleService;
+import com.blueocean.azbrain.service.StatisticsService;
 import com.blueocean.azbrain.vo.ArticleEvaluateVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -152,6 +153,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public int changeStatusBatch(List<Integer> ids) {
+        StatisticsServiceImpl.removeCacheArticle();
         return articleMapper.changeStatusBatch(ids);
     }
 

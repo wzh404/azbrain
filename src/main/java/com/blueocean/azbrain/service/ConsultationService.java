@@ -6,6 +6,8 @@ import com.blueocean.azbrain.vo.UserEvaluateVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -87,4 +89,8 @@ public interface ConsultationService {
      * @return
      */
     Map<String, Object> getEvaluationByLog(Integer logId);
+
+    int selectSametimeLog(Integer userId, LocalDate cdate, LocalTime startTime, LocalTime endTime);
+
+    int selectBySametimeLog(Integer byUserId, LocalDate cdate, LocalTime startTime, LocalTime endTime);
 }

@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -153,5 +155,13 @@ public class ConsultationServiceImpl implements ConsultationService {
         return resultMap;
     }
 
+    @Override
+    public int selectSametimeLog(Integer userId, LocalDate cdate, LocalTime startTime, LocalTime endTime) {
+        return consultationLogMapper.selectSametimeLog(userId, cdate, startTime, endTime);
+    }
 
+    @Override
+    public int selectBySametimeLog(Integer byUserId, LocalDate cdate, LocalTime startTime, LocalTime endTime) {
+        return consultationLogMapper.selectBySametimeLog(byUserId, cdate, startTime, endTime);
+    }
 }

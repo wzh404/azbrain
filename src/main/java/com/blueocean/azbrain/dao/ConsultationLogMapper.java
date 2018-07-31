@@ -7,6 +7,8 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -92,4 +94,14 @@ public interface ConsultationLogMapper {
      * @return
      */
     List<Map<String, String>>listMeeting();
+
+    int selectSametimeLog(@Param("userId") Integer userId,
+                          @Param("cdate")LocalDate cdate,
+                          @Param("startTime")LocalTime startTime,
+                          @Param("endTime")LocalTime endTime);
+
+    int selectBySametimeLog(@Param("byUserId") Integer byUserId,
+                          @Param("cdate")LocalDate cdate,
+                          @Param("startTime")LocalTime startTime,
+                          @Param("endTime")LocalTime endTime);
 }

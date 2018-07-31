@@ -280,4 +280,36 @@
         WHERE
             status = 1
     </select>
+
+    <select id="selectSametimeLog" resultType="java.lang.Integer">
+        select count(*) from azbrain_user_consultation_log
+        where
+          user_id = #{userId}
+        AND
+          cdate = #{cdate}
+        AND
+          (status = '00' OR status = '01' OR status='02')
+        and (
+        <![CDATA[
+            (start_time <= #{startTime} and end_time >= #{startTime}) OR
+            (start_time <= #{endTime} and end_time >= #{endTime})
+        ]]>
+        )
+    </select>
+
+    <select id="selectBySametimeLog" resultType="java.lang.Integer">
+        select count(*) from azbrain_user_consultation_log
+        where
+          by_user_id = #{byUserId}
+        AND
+          cdate = #{cdate}
+        AND
+          (status = '00' OR status = '01' OR status='02')
+        and (
+         <![CDATA[
+            (start_time <= #{startTime} and end_time >= #{startTime}) OR
+            (start_time <= #{endTime} and end_time >= #{endTime})
+        ]]>
+        )
+    </select>
 </mapper>

@@ -69,7 +69,7 @@ public class ConsultationController {
         // 不能自己咨询自己
         if (userId.intValue() == consultationLog.getByUserId().intValue()){
             logger.error("invalid by user id");
-            return ResultObject.fail(ResultCode.BAD_REQUEST);
+            return ResultObject.fail(ResultCode.CONSULTATION_SELF);
         }
 
         if (consultationLog.getTopicId() == null){
@@ -102,6 +102,20 @@ public class ConsultationController {
 
         int duration = Integer.parseInt(consultationLog.getCode());
         consultationLog.setEndTime(consultationLog.getStartTime().plus(duration, ChronoUnit.MINUTES));
+
+        int sameCnt = consultationService.selectSametimeLog(userId,
+                consultationLog.getCdate(), consultationLog.getStartTime(), consultationLog.getEndTime());
+        if (sameCnt > 0 ){
+            logger.warn("consultation log user time conflict");
+            return ResultObject.fail(ResultCode.CONSULTATION_TIME_CONFLICT);
+        }
+
+        int sameByCnt = consultationService.selectBySametimeLog(consultationLog.getByUserId(),
+                consultationLog.getCdate(), consultationLog.getStartTime(), consultationLog.getEndTime());
+        if (sameByCnt > 0){
+            logger.warn("consultation log by-user time conflict");
+            return ResultObject.fail(ResultCode.CONSULTATION_TIME_BY_CONFLICT);
+        }
 
         // 400咨询检查会议密码
         if (consultationLog.getWay().equalsIgnoreCase("400") && !MeetingUtil.get(consultationLog)) {

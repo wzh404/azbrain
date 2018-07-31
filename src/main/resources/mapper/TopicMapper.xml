@@ -161,19 +161,29 @@
 
   <select id="pageTopics" resultMap="topic">
     SELECT
-    <include refid="Base_Column_List" />
+      t.id,
+      title,
+      content,
+      icon,
+      follower_num,
+      consulted_num,
+      specialist_num,
+      0 as updated_article_num,
+      create_time,
+      create_by,
+      status
     FROM
-      azbrain_topic
+      azbrain_topic t
     WHERE
-      status = '00'
+      t.status = '00'
     <if test="title != null">
-      AND title LIKE CONCAT('%',#{title},'%')
+      AND t.title LIKE CONCAT('%',#{title},'%')
     </if>
     <if test="startTime != null">
-      <![CDATA[ AND create_time >= #{startTime} ]]>
+      <![CDATA[ AND t.create_time >= #{startTime} ]]>
     </if>
     <if test="endTime != null">
-      <![CDATA[ AND create_time <= #{endTime} ]]>
+      <![CDATA[ AND t.create_time <= #{endTime} ]]>
     </if>
   </select>
 

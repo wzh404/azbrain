@@ -106,9 +106,12 @@ public class UserController {
      */
     @RequestMapping(value="/profile", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject profile(HttpServletRequest request,
+                                @RequestParam(value="user_id", required = false) Integer userId,
                                 @RequestParam(value="useRealName", required = false)Integer useRealName){
-        Integer userId = (Integer)request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
-        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+        if (userId == null) {
+            userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+            Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+        }
 
         Map<String, Object> map = userService.profile(userId, useRealName==null ? 0 : 1);
         return ResultObject.ok(map);
@@ -121,7 +124,8 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/specialist/profile", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResultObject specialistProfile(HttpServletRequest request, @RequestParam(value="user_id", required = false) Integer userId,
+    public ResultObject specialistProfile(HttpServletRequest request,
+                                          @RequestParam(value="user_id", required = false) Integer userId,
                                           @RequestParam(value="useRealName", required = false)Integer useRealName){
         if (userId == null) {
             userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);

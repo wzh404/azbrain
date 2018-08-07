@@ -40,7 +40,10 @@ public class QRTests {
         //String secret = "5e5829e1b0b13484baf6a48c4783178a";
         //String jscode = "00178tqj2f6vuG0SO0qj2T9Cqj278tqu";
         //WxUtils.getOpenId(appid, secret, jscode);
-        qr();
+        int[] ids = {142,145,146,147,148,150,154,156,160,161,168,169,170,175,176,177,178,179,180,181,182,183,195,196,197,198,200,201,202,203,204,205,206};
+        for (int id :ids) {
+            qr(id);
+        }
     }
 
 
@@ -84,13 +87,13 @@ public class QRTests {
         }
     }
 
-    public static void qr() throws Exception {
+    public static void qr(Integer id) throws Exception {
         String access_token = getAccessToken().get();
         {
             System.out.println(access_token);
             Map<String, Object> params = new HashMap<>();
             params.put("scene", "test");
-            params.put("path", "pages/pensionAgency/main?id=1&km=10");
+            params.put("path", "pages/pensionAgency/main?id=" + id + "&km=0");
             params.put("width", 430);
 
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -111,10 +114,10 @@ public class QRTests {
                 if (!targetFile.exists()) {
                     targetFile.mkdirs();
                 }
-                FileOutputStream out = new FileOutputStream("D:\\upload\\5.png");
-                byte[] buffer = new byte[8192];
+                FileOutputStream out = new FileOutputStream("D:\\upload\\qr_" + id + ".png");
+                byte[] buffer = new byte[10240];
                 int bytesRead;
-                while ((bytesRead = inputStream.read(buffer, 0, 8192)) != -1) {
+                while ((bytesRead = inputStream.read(buffer, 0, 10240)) != -1) {
                     out.write(buffer, 0, bytesRead);
                 }
 

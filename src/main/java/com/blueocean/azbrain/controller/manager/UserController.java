@@ -8,6 +8,7 @@ import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.service.UserManagerService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.CryptoUtil;
+import com.blueocean.azbrain.util.ExcelUtil;
 import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.vo.LoginVo;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
@@ -17,6 +18,7 @@ import com.github.pagehelper.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +35,9 @@ import java.util.Map;
 @RequestMapping("/manager")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Value("${spring.resources.static-locations}")
+    private String resourceLocation;
 
     @Autowired
     private UserManagerService userService;
@@ -335,5 +340,19 @@ public class UserController {
                                              @RequestParam(value="user_id", required = false) Integer userId){
         int rows = userService.deleteUserEvaluate(userId, byUserId);
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    @RequestMapping(value="/user/import", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject importUser(){
+        String filePath = resourceLocation.substring(5) + "azbrain-e.xlsx";
+        logger.info(filePath);
+        List<UserVo> vos = ExcelUtil.read(filePath);
+        for (UserVo vo : vos){
+            if (userService.newUser(vo.asUser())  <= 0 ){
+                logger.warn("insert user {} failed.", vo.getName());
+            }
+        }
+
+        return ResultObject.ok();
     }
 }

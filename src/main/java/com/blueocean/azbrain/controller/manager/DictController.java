@@ -36,10 +36,9 @@ public class DictController {
                              @RequestParam(value="name", required = false) String name,
                              @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
                              @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
-        int pageSize = AZBrainConstants.MANAGER_PAGE_SIZE;
+        int pageSize = 50;
         if (page == 0){
             page = 1;
-            pageSize = 50;
         }
 
         Map<String, Object> conditionMap = new HashMap<>();

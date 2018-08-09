@@ -1,8 +1,9 @@
 package com.blueocean.azbrain.common;
 
 import com.blueocean.azbrain.dao.ConsultationLogMapper;
-import com.blueocean.azbrain.dao.UserMapper;
+import com.blueocean.azbrain.dao.DictMapper;
 import com.blueocean.azbrain.model.ConsultationLog;
+import com.blueocean.azbrain.model.EventLog;
 import com.blueocean.azbrain.util.MeetingUtil;
 import com.blueocean.azbrain.util.WxUtils;
 import org.slf4j.Logger;
@@ -63,5 +64,9 @@ public class MeetingRunner implements ApplicationRunner, Ordered, DisposableBean
 
         logger.info("send message '{}' to [{}]", content, kcode);
         executor.execute(() -> WxUtils.wxMessage(kcode, content));
+    }
+
+    public static void execute(Runnable command){
+        executor.execute(command);
     }
 }

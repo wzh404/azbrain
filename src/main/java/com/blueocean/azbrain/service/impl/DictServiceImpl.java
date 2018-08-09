@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.service.impl;
 
 import com.blueocean.azbrain.dao.DictMapper;
+import com.blueocean.azbrain.model.EventLog;
 import com.blueocean.azbrain.model.Label;
 import com.blueocean.azbrain.service.DictService;
 import com.github.pagehelper.Page;
@@ -72,5 +73,10 @@ public class DictServiceImpl implements DictService {
     @Override
     public int changeStatus(Integer id, String status) {
         return dictMapper.changeStatus(id, status);
+    }
+
+    @Override
+    public int insertEvent(EventLog event) {
+        return dictMapper.insertEvent(event);
     }
 }

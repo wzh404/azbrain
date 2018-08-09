@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.service;
 
+import com.blueocean.azbrain.model.EventLog;
 import com.blueocean.azbrain.model.Label;
 import com.github.pagehelper.Page;
 
@@ -34,4 +35,12 @@ public interface DictService {
      * @return
      */
     int changeStatus(Integer id, String status);
+
+    /**
+     * 插入系统事件日志
+     *
+     * @param event
+     * @return
+     */
+    int insertEvent(EventLog event);
 }

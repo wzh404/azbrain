@@ -37,9 +37,9 @@ public class UserVo {
         user.setCreateTime(LocalDateTime.now());
         if (StringUtils.isEmpty(user.getPhoto())) {
             if ("F".equalsIgnoreCase(user.getGender())) {
-                user.setPhoto("http://community.blueocean-health.com/static/user_logo_f.jpg");
+                user.setPhoto("https://community.blueocean-health.com/static/user_logo_f.jpg");
             } else {
-                user.setPhoto("http://community.blueocean-health.com/static/user_logo_m.jpg");
+                user.setPhoto("https://community.blueocean-health.com/static/user_logo_m.jpg");
             }
         }
 

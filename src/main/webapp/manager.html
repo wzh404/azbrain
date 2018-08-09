@@ -87,14 +87,14 @@
     var icon = "";
     //var g_uri = "http://119.254.84.20:8889";
     //var g_uri = "http://10.13.202.49:8889";
-    var g_uri = "http://localhost:8889";
-    //var g_uri = "http://192.168.1.88:8010";
+    //var g_uri = "http://localhost:8889";
+    var g_uri = "https://community.blueocean-health.com/azbrain";
 
     function upload() {
         var formData = new FormData($( "#frm" )[0]);
         $.ajax({
             type : "POST",
-            url : g_uri + "/manager/upload",
+            url : g_uri + "/manager/upload?type=excel",
             data : formData,
             cache : false,
             processData:false,

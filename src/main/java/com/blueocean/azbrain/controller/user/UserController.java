@@ -1,13 +1,12 @@
 package com.blueocean.azbrain.controller.user;
 
+import com.blueocean.azbrain.common.MeetingRunner;
 import com.blueocean.azbrain.common.SessionObject;
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
-import com.blueocean.azbrain.model.Article;
-import com.blueocean.azbrain.model.User;
-import com.blueocean.azbrain.model.UserFeedback;
-import com.blueocean.azbrain.model.UserPoints;
+import com.blueocean.azbrain.model.*;
 import com.blueocean.azbrain.service.ArticleService;
+import com.blueocean.azbrain.service.DictService;
 import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.StringUtil;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +45,8 @@ public class UserController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private DictService dictService;
     /**
      * 获取access_token.
      *
@@ -64,6 +66,16 @@ public class UserController {
 
         User user = userService.getUserByKCode(kcode);
         if (user == null) {
+            final EventLog event = new EventLog();
+            event.setWho(kcode);
+            event.setLevel(5);
+            event.setType("0100");
+            event.setContent("Login failed");
+            event.setCreateTime(LocalDateTime.now());
+            MeetingRunner.execute(()->{
+                dictService.insertEvent(event);
+            });
+
             logger.warn("The user does not exist ");
             return ResultObject.fail(ResultCode.USER_ACCESS_TOKEN);
         }
@@ -79,6 +91,16 @@ public class UserController {
         if (user.getLoginFlag().intValue() == 1){
             userService.updateLogin(user.getId());
         }
+
+        final EventLog event = new EventLog();
+        event.setWho(user.getName());
+        event.setLevel(0);
+        event.setType("0100");
+        event.setContent("Login OK");
+        event.setCreateTime(LocalDateTime.now());
+        MeetingRunner.execute(()->{
+            dictService.insertEvent(event);
+        });
         return ResultObject.ok(resultMap);
     }
 

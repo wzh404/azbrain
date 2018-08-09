@@ -2,9 +2,13 @@ package com.blueocean.azbrain.controller.manager;
 
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
+import com.blueocean.azbrain.service.UserManagerService;
 import com.blueocean.azbrain.util.CryptoUtil;
+import com.blueocean.azbrain.util.ExcelUtil;
+import com.blueocean.azbrain.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
 
 @RestController
 @RequestMapping("/manager")
@@ -24,7 +29,6 @@ public class FileController {
 
     @Value("${azbrain.static.icon.url}")
     private String staticUrl;
-
 
     /**
      * 上传图片
@@ -46,7 +50,6 @@ public class FileController {
         String filePath = resourceLocation.substring(5);
         String destFileName = CryptoUtil.sha1(fileName, System.currentTimeMillis()+"", Math.random()+"");
         File dest = new File(filePath + destFileName + suffixName);
-        logger.info("-------{}", dest.getName());
         try {
             file.transferTo(dest);
             String iconUrl = staticUrl + destFileName + suffixName;

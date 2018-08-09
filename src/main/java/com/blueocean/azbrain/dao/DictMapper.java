@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.Dict;
+import com.blueocean.azbrain.model.EventLog;
 import com.blueocean.azbrain.model.Label;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
@@ -49,4 +50,12 @@ public interface DictMapper {
     String maxCode(@Param("classify")String classify, @Param("code")String code);
 
     Label getLabelByName(@Param("name")String name);
+
+    /**
+     * 插入系统事件日志
+     *
+     * @param event
+     * @return
+     */
+    int insertEvent(EventLog event);
 }

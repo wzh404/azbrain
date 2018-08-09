@@ -144,4 +144,22 @@
     AND
       code != #{code}
   </select>
+
+  <insert id="insertEvent" parameterType="com.blueocean.azbrain.model.EventLog">
+    insert into azbrain_event_log (
+      id,
+      `who`,
+      content,
+      `type`,
+      `level`,
+      create_time)
+    values (
+      #{id,jdbcType=INTEGER},
+      #{who,jdbcType=VARCHAR},
+      #{content,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR},
+      #{level,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
 </mapper>

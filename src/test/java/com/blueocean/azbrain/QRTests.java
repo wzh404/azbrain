@@ -40,7 +40,7 @@ public class QRTests {
         //String secret = "5e5829e1b0b13484baf6a48c4783178a";
         //String jscode = "00178tqj2f6vuG0SO0qj2T9Cqj278tqu";
         //WxUtils.getOpenId(appid, secret, jscode);
-        int[] ids = {142,145,146,147,148,150,154,156,160,161,168,169,170,175,176,177,178,179,180,181,182,183,195,196,197,198,200,201,202,203,204,205,206};
+        int[] ids = {209};
         for (int id :ids) {
             qr(id);
         }

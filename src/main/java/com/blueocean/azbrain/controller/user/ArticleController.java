@@ -58,7 +58,8 @@ public class ArticleController {
                         ae.setValue("0");
 
                         return ae;
-                    }).collect(Collectors.toList());
+                    })
+                    .collect(Collectors.toList());
         }
 
         map.put("article", article);

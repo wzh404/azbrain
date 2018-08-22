@@ -42,4 +42,6 @@ public class Article {
     private String status;
 
     private String topicTitle;
+
+    private Long clickedNum;
 }

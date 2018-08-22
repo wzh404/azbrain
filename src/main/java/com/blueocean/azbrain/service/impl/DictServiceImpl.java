@@ -79,4 +79,10 @@ public class DictServiceImpl implements DictService {
     public int insertEvent(EventLog event) {
         return dictMapper.insertEvent(event);
     }
+
+    @Override
+    public Page<EventLog> listEvent(int page, int pageSize, Map<String, Object> conditionMap) {
+        PageHelper.startPage(page, pageSize);
+        return dictMapper.listEvent(conditionMap);
+    }
 }

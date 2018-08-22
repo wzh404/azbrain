@@ -152,6 +152,8 @@
       content,
       `type`,
       `level`,
+      event_id,
+      duration,
       create_time)
     values (
       #{id,jdbcType=INTEGER},
@@ -159,7 +161,32 @@
       #{content,jdbcType=VARCHAR},
       #{type,jdbcType=VARCHAR},
       #{level,jdbcType=INTEGER},
+      #{eventId,jdbcType=INTEGER},
+      #{duration,jdbcType=INTEGER},
       #{createTime,jdbcType=TIMESTAMP}
     )
   </insert>
+
+  <select id="listEvent" resultType="com.blueocean.azbrain.model.EventLog">
+    SELECT
+      id,
+      `who`,
+      content,
+      `type`,
+      `level`,
+      event_id as eventId,
+      duration,
+      create_time as createTime
+    FROM
+      azbrain_event_log
+    WHERE
+      `type` = #{type}
+    <if test="startTime != null">
+      <![CDATA[ AND create_time >= #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND create_time <= #{endTime} ]]>
+    </if>
+    ORDER BY create_time DESC
+  </select>
 </mapper>

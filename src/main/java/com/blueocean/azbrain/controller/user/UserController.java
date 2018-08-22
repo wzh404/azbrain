@@ -71,6 +71,8 @@ public class UserController {
             event.setLevel(5);
             event.setType("0100");
             event.setContent("Login failed");
+            event.setEventId(0);
+            event.setDuration(0);
             event.setCreateTime(LocalDateTime.now());
             MeetingRunner.execute(()->{
                 dictService.insertEvent(event);
@@ -97,6 +99,8 @@ public class UserController {
         event.setLevel(0);
         event.setType("0100");
         event.setContent("Login OK");
+        event.setEventId(0);
+        event.setDuration(0);
         event.setCreateTime(LocalDateTime.now());
         MeetingRunner.execute(()->{
             dictService.insertEvent(event);

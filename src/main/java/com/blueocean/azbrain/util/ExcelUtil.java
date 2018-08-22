@@ -25,7 +25,16 @@ public class ExcelUtil {
                 if (row == null) continue;
                 String kcode = row.getCell(0).getStringCellValue();
                 String name = row.getCell(1).getStringCellValue();
-                String mobile = Long.toString(Math.round(row.getCell(2).getNumericCellValue()));
+                String mobile;
+                if (row.getCell(2).getCellType() == CellType.STRING.getCode()) {
+                    mobile = row.getCell(2).getStringCellValue();
+                }
+                else if (row.getCell(2).getCellType() == CellType.STRING.getCode()){
+                    mobile = Long.toString(Math.round(row.getCell(2).getNumericCellValue()));
+                } else {
+                    mobile = row.getCell(2).getRawValue();
+                }
+
                 String bu = row.getCell(3).getStringCellValue();
                 String gender = row.getCell(4).getStringCellValue();
                 System.out.println(kcode + ":" + name + ":" + mobile + ":" + bu + ":" + gender);

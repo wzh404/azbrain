@@ -2,6 +2,7 @@ package com.blueocean.azbrain.controller.manager;
 
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
+import com.blueocean.azbrain.model.EventLog;
 import com.blueocean.azbrain.model.Label;
 import com.blueocean.azbrain.service.DictService;
 import com.blueocean.azbrain.util.AZBrainConstants;
@@ -99,5 +100,30 @@ public class DictController {
     public ResultObject delete(@RequestParam("id") Integer id){
         int rows = dictService.changeStatus(id, "99");
         return ResultObject.cond(rows > 0, ResultCode.BAD_REQUEST);
+    }
+
+    /**
+     * 按类型分页显示埋点数据
+     *
+     * @param page
+     * @param type
+     * @return
+     */
+    @RequestMapping(value="/events", method= {RequestMethod.POST,RequestMethod.GET})
+    public ResultObject pageEvent(@RequestParam("page") Integer page,
+                                  @RequestParam("type") String type,
+                                  @RequestParam(value="startTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+                                  @RequestParam(value="endTime", required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date endTime){
+        if (page <= 0){
+            page = 1;
+        }
+
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("type", type);
+        if (startTime != null) conditionMap.put("startTime", startTime);
+        if (endTime != null) conditionMap.put("endTime", endTime);
+
+        Page<EventLog> labelPage = dictService.listEvent(page, AZBrainConstants.MANAGER_PAGE_SIZE, conditionMap);
+        return ResultObject.ok(StringUtil.pageToMap("events", labelPage));
     }
 }

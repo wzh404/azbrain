@@ -4,6 +4,7 @@ import com.blueocean.azbrain.model.EventLog;
 import com.blueocean.azbrain.model.Label;
 import com.github.pagehelper.Page;
 
+import java.util.List;
 import java.util.Map;
 
 public interface DictService {
@@ -43,4 +44,11 @@ public interface DictService {
      * @return
      */
     int insertEvent(EventLog event);
+
+    /**
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<EventLog> listEvent(int page, int pageSize, Map<String, Object> conditionMap);
 }

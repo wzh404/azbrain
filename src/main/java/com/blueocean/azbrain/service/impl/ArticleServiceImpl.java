@@ -34,6 +34,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article get(Integer id) {
+        articleMapper.changeClickedNum(id, 1);
         return articleMapper.get(id);
     }
 

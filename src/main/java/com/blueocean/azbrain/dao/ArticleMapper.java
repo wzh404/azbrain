@@ -1,6 +1,7 @@
 package com.blueocean.azbrain.dao;
 
 import com.blueocean.azbrain.model.Article;
+import com.blueocean.azbrain.model.EventLog;
 import com.blueocean.azbrain.model.UserLikeArticle;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
@@ -144,5 +145,14 @@ public interface ArticleMapper {
      * @return
      */
     Long totalTopNum();
+
+    /**
+     * 统计文章点击数
+     *
+     * @param articleId
+     * @param clickedNum
+     * @return
+     */
+    int changeClickedNum(@Param("articleId")Integer articleId, @Param("clickedNum")Integer clickedNum);
 }
 

@@ -29,6 +29,11 @@ public interface UserService {
      */
     User getUserByName(String login);
 
+    /**
+     *
+     * @param kcode
+     * @return
+     */
     User getUserByKCode(String kcode);
 
 
@@ -98,14 +103,43 @@ public interface UserService {
      */
     int insertUserFeedback(UserFeedback feedback);
 
+    /**
+     *
+     * @param uid
+     * @return
+     */
     List<Map<String, Object>> getSpecialistLabels(Integer uid);
 
+    /**
+     * 修改用户登录状态
+     *
+     * @param userId
+     * @return
+     */
     int updateLogin(Integer userId);
 
+    /**
+     *
+     * @param vo
+     * @return
+     */
     int changeSpecialistLabel(SpecialistEditVo vo);
 
+    /**
+     * 取消用户咨询通知
+     *
+     * @param userId
+     * @return
+     */
     int cancelNotify(Integer userId);
 
+    /**
+     * 用户咨询通知
+     *
+     * @param userId
+     * @param content
+     * @return
+     */
     int notify(Integer userId, String content);
 }
 

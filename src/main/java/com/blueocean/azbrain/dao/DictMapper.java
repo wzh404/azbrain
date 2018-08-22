@@ -58,4 +58,13 @@ public interface DictMapper {
      * @return
      */
     int insertEvent(EventLog event);
+
+
+    /**
+     * 查询埋点数据
+     *
+     * @param conditionMap
+     * @return
+     */
+    Page<EventLog> listEvent(Map<String, Object> conditionMap);
 }

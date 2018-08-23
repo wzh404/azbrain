@@ -55,13 +55,14 @@ public class UserController {
      */
     @RequestMapping(value = "/apply/access-token", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject accessToken(@RequestParam("code") String code) {
-        String kcode = null;
+        String kcode = code;
         try {
             kcode = new String(Base64.getDecoder().decode(code), "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
+
         logger.info("{} kcode is {}", code, kcode);
 
         User user = userService.getUserByKCode(kcode);

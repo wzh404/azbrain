@@ -181,4 +181,9 @@ public class ArticleServiceImpl implements ArticleService {
 
         return resultMap;
     }
+
+    @Override
+    public List<Article> listArticleClickNum() {
+        return articleMapper.listArticleClickNum();
+    }
 }

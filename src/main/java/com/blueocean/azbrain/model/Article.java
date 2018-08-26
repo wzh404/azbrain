@@ -1,5 +1,6 @@
 package com.blueocean.azbrain.model;
 
+import com.blueocean.azbrain.util.ExcelResources;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -9,8 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Article {
+    @ExcelResources(title="ID", order = 1)
     private Integer id;
 
+    @ExcelResources(title="标题", order = 2)
     private String title;
 
     private String content;
@@ -43,5 +46,6 @@ public class Article {
 
     private String topicTitle;
 
+    @ExcelResources(title="点击数", order = 3)
     private Long clickedNum;
 }

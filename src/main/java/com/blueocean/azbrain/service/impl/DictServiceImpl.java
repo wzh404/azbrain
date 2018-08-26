@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service("dictService")
@@ -83,6 +84,11 @@ public class DictServiceImpl implements DictService {
     @Override
     public Page<EventLog> listEvent(int page, int pageSize, Map<String, Object> conditionMap) {
         PageHelper.startPage(page, pageSize);
+        return dictMapper.listEvent(conditionMap);
+    }
+
+    @Override
+    public List<EventLog> listAllEvent(Map<String, Object> conditionMap) {
         return dictMapper.listEvent(conditionMap);
     }
 }

@@ -154,5 +154,12 @@ public interface ArticleMapper {
      * @return
      */
     int changeClickedNum(@Param("articleId")Integer articleId, @Param("clickedNum")Integer clickedNum);
+
+    /**
+     * 文章点击数下载
+     *
+     * @return
+     */
+    List<Article> listArticleClickNum();
 }
 

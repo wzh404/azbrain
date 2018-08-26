@@ -309,4 +309,15 @@
         WHERE
             id = #{articleId}
     </update>
+
+    <select id="listArticleClickNum" resultType="com.blueocean.azbrain.model.Article">
+        SELECT
+            id,
+            title,
+            clicked_num as clickedNum
+        FROM
+            azbrain_article
+        WHERE
+            status = '00'
+    </select>
 </mapper>

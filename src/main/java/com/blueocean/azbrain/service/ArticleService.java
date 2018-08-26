@@ -193,4 +193,11 @@ public interface ArticleService {
      * @return
      */
     Map<String, Long> totalNum();
+
+    /**
+     * 文章点击数下载
+     *
+     * @return
+     */
+    List<Article> listArticleClickNum();
 }

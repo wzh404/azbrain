@@ -51,4 +51,11 @@ public interface DictService {
      * @return
      */
     Page<EventLog> listEvent(int page, int pageSize, Map<String, Object> conditionMap);
+
+    /**
+     *
+     * @param conditionMap
+     * @return
+     */
+    List<EventLog> listAllEvent(Map<String, Object> conditionMap);
 }

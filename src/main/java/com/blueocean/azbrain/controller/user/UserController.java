@@ -4,6 +4,7 @@ import com.blueocean.azbrain.common.MeetingRunner;
 import com.blueocean.azbrain.common.SessionObject;
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
+import com.blueocean.azbrain.common.kcode.KCodeService;
 import com.blueocean.azbrain.model.*;
 import com.blueocean.azbrain.service.ArticleService;
 import com.blueocean.azbrain.service.DictService;
@@ -47,6 +48,9 @@ public class UserController {
 
     @Autowired
     private DictService dictService;
+
+    @Autowired
+    private KCodeService kCodeService;
     /**
      * 获取access_token.
      *
@@ -55,20 +59,16 @@ public class UserController {
      */
     @RequestMapping(value = "/apply/access-token", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultObject accessToken(@RequestParam("code") String code) {
-        String kcode = code;
-        try {
-            kcode = new String(Base64.getDecoder().decode(code), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        Optional<String> kcode = kCodeService.getKCode(code);
+        if (!kcode.isPresent()){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
-        logger.info("{} kcode is {}", code, kcode);
-
-        User user = userService.getUserByKCode(kcode);
+        logger.info("{} kcode is {}", code, kcode.get());
+        User user = userService.getUserByKCode(kcode.get());
         if (user == null) {
             final EventLog event = new EventLog();
-            event.setWho(kcode);
+            event.setWho(kcode.get());
             event.setLevel(5);
             event.setType("0100");
             event.setContent("Login failed");

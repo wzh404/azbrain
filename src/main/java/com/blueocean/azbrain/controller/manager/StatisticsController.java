@@ -21,7 +21,9 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,19 +59,19 @@ public class StatisticsController {
     @RequestMapping(value="/stat/event", method= {RequestMethod.GET})
     public ResultObject event(HttpServletResponse response,
                               @RequestParam("type")String type,
-                              @RequestParam(value="startTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDateTime startTime,
-                              @RequestParam(value="endTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDateTime endTime){
+                              @RequestParam(value="startTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate startTime,
+                              @RequestParam(value="endTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endTime){
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("type", type);
         if (startTime == null){
-            startTime = LocalDateTime.now().minusDays(7L);
+            startTime = LocalDate.now().minusDays(7L);
         }
-        conditionMap.put("startTime", startTime);
+        conditionMap.put("startTime", LocalDateTime.of(startTime, LocalTime.MIN));
 
         if (endTime == null){
-            endTime = LocalDateTime.now();
+            endTime = LocalDate.now();
         }
-        conditionMap.put("endTime", endTime);
+        conditionMap.put("endTime", LocalDateTime.of(endTime, LocalTime.MAX));
 
         List<EventLog> logList = dictService.listAllEvent(conditionMap);
         OutputStream toClient = null;

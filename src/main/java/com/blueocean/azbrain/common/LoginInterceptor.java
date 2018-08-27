@@ -33,7 +33,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         for (String uri : uris) {
-            if (request.getRequestURI().startsWith(contextPath + uri)) {
+            String matchUri = uri;
+            if (!"/".equals(contextPath)){
+                matchUri = contextPath + uri;
+            }
+            if (request.getRequestURI().startsWith(matchUri)) {
                 return true;
             }
         }

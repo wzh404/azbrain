@@ -59,7 +59,7 @@
 
   <select id="getEvaluationByLog" resultMap="user_evaluate">
     SELECT
-      l.name,
+      l.name as evaluate_name,
       e.evaluate_value,
       e.create_time,
       u1.name as userName,

@@ -223,6 +223,26 @@
             <![CDATA[ AND l.by_user_evaluated = #{byUserEvaluated} ]]>
         </if>
 
+        <if test="expired != null and expired == 1">
+            <![CDATA[
+            AND (
+                datediff(CURRENT_DATE(), cdate) > 0
+            OR
+                (datediff(CURRENT_DATE(), cdate) = 0 and timediff(CURRENT_TIME(), start_time) > 0)
+            )
+            ]]>
+        </if>
+
+        <if test="expired != null and expired == 0">
+            <![CDATA[
+            AND (
+                datediff(CURRENT_DATE(), cdate) < 0
+            OR
+                (datediff(CURRENT_DATE(), cdate) = 0 and timediff(CURRENT_TIME(), start_time) < 0)
+            )
+            ]]>
+        </if>
+
         <if test="way != null">
             <![CDATA[ AND l.way = #{way} ]]>
         </if>
@@ -237,6 +257,7 @@
                 l.status != '99'
             ]]>
         </if>
+
         <if test="userName != null">
             <![CDATA[ AND u1.name LIKE CONCAT('%',#{userName},'%') ]]>
         </if>

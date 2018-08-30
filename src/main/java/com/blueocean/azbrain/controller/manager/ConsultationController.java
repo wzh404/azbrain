@@ -71,8 +71,10 @@ public class ConsultationController {
     private void toStatus(String status, Map<String, Object> conditionMap){
         if (status.equalsIgnoreCase("unconfirmed")){
             conditionMap.put("status", ConsultationStatus.UNCONFIRMED.getCode());
+            conditionMap.put("expired", 0);
         } else if (status.equalsIgnoreCase("edited")){
             conditionMap.put("status", ConsultationStatus.EDITED.getCode());
+            conditionMap.put("expired", 0);
         } else if (status.equalsIgnoreCase("canceled")){
             conditionMap.put("status", ConsultationStatus.CANCELED.getCode());
         } else if (status.equalsIgnoreCase("rejected")){
@@ -82,9 +84,11 @@ public class ConsultationController {
         } else if (status.equalsIgnoreCase("user_unevaluated")){
             conditionMap.put("status", ConsultationStatus.CONFIRMED.getCode());
             conditionMap.put("userEvaluated", 0);
+            conditionMap.put("expired", 1);
         } else if (status.equalsIgnoreCase("by_user_unevaluated")){
             conditionMap.put("status", ConsultationStatus.CONFIRMED.getCode());
             conditionMap.put("byUserEvaluated", 0);
+            conditionMap.put("expired", 1);
         } else if (status.equalsIgnoreCase("completed")){
             conditionMap.put("status", ConsultationStatus.CONFIRMED.getCode());
             conditionMap.put("userEvaluated", 1);

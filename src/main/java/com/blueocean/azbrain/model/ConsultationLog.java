@@ -70,6 +70,8 @@ public class ConsultationLog {
 
     private String byUserName;
 
+    private String byUserMobile;
+
     public String getUserName(){
         if (this.userName == null || useRealName) {
             return this.userName;

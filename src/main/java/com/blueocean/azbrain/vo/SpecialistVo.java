@@ -15,14 +15,11 @@ public class SpecialistVo {
     // 爽约0
     private String contract;
 
-    // 周
-    //private Integer week;
+    // 驻留时间
+    private Integer duration;
 
-    // 时间段代码
-    //private String timeline;
-
-    // 可咨询时长
-    //private Integer duration;
+    // 查询标签描述
+    private List<String> tag;
 
     private String getLabel(){
         StringBuilder labels = new StringBuilder();

@@ -12,21 +12,17 @@ import com.blueocean.azbrain.service.UserService;
 import com.blueocean.azbrain.util.AZBrainConstants;
 import com.blueocean.azbrain.util.StringUtil;
 import com.blueocean.azbrain.util.TokenUtil;
-import com.blueocean.azbrain.util.WxUtils;
 import com.blueocean.azbrain.vo.SpecialistEditVo;
 import com.blueocean.azbrain.vo.SpecialistVo;
 import com.github.pagehelper.Page;
 import com.google.common.base.Preconditions;
-import jdk.nashorn.internal.runtime.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -120,6 +116,21 @@ public class UserController {
     public ResultObject searchSpecialist(HttpServletRequest request,
                                          @RequestParam("page") Integer page,
                                          @RequestBody SpecialistVo specialistVo){
+        Integer userId = (Integer) request.getAttribute(AZBrainConstants.REQUEST_ATTRIBUTE_UID);
+        Preconditions.checkArgument(userId != null, AZBrainConstants.PLEASE_LOG_IN);
+
+        User user = userService.get(userId);
+        EventLog log = new EventLog();
+        log.setCreateTime(LocalDateTime.now());
+        log.setLevel(0);
+        log.setWho(user.getName());
+        log.setDuration(specialistVo.getDuration());
+        log.setType("0130");
+        log.setContent("专家搜索");
+        log.setEventId(0);
+        log.setRemark(String.join(",", specialistVo.getTag()));
+        dictService.insertEvent(log);
+
         Page<User> pageMap = userService.searchSpecialist(page, AZBrainConstants.PAGE_SIZE, specialistVo);
         StringUtil.notUserRealName(pageMap.getResult());
         return ResultObject.ok("specialist", pageMap.getResult());

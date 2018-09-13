@@ -40,8 +40,8 @@ public class QRTests {
         //String secret = "5e5829e1b0b13484baf6a48c4783178a";
         //String jscode = "00178tqj2f6vuG0SO0qj2T9Cqj278tqu";
         //WxUtils.getOpenId(appid, secret, jscode);
-        int[] ids = {209};
-        for (int id :ids) {
+        //int[] ids = {209};
+        for (int id = 210; id < 436; id++) {
             qr(id);
         }
     }
@@ -92,8 +92,8 @@ public class QRTests {
         {
             System.out.println(access_token);
             Map<String, Object> params = new HashMap<>();
-            params.put("scene", "test");
-            params.put("path", "pages/pensionAgency/main?id=" + id + "&km=0");
+            params.put("scene", ""+id);
+            params.put("page", "pages/pensionAgency/main");
             params.put("width", 430);
 
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();

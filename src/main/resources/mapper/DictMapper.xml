@@ -154,6 +154,7 @@
       `level`,
       event_id,
       duration,
+      remark,
       create_time)
     values (
       #{id,jdbcType=INTEGER},
@@ -163,6 +164,7 @@
       #{level,jdbcType=INTEGER},
       #{eventId,jdbcType=INTEGER},
       #{duration,jdbcType=INTEGER},
+      #{remark,jdbcType=VARCHAR},
       #{createTime,jdbcType=TIMESTAMP}
     )
   </insert>
@@ -176,6 +178,7 @@
       `level`,
       event_id as eventId,
       duration,
+      remark,
       create_time as createTime
     FROM
       azbrain_event_log

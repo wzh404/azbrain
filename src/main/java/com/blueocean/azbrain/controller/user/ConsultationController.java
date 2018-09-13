@@ -6,6 +6,7 @@ import com.blueocean.azbrain.common.ResultObject;
 import com.blueocean.azbrain.common.status.ConsultationStatus;
 import com.blueocean.azbrain.model.Topic;
 import com.blueocean.azbrain.model.ConsultationLog;
+import com.blueocean.azbrain.model.User;
 import com.blueocean.azbrain.service.ConsultationService;
 import com.blueocean.azbrain.service.TopicService;
 import com.blueocean.azbrain.service.UserService;
@@ -265,13 +266,13 @@ public class ConsultationController {
 
         // 被咨询人员(专家)才能进行确认操作
         if (!consultationLog.byUser(userId)){
-            logger.warn("consultation by-user <> login");
+            logger.warn("invalid consultation by user");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
         // 待确认状态才能拒绝
         if (!consultationLog.unconfirmed()){
-            logger.warn("consultation status is not applied");
+            logger.warn("consultation status [not unconfirmed]");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -305,19 +306,21 @@ public class ConsultationController {
             return ResultObject.fail(ResultCode.CONSULTATION_EXPIRED);
         }
 
-        // 原来的周保持一致
+        /* 原来的周保持一致
         if (!consultationLog.checkWeek(consultationLogVo.getCdate())){
             logger.error("invalid edit cdate");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
-        }
+        }*/
 
         // 是否专家（被咨询人）
         if (!consultationLog.byUser(userId)){
+            logger.warn("invalid by user");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
         // 待确认状态专家才能编辑
         if (!consultationLog.unconfirmed()){
+            logger.warn("invalid consultation status [not unconfirmed]");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -367,11 +370,13 @@ public class ConsultationController {
 
         // 是否用户
         if (!consultationLog.user(userId)){
+            logger.warn("invalid user");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
         // 编辑状态用户才能编辑
         if (!consultationLog.edited()){
+            logger.warn("invalid consultation status [not edited]");
             return ResultObject.fail(ResultCode.BAD_REQUEST);
         }
 
@@ -548,6 +553,11 @@ public class ConsultationController {
         ConsultationLog log = consultationService.get(id);
         if (log == null){
             return ResultObject.fail(ResultCode.BAD_REQUEST);
+        }
+        // 被咨询者电话
+        if (log.confirmed()) {
+            User u = userService.get(log.getByUserId());
+            log.setByUserMobile(u.getMobile());
         }
         return ResultObject.ok(log);
     }

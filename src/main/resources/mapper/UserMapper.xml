@@ -165,10 +165,24 @@
             azbrain_user u
         LEFT JOIN azbrain_user_specialist_label s ON u.id = s.user_id
         LEFT JOIN azbrain_user_consultation_way c ON u.id = c.user_id
+        LEFT JOIN (
+            select
+                by_user_id
+            from
+                azbrain_user_consultation_log
+            where
+                (status = '00' or status='01' or status='02')
+            and
+                cdate >= now()
+        ) co
+        ON
+            u.id = co.by_user_id
         WHERE
             u.status = '00'
         AND
             u.user_type = '10'
+        AND
+            co.by_user_id is null
         <if test="label != null">
             <![CDATA[
                 AND s.label_code IN (${label})

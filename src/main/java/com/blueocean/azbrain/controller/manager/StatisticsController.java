@@ -51,7 +51,11 @@ public class StatisticsController {
      * 下载埋点数据
      *
      * @param response
-     * @param type 0100用户登录，0110文章详情驻留时间， 0120用户总驻留时间
+     * @param type
+     *         0100 用户登录，
+     *         0110 文章详情驻留时间，
+     *         0120 用户总驻留时间
+     *         0130 专家搜索
      * @param startTime
      * @param endTime
      * @return

@@ -14,7 +14,7 @@ public class EventLog {
     @ExcelResources(title="用户", order=2)
     private String who;
 
-    @ExcelResources(title="事件内容", order=3)
+    @ExcelResources(title="事件名称", order=3)
     private String content;
 
     @ExcelResources(title="事件类型", order=4)
@@ -27,8 +27,10 @@ public class EventLog {
     @ExcelResources(title="事件耗时ms", order=6)
     private Integer duration;
 
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @ExcelResources(title="事件发生时间", order=7)
     private LocalDateTime createTime;
+
+    @ExcelResources(title="事件描述", order=8)
+    private String remark;
 }

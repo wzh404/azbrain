@@ -292,6 +292,29 @@
             )
     </select>
 
+    <!-- 咨询提醒 -->
+    <select id="listReminderLogs" resultMap="BaseResultMap">
+        SELECT
+            user_id,
+            by_user_id,
+            cdate,
+            start_time
+        FROM
+            azbrain_user_consultation_log
+        WHERE
+            status='02'
+        AND
+            (
+                cdate > curdate()
+            OR
+                (
+                    cdate = curdate()
+                AND
+                    start_time > curtime()
+                )
+            )
+    </select>
+
     <select id="listMeeting" resultType="java.util.Map">
         SELECT
             host,

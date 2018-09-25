@@ -207,4 +207,9 @@ public class UserServiceImpl implements UserService {
         MeetingRunner.wxNotify(userMapper.getKCode(userId), content);
         return userMapper.notify(userId);
     }
+
+    @Override
+    public String getKCode(Integer userId) {
+        return userMapper.getKCode(userId);
+    }
 }

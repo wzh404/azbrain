@@ -1,8 +1,8 @@
 package com.blueocean.azbrain.controller.user;
 
-import com.blueocean.azbrain.common.Meeting;
 import com.blueocean.azbrain.common.ResultCode;
 import com.blueocean.azbrain.common.ResultObject;
+import com.blueocean.azbrain.common.ScheduleTask;
 import com.blueocean.azbrain.common.status.ConsultationStatus;
 import com.blueocean.azbrain.model.Topic;
 import com.blueocean.azbrain.model.ConsultationLog;
@@ -21,7 +21,6 @@ import com.mysql.jdbc.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +43,9 @@ public class ConsultationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ScheduleTask task;
 
     /**
      * 用户咨询
@@ -219,6 +221,10 @@ public class ConsultationController {
 
         userService.notify(consultationLog.getUserId(), "咨询已被专家确认");
         int rows = consultationService.confirm(consultationLog);
+
+        if (rows > 0) {
+            task.submit(consultationLog);
+        }
         return ResultObject.cond(rows > 0, ResultCode.CONSULTATION_CHANGE_STATUS_FAILED);
     }
 

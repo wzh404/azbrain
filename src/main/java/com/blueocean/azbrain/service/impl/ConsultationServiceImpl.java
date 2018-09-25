@@ -78,8 +78,6 @@ public class ConsultationServiceImpl implements ConsultationService {
         return consultationLogMapper.edit(consultationLogVo);
     }
 
-
-
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public int insertUserEvaluate(UserEvaluateVo record) {

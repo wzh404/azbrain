@@ -141,5 +141,12 @@ public interface UserService {
      * @return
      */
     int notify(Integer userId, String content);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    String getKCode(Integer userId);
 }
 

@@ -95,6 +95,8 @@ public interface ConsultationLogMapper {
      */
     List<Map<String, String>>listMeeting();
 
+    List<ConsultationLog> listReminderLogs();
+
     int selectSametimeLog(@Param("userId") Integer userId,
                           @Param("cdate")LocalDate cdate,
                           @Param("startTime")LocalTime startTime,

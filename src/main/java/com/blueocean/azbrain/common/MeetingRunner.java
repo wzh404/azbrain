@@ -29,7 +29,10 @@ public class MeetingRunner implements ApplicationRunner, Ordered, DisposableBean
     @Autowired
     private ConsultationLogMapper logMapper;
 
-    private static ThreadPoolExecutor executor;
+    @Autowired
+    private ScheduleTask task;
+
+    private static ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(150));
 
     @Override
     public void run(ApplicationArguments args) {
@@ -43,7 +46,11 @@ public class MeetingRunner implements ApplicationRunner, Ordered, DisposableBean
             MeetingUtil.merge(logs);
         }
 
-        executor = new ThreadPoolExecutor(5, 10, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(150));
+        // 咨询时间提醒
+        List<ConsultationLog> taskLogs = logMapper.listReminderLogs();
+        for (ConsultationLog log : taskLogs) {
+            task.submit(log);
+        }
     }
 
     @Override
